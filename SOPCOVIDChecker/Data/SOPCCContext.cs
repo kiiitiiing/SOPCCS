@@ -1,0 +1,221 @@
+﻿using System;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
+using SOPCOVIDChecker.Models;
+
+namespace SOPCOVIDChecker.Data
+{
+    public partial class SOPCCContext : DbContext
+    {
+        public SOPCCContext()
+        {
+        }
+
+        public SOPCCContext(DbContextOptions<SOPCCContext> options)
+            : base(options)
+        {
+        }
+
+        public virtual DbSet<Barangay> Barangay { get; set; }
+        public virtual DbSet<Facility> Facility { get; set; }
+        public virtual DbSet<Muncity> Muncity { get; set; }
+        public virtual DbSet<Patient> Patient { get; set; }
+        public virtual DbSet<Province> Province { get; set; }
+        public virtual DbSet<ResultForm> ResultForm { get; set; }
+        public virtual DbSet<Sopform> Sopform { get; set; }
+        public virtual DbSet<Sopusers> Sopusers { get; set; }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
+                optionsBuilder.UseSqlServer("Data Source=ROCKY\\SQLEXPRESS;Initial Catalog=SOPCOVIDDB;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
+            }
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Barangay>(entity =>
+            {
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.Property(e => e.Description).IsUnicode(false);
+            });
+
+            modelBuilder.Entity<Facility>(entity =>
+            {
+                entity.Property(e => e.Abbrevation).IsUnicode(false);
+
+                entity.Property(e => e.Address).IsUnicode(false);
+
+                entity.Property(e => e.ChiefHospital).IsUnicode(false);
+
+                entity.Property(e => e.Contact).IsUnicode(false);
+
+                entity.Property(e => e.Email).IsUnicode(false);
+
+                entity.Property(e => e.HospitalType).IsUnicode(false);
+
+                entity.Property(e => e.Name).IsUnicode(false);
+
+                entity.Property(e => e.Picture).IsUnicode(false);
+
+                entity.HasOne(d => d.Barangay)
+                    .WithMany(p => p.Facility)
+                    .HasForeignKey(d => d.BarangayId)
+                    .HasConstraintName("FK_Facility_Barangay");
+
+                entity.HasOne(d => d.Muncity)
+                    .WithMany(p => p.Facility)
+                    .HasForeignKey(d => d.MuncityId)
+                    .HasConstraintName("FK_Facility_Muncity");
+
+                entity.HasOne(d => d.Province)
+                    .WithMany(p => p.Facility)
+                    .HasForeignKey(d => d.ProvinceId)
+                    .HasConstraintName("FK_Facility_Province");
+            });
+
+            modelBuilder.Entity<Muncity>(entity =>
+            {
+                entity.Property(e => e.Description).IsUnicode(false);
+            });
+
+            modelBuilder.Entity<Patient>(entity =>
+            {
+                entity.Property(e => e.Address).IsUnicode(false);
+
+                entity.Property(e => e.ContactNumber).IsUnicode(false);
+
+                entity.Property(e => e.Firstname).IsUnicode(false);
+
+                entity.Property(e => e.Lastname).IsUnicode(false);
+
+                entity.Property(e => e.Middlename).IsUnicode(false);
+
+                entity.HasOne(d => d.Barangay)
+                    .WithMany(p => p.Patient)
+                    .HasForeignKey(d => d.BarangayId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Patient_Barangay");
+
+                entity.HasOne(d => d.Muncity)
+                    .WithMany(p => p.Patient)
+                    .HasForeignKey(d => d.MuncityId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Patient_Muncity");
+
+                entity.HasOne(d => d.Province)
+                    .WithMany(p => p.Patient)
+                    .HasForeignKey(d => d.ProvinceId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Patient_Province");
+            });
+
+            modelBuilder.Entity<Province>(entity =>
+            {
+                entity.Property(e => e.Description).IsUnicode(false);
+            });
+
+            modelBuilder.Entity<ResultForm>(entity =>
+            {
+                entity.Property(e => e.ApprovedBy).IsUnicode(false);
+
+                entity.Property(e => e.BiologicalReferrence).IsUnicode(false);
+
+                entity.Property(e => e.FinalResult).IsUnicode(false);
+
+                entity.Property(e => e.Interpretation).IsUnicode(false);
+
+                entity.Property(e => e.LabTestPerformed).IsUnicode(false);
+
+                entity.Property(e => e.PerformedBy).IsUnicode(false);
+
+                entity.Property(e => e.TestResult).IsUnicode(false);
+
+                entity.Property(e => e.TestResultsUnits).IsUnicode(false);
+
+                entity.Property(e => e.VerifiedBy).IsUnicode(false);
+
+                entity.HasOne(d => d.SopForm)
+                    .WithMany(p => p.ResultForm)
+                    .HasForeignKey(d => d.SopFormId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ResultForm_SOPForm");
+            });
+
+            modelBuilder.Entity<Sopform>(entity =>
+            {
+                entity.Property(e => e.PcrResult).IsUnicode(false);
+
+                entity.Property(e => e.RequestedBy).IsUnicode(false);
+
+                entity.Property(e => e.RequesterContact).IsUnicode(false);
+
+                entity.Property(e => e.SampleId).IsUnicode(false);
+
+                entity.Property(e => e.TypeSpeciment).IsUnicode(false);
+
+                entity.HasOne(d => d.DiseaseReportingUnit)
+                    .WithMany(p => p.Sopform)
+                    .HasForeignKey(d => d.DiseaseReportingUnitId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_SOPForm_Facility");
+
+                entity.HasOne(d => d.Patient)
+                    .WithMany(p => p.Sopform)
+                    .HasForeignKey(d => d.PatientId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_SOPForm_Patient");
+            });
+
+            modelBuilder.Entity<Sopusers>(entity =>
+            {
+                entity.Property(e => e.Contact).IsUnicode(false);
+
+                entity.Property(e => e.Email).IsUnicode(false);
+
+                entity.Property(e => e.Firstname).IsUnicode(false);
+
+                entity.Property(e => e.Lastname).IsUnicode(false);
+
+                entity.Property(e => e.Middlename).IsUnicode(false);
+
+                entity.Property(e => e.Password).IsUnicode(false);
+
+                entity.Property(e => e.UserLevel).IsUnicode(false);
+
+                entity.Property(e => e.Username).IsUnicode(false);
+
+                entity.HasOne(d => d.Barangay)
+                    .WithMany(p => p.Sopusers)
+                    .HasForeignKey(d => d.BarangayId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_SOPUsers_Barangay");
+
+                entity.HasOne(d => d.Facility)
+                    .WithMany(p => p.Sopusers)
+                    .HasForeignKey(d => d.FacilityId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_SOPUsers_Facility");
+
+                entity.HasOne(d => d.Muncity)
+                    .WithMany(p => p.Sopusers)
+                    .HasForeignKey(d => d.MuncityId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_SOPUsers_Muncity");
+
+                entity.HasOne(d => d.Province)
+                    .WithMany(p => p.Sopusers)
+                    .HasForeignKey(d => d.ProvinceId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_SOPUsers_Province");
+            });
+
+            OnModelCreatingPartial(modelBuilder);
+        }
+
+        partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+    }
+}

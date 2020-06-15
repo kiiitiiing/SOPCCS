@@ -1,0 +1,92 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - SOP COVID Checker</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="icon" href="~/assets/dist/img/dohfavicon.png" />
+    <link rel="stylesheet" href="~/assets/dist/css/adminlte.min.css" />
+    <link rel="stylesheet" href="~/assets/dist/css/wizardstep.css" />
+    <link rel="stylesheet" href="~/assets/dist/css/CustomCSS.css" />
+    <link rel="stylesheet" href="~/assets/plugins/icheck-bootstrap/icheck-bootstrap.min.css" />
+    <link rel="stylesheet" href="~/assets/dist/css/bootstrap-select.css" />
+    <link rel="stylesheet" href="~/assets/plugins/toastr/toastr.min.css">
+    <link rel="stylesheet" href="~/assets/plugins/fontawesome-free/css/all.min.css" />
+    <link rel="stylesheet" type="text/css" href="~/assets/daterangepicker/daterangepicker-bs3.css" />
+    <link rel="stylesheet" href="~/assets/plugins/select2/css/select2.min.css" />
+    <link rel="stylesheet" href="~/assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css" />
+    <link rel="stylesheet" href="~/assets/dist/css/bootstrap-datetimepicker.css" />
+    <link rel="stylesheet" href="~/assets/datepicker/css/bootstrap-datepicker.css" />
+    <link rel="stylesheet" href="~/assets/dist/css/lobibox.css" />
+    <link rel="stylesheet" href="~/assets/dist/css/pagination.css" />
+    <link rel="stylesheet" href="~/css/Custom.css" />
+
+
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/js/site.js"></script>
+    <script src="~/assets/plugins/chart.js/Chart.js"></script>
+    <script src="~/assets/datepicker/js/bootstrap-datepicker.min.js"></script>
+    <script type="text/javascript" src="~/assets/daterangepicker/moment.js"></script>
+    <script type="text/javascript" src="~/assets/daterangepicker/daterangepicker.js"></script>
+    <script src="~/assets/plugins/bootstrap/js/bootstrap.bundle.js"></script>
+    <script src="~/assets/plugins/select2/js/select2.full.min.js"></script>
+    <script src="~/assets/dist/js/bootstrap-select.js"></script>
+    <script src="~/assets/plugins/moment/moment.min.js"></script>
+    <script src="~/assets/dist/js/bootstrap-datetimepicker.js"></script>
+    <script src="~/assets/dist/js/lobibox.js"></script>
+    <script src="~/assets/dist/js/messageboxes.js"></script>
+    <script src="~/assets/dist/js/notifications.js"></script>
+    <script type="text/javascript" src="~/assets/plugins/toastr/toastr.min.js"></script>
+    <script src="~/assets/dist/js/pagination.js"></script>
+    <script type="text/javascript" src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script type="text/javascript" src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+</head>
+<body>
+    <header>
+        @if (User.Identity.IsAuthenticated)
+        {
+            <div class="header" style="background-color:#2F4054;padding:10px;">
+                <div class="container">
+                    <div class="fa-pull-left">
+                        <span class="title-desc" style="color:coral;font-weight:bold">Welcome,</span> <span class="title-desc" style="color:whitesmoke;font-weight:bold"> @User.FindFirstValue(ClaimTypes.GivenName) @User.FindFirstValue(ClaimTypes.Surname)  </span>
+                    </div>
+                    <div class="fa-pull-right">
+                        <span class="title-desc" style="color:whitesmoke;font-weight:bold">@User.FindFirstValue("FacilityName")</span>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+            <div class="header" style="background-color:#59ab91;padding:5px;">
+                <div class="container">
+                    <img src="~/assets/dist/img/DPADISBanner.png" class="img-responsive" alt="banner" />
+                </div>
+            </div>
+            <nav class="navbar navbar-expand-md navbar-light navbar-white custom-nav">
+                <div class="container">
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse order-3" id="navbarCollapse">
+                        <partial name="~/Views/Shared/Navbar/_navbarPartialView.cshtml" />
+                    </div>
+                </div>
+            </nav>
+        }
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+    @if (User.Identity.IsAuthenticated)
+    {
+        <footer class="footer text-muted text-center">
+            <div class="container">
+                &copy; 2020 - SOPCOVIDChecker v1.0
+            </div>
+        </footer>
+    }
+    @RenderSection("Scripts", required: false)
+    </body>
+</html>
