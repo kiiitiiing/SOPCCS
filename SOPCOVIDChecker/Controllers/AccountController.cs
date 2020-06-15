@@ -74,7 +74,7 @@ namespace SOPCOVIDChecker.Controllers
             else
             {
                 if (User.FindFirstValue(ClaimTypes.Role).Equals("user"))
-                    return RedirectToAction("Index", "Sop");
+                    return RedirectToAction("SopIndex", "Sop");
                 else if (User.FindFirstValue(ClaimTypes.Role).Equals("admin"))
                 {
                     return RedirectToAction("Index", "Admin");
@@ -101,7 +101,7 @@ namespace SOPCOVIDChecker.Controllers
                 {
                     await LoginAsync(user, model.RememberMe);
                     if (user.UserLevel.Equals("user"))
-                        return RedirectToAction("Index", "Sop");
+                        return RedirectToAction("SopIndex", "Sop");
                     else if (user.UserLevel.Equals("admin"))
                     {
                         return RedirectToAction("Index", "Admin");
@@ -187,14 +187,14 @@ namespace SOPCOVIDChecker.Controllers
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Name, user.Username),
-                new Claim(ClaimTypes.GivenName, user.Firstname),
-                new Claim(ClaimTypes.Surname, user.Lastname),
+                new Claim(ClaimTypes.GivenName, user.Fname),
+                new Claim(ClaimTypes.Surname, user.Lname),
                 new Claim(ClaimTypes.Role, user.UserLevel),
                 new Claim("Facility", user.FacilityId.ToString()),
                 new Claim("FacilityName", user.Facility.Name),
-                new Claim("Province", user.ProvinceId.ToString()),
-                new Claim("Muncity", user.MuncityId.ToString()),
-                new Claim("Barangay", user.BarangayId.ToString()),
+                new Claim("Province", user.Province.ToString()),
+                new Claim("Muncity", user.Muncity.ToString()),
+                new Claim("Barangay", user.Barangay.ToString()),
             };
 
             var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);

@@ -26,11 +26,11 @@ namespace SOPCOVIDChecker.Models
         [Column("updated_at")]
         public DateTime? UpdatedAt { get; set; }
 
-        [InverseProperty("Province")]
+        [InverseProperty("ProvinceNavigation")]
         public virtual ICollection<Facility> Facility { get; set; }
-        [InverseProperty("Province")]
+        [InverseProperty("ProvinceNavigation")]
         public virtual ICollection<Patient> Patient { get; set; }
-        [InverseProperty("Province")]
+        [InverseProperty("ProvinceNavigation")]
         public virtual ICollection<Sopusers> Sopusers { get; set; }
     }
 }

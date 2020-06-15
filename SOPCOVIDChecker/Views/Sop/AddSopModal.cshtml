@@ -16,19 +16,19 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>First name:</label>
-                        <input class="form-control" asp-for="Patient.Firstname" />
+                        <input class="form-control" asp-for="Patient.Fname" />
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Middle name:</label>
-                        <input class="form-control" asp-for="Patient.Middlename" />
+                        <input class="form-control" asp-for="Patient.Mname" />
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Last name:</label>
-                        <input class="form-control" asp-for="Patient.Lastname" />
+                        <input class="form-control" asp-for="Patient.Lname" />
                     </div>
                 </div>
                 @*<div class="col-md-12">
@@ -41,30 +41,30 @@
             <div class="row">
                 <div class="col-sm-4">
                     <label>Date of birth:</label>
-                    <input id="patient_dob" type="date" class="form-control" asp-for="Patient.DateOfBirth" onchange="CaclAge($(this).val());" />
+                    <input id="patient_dob" type="date" class="form-control" asp-for="Patient.Dob" onchange="CaclAge($(this).val());" />
                 </div>
                 <div class="col-sm-4">
                     <label>Age:</label>
-                    <input type="number" class="form-control" asp-for="Patient.Age" readonly />
+                    <input type="number" class="form-control" id="Patient_Age" readonly />
                 </div>
                 <div class="col-sm-4">
                     <label>Gender:</label><br />
-                    <input type="radio" id="male" asp-for="Patient.Gender" value="true" checked />
+                    <input type="radio" id="male" asp-for="Patient.Sex" value="male" checked />
                     <label for="male">Male</label>
-                    <input type="radio" id="female" asp-for="Patient.Gender" value="false" />
+                    <input type="radio" id="female" asp-for="Patient.Sex" value="female" />
                     <label for="male">Female</label>
                 </div>
             </div>
             <div class="row">
                 <div class="col-sm-4">
                     Province:
-                    <select asp-for="Patient.ProvinceId" asp-items="ViewBag.Province" id="patientProvince" title="province" class="form-control col-sm-12">
+                    <select asp-for="Patient.Province" asp-items="ViewBag.Province" id="patientProvince" title="province" class="form-control col-sm-12">
                     </select>
                 </div>
                 <div class="col-sm-4">
                     City/Municipality:
                     <select id="muncityFilters"
-                            asp-for="Patient.MuncityId"
+                            asp-for="Patient.Muncity"
                             asp-items="ViewBag.Muncity"
                             title="City/Municipality"
                             class="form-control col-sm-12"
@@ -74,7 +74,7 @@
                 </div>
                 <div class="col-sm-4">
                     Barangay:
-                    <select id="barangays" asp-for="Patient.BarangayId" asp-items="ViewBag.BarangayP" title="Barangay" class="form-control col-sm-12">
+                    <select id="barangays" asp-for="Patient.Barangay" asp-items="ViewBag.BarangayP" title="Barangay" class="form-control col-sm-12">
                         <option value="">Select Barangay</option>
                     </select>
                 </div>

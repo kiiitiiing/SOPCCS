@@ -188,13 +188,11 @@ function Toast(message) {
 
 
 //PAGINATIONS
-function LoadPatients(q, container, controller, action) {
+function LoadList(q, container, urls) {
     //var container = $('#' + vessel);
     var size = 5;
-    var url = '/' + controller + '/' + action + '/' + q;
-    if (action == 'ActionsJson') {
-        url = '/' + controller + '/' + action + q;
-    }
+    var ctr = 0;
+    var url = urls + '?q=' + q;
     var showArrows = true;
     console.log(url);
     container.pagination({
@@ -204,6 +202,7 @@ function LoadPatients(q, container, controller, action) {
                 url: url,
                 success: function (response) {
                     done(response);
+                    ctr = response.length;
                 }
             });
         },
@@ -218,9 +217,9 @@ function LoadPatients(q, container, controller, action) {
         callback: function (response, pagination) {
             var action = '';
             var controller = '';
-            if (container.attr('id') == 'patients-patients') {
-                action = 'IndexPartial';
-                controller = 'Patients'
+            if (container.attr('id') == 'sop-sop') {
+                action = 'SopIndexPartial';
+                controller = 'Sop'
             }
             else if (container.attr('id') == 'patients-actions') {
                 action = 'ActivitiesPartial';
@@ -231,6 +230,11 @@ function LoadPatients(q, container, controller, action) {
                 controller = 'Admin';
             }
             $.when(CallPartialView(response, controller, action)).done(function (output) {
+                $('.total_ctr').html(ctr);
+                if (ctr <= size)
+                    container.hide();
+                else
+                    container.show();
                 container.prev().empty();
                 container.prev().html(output);
             })
@@ -243,7 +247,7 @@ function LoadPatients(q, container, controller, action) {
 function CallPartialView(data, controller, action) {
     console.log(JSON.stringify(data));
     return $.ajax({
-        url: "/" + controller + "/" + action,
+        url: "/SOPCCS/" + controller + "/" + action,
         type: "POST",
         async: true,
         contentType: 'application/json; charset=utf-8',

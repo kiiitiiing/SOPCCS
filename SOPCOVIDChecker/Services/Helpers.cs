@@ -147,13 +147,20 @@ namespace SOPCOVIDChecker.Services
             return string.IsNullOrEmpty(text) ? "" : text;
         }
 
+        public static string GetSex(this int sex)
+        {
+            if (sex == 1)
+                return "Male";
+            else
+                return "Female";
+        }
 
         public static string GetAddress(this Facility facility)
         {
             string address = string.IsNullOrEmpty(facility.Address) ? "" : facility.Address + ", ";
-            string barangay = facility.Barangay == null ? "" : facility.Barangay.Description + ", ";
-            string muncity = facility.Muncity == null ? "" : facility.Muncity.Description + ", ";
-            string province = facility.Province == null ? "" : facility.Province.Description;
+            string barangay = facility.BarangayNavigation == null ? "" : facility.BarangayNavigation.Description + ", ";
+            string muncity = facility.MuncityNavigation == null ? "" : facility.MuncityNavigation.Description + ", ";
+            string province = facility.ProvinceNavigation == null ? "" : facility.ProvinceNavigation.Description;
 
             return address + barangay + muncity + province;
         }
@@ -169,17 +176,17 @@ namespace SOPCOVIDChecker.Services
 
         public static string GetAddress(this Patient patient)
         {
-            string barangay = patient.Barangay == null ? "" : patient.Barangay.Description + ", ";
-            string muncity = patient.Muncity == null ? "" : patient.Muncity.Description + ", ";
-            string province = patient.Province == null ? "" : patient.Province.Description;
+            string barangay = patient.BarangayNavigation == null ? "" : patient.BarangayNavigation.Description + ", ";
+            string muncity = patient.MuncityNavigation == null ? "" : patient.MuncityNavigation.Description + ", ";
+            string province = patient.ProvinceNavigation == null ? "" : patient.ProvinceNavigation.Description;
 
             return barangay + muncity + province;
         }
         public static string GetAddress(this Sopusers patient)
         {
-            string barangay = patient.Barangay == null ? "" : patient.Barangay.Description + ", ";
-            string muncity = patient.Muncity == null ? "" : patient.Muncity.Description + ", ";
-            string province = patient.Province == null ? "" : patient.Province.Description;
+            string barangay = patient.BarangayNavigation == null ? "" : patient.BarangayNavigation.Description + ", ";
+            string muncity = patient.MuncityNavigation == null ? "" : patient.MuncityNavigation.Description + ", ";
+            string province = patient.ProvinceNavigation == null ? "" : patient.ProvinceNavigation.Description;
 
             return barangay + muncity + province;
         }
@@ -187,7 +194,7 @@ namespace SOPCOVIDChecker.Services
         public static string GetFullName(this Patient patient)
         {
             if (patient != null)
-                return patient.Firstname.CheckName() + " " + patient.Middlename.CheckName() + " " + patient.Lastname.CheckName();
+                return patient.Fname.CheckName() + " " + patient.Mname.CheckName() + " " + patient.Lname.CheckName();
             else
                 return "";
         }
@@ -195,21 +202,21 @@ namespace SOPCOVIDChecker.Services
         public static string GetFullLastName(Sopusers user)
         {
             if (user != null)
-                return user.Lastname.CheckName() + ", " + user.Firstname.CheckName() + " " + user.Middlename.CheckName();
+                return user.Lname.CheckName() + ", " + user.Fname.CheckName() + " " + user.Mname.CheckName();
             else
                 return "";
         }
         public static string GetFullLastName(this Patient patient)
         {
             if (patient != null)
-                return patient.Lastname.CheckName() + ", " + patient.Firstname.CheckName() + " " + patient.Middlename.CheckName();
+                return patient.Lname.CheckName() + ", " + patient.Fname.CheckName() + " " + patient.Mname.CheckName();
             else
                 return "";
         }
         public static string GetFullName(this Sopusers user)
         {
             if (user != null)
-                return user.Firstname.CheckName() + " " + user.Middlename.CheckName() + " " + user.Lastname.CheckName();
+                return user.Fname.CheckName() + " " + user.Mname.CheckName() + " " + user.Lname.CheckName();
             else
                 return "";  
         }
@@ -217,7 +224,7 @@ namespace SOPCOVIDChecker.Services
         public static string GetMDFullName(this Sopusers doctor)
         {
             if (doctor != null)
-                FullName = "Dr. " + doctor.Firstname.CheckName() + " " + doctor.Middlename.CheckName() + " " + doctor.Lastname.CheckName();
+                FullName = "Dr. " + doctor.Fname.CheckName() + " " + doctor.Mname.CheckName() + " " + doctor.Lname.CheckName();
             else
                 FullName = "";
 

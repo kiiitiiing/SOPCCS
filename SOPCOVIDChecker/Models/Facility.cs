@@ -25,15 +25,15 @@ namespace SOPCOVIDChecker.Models
         [Column("address")]
         [StringLength(255)]
         public string Address { get; set; }
-        [Column("barangay_id")]
-        public int? BarangayId { get; set; }
-        [Column("muncity_id")]
-        public int? MuncityId { get; set; }
-        [Column("province_id")]
-        public int? ProvinceId { get; set; }
-        [Column("contact")]
-        [StringLength(255)]
-        public string Contact { get; set; }
+        [Column("barangay")]
+        public int? Barangay { get; set; }
+        [Column("muncity")]
+        public int? Muncity { get; set; }
+        [Column("province")]
+        public int? Province { get; set; }
+        [Column("contact_no")]
+        [StringLength(50)]
+        public string ContactNo { get; set; }
         [Column("email")]
         [StringLength(255)]
         public string Email { get; set; }
@@ -55,15 +55,15 @@ namespace SOPCOVIDChecker.Models
         [Column("updated_at")]
         public DateTime? UpdatedAt { get; set; }
 
-        [ForeignKey(nameof(BarangayId))]
+        [ForeignKey(nameof(Barangay))]
         [InverseProperty("Facility")]
-        public virtual Barangay Barangay { get; set; }
-        [ForeignKey(nameof(MuncityId))]
+        public virtual Barangay BarangayNavigation { get; set; }
+        [ForeignKey(nameof(Muncity))]
         [InverseProperty("Facility")]
-        public virtual Muncity Muncity { get; set; }
-        [ForeignKey(nameof(ProvinceId))]
+        public virtual Muncity MuncityNavigation { get; set; }
+        [ForeignKey(nameof(Province))]
         [InverseProperty("Facility")]
-        public virtual Province Province { get; set; }
+        public virtual Province ProvinceNavigation { get; set; }
         [InverseProperty("DiseaseReportingUnit")]
         public virtual ICollection<Sopform> Sopform { get; set; }
         [InverseProperty("Facility")]

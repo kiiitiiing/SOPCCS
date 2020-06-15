@@ -26,7 +26,7 @@ namespace SOPCOVIDChecker.Controllers
         public List<SelectAddress> FilteredBarangay(int? muncityId)
         {
             var filteredBarangay = _context.Barangay
-                .Where(x => x.MuncityId.Equals(muncityId))
+                .Where(x => x.Muncity.Equals(muncityId))
                 .Select(y => new SelectAddress
                 {
                     Id = y.Id,

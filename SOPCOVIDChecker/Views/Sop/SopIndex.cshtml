@@ -1,0 +1,61 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+}
+
+    <div class="card card-success card-outline">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-md-6">
+                    Test Results for SARS-CoV-2 Viral RNA Detection by Real Time-Polymerase Chain Reaction
+                    <br />
+                    Total Patients: <span class="total_ctr"></span>
+                </div>
+                <div class="col-md-6">
+                    <div class="fa-pull-right form-inline ml-3">
+                        <!-- INPUT -->
+                        <input class="form-control form-control-sm"
+                               name="search"
+                               id="searchDetail"
+                               placeholder="Search name"
+                               type="text" />
+                        <button id="searchPatientBtn" type="button" class="btn btn-sm btn-success">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        <button type="button" id="add-sop"
+                                class="btn btn-sm btn-primary"
+                                data-toggle="ajax-modal"
+                                data-target="#large_modal"
+                                data-action="#large_content"
+                                data-url="@Url.Action("AddSopModal","Sop")">
+                            <i class="fa fa-user"></i>
+                            &nbsp;Add User
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-body" id="list_sop">
+            <div class="overlay d-flex justify-content-center align-items-center">
+                <i class="fas fa-2x fa-sync fa-spin"></i>
+            </div>
+            <br />
+            <br />
+
+        </div>
+        <div id="sop-sop" style="margin: auto; margin-bottom: 20px;"></div>
+    </div>
+
+    <script>
+    var vessel = $('#sop-sop');
+    LoadList('', vessel, '@Url.Action("SopFormJson","Sop")');
+
+    $(function () {
+        $('#searchPatientBtn').on('click', function (event) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            var q = $('#searchDetail').val();
+            LoadList(q, vessel, '@Url.Action("SopFormJson","Sop")');
+        });
+    })
+    </script>

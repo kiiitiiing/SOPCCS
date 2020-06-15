@@ -17,10 +17,10 @@ namespace SOPCOVIDChecker.Models
         [Key]
         [Column("id")]
         public int Id { get; set; }
-        [Column("province_id")]
-        public int? ProvinceId { get; set; }
-        [Column("muncity_id")]
-        public int MuncityId { get; set; }
+        [Column("province")]
+        public int? Province { get; set; }
+        [Column("muncity")]
+        public int Muncity { get; set; }
         [Required]
         [Column("description")]
         [StringLength(255)]
@@ -34,11 +34,11 @@ namespace SOPCOVIDChecker.Models
         [Column("updated_at")]
         public DateTime? UpdatedAt { get; set; }
 
-        [InverseProperty("Barangay")]
+        [InverseProperty("BarangayNavigation")]
         public virtual ICollection<Facility> Facility { get; set; }
-        [InverseProperty("Barangay")]
+        [InverseProperty("BarangayNavigation")]
         public virtual ICollection<Patient> Patient { get; set; }
-        [InverseProperty("Barangay")]
+        [InverseProperty("BarangayNavigation")]
         public virtual ICollection<Sopusers> Sopusers { get; set; }
     }
 }

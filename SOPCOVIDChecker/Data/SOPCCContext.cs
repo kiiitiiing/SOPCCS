@@ -51,7 +51,7 @@ namespace SOPCOVIDChecker.Data
 
                 entity.Property(e => e.ChiefHospital).IsUnicode(false);
 
-                entity.Property(e => e.Contact).IsUnicode(false);
+                entity.Property(e => e.ContactNo).IsUnicode(false);
 
                 entity.Property(e => e.Email).IsUnicode(false);
 
@@ -61,19 +61,19 @@ namespace SOPCOVIDChecker.Data
 
                 entity.Property(e => e.Picture).IsUnicode(false);
 
-                entity.HasOne(d => d.Barangay)
+                entity.HasOne(d => d.BarangayNavigation)
                     .WithMany(p => p.Facility)
-                    .HasForeignKey(d => d.BarangayId)
+                    .HasForeignKey(d => d.Barangay)
                     .HasConstraintName("FK_Facility_Barangay");
 
-                entity.HasOne(d => d.Muncity)
+                entity.HasOne(d => d.MuncityNavigation)
                     .WithMany(p => p.Facility)
-                    .HasForeignKey(d => d.MuncityId)
+                    .HasForeignKey(d => d.Muncity)
                     .HasConstraintName("FK_Facility_Muncity");
 
-                entity.HasOne(d => d.Province)
+                entity.HasOne(d => d.ProvinceNavigation)
                     .WithMany(p => p.Facility)
-                    .HasForeignKey(d => d.ProvinceId)
+                    .HasForeignKey(d => d.Province)
                     .HasConstraintName("FK_Facility_Province");
             });
 
@@ -84,31 +84,33 @@ namespace SOPCOVIDChecker.Data
 
             modelBuilder.Entity<Patient>(entity =>
             {
-                entity.Property(e => e.Address).IsUnicode(false);
+                entity.Property(e => e.ContactNo).IsUnicode(false);
 
-                entity.Property(e => e.ContactNumber).IsUnicode(false);
+                entity.Property(e => e.Fname).IsUnicode(false);
 
-                entity.Property(e => e.Firstname).IsUnicode(false);
+                entity.Property(e => e.Lname).IsUnicode(false);
 
-                entity.Property(e => e.Lastname).IsUnicode(false);
+                entity.Property(e => e.Mname).IsUnicode(false);
 
-                entity.Property(e => e.Middlename).IsUnicode(false);
+                entity.Property(e => e.Sex)
+                    .IsUnicode(false)
+                    .IsFixedLength();
 
-                entity.HasOne(d => d.Barangay)
+                entity.HasOne(d => d.BarangayNavigation)
                     .WithMany(p => p.Patient)
-                    .HasForeignKey(d => d.BarangayId)
+                    .HasForeignKey(d => d.Barangay)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Patient_Barangay");
 
-                entity.HasOne(d => d.Muncity)
+                entity.HasOne(d => d.MuncityNavigation)
                     .WithMany(p => p.Patient)
-                    .HasForeignKey(d => d.MuncityId)
+                    .HasForeignKey(d => d.Muncity)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Patient_Muncity");
 
-                entity.HasOne(d => d.Province)
+                entity.HasOne(d => d.ProvinceNavigation)
                     .WithMany(p => p.Patient)
-                    .HasForeignKey(d => d.ProvinceId)
+                    .HasForeignKey(d => d.Province)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Patient_Province");
             });
@@ -172,15 +174,15 @@ namespace SOPCOVIDChecker.Data
 
             modelBuilder.Entity<Sopusers>(entity =>
             {
-                entity.Property(e => e.Contact).IsUnicode(false);
+                entity.Property(e => e.ContactNo).IsUnicode(false);
 
                 entity.Property(e => e.Email).IsUnicode(false);
 
-                entity.Property(e => e.Firstname).IsUnicode(false);
+                entity.Property(e => e.Fname).IsUnicode(false);
 
-                entity.Property(e => e.Lastname).IsUnicode(false);
+                entity.Property(e => e.Lname).IsUnicode(false);
 
-                entity.Property(e => e.Middlename).IsUnicode(false);
+                entity.Property(e => e.Mname).IsUnicode(false);
 
                 entity.Property(e => e.Password).IsUnicode(false);
 
@@ -188,9 +190,9 @@ namespace SOPCOVIDChecker.Data
 
                 entity.Property(e => e.Username).IsUnicode(false);
 
-                entity.HasOne(d => d.Barangay)
+                entity.HasOne(d => d.BarangayNavigation)
                     .WithMany(p => p.Sopusers)
-                    .HasForeignKey(d => d.BarangayId)
+                    .HasForeignKey(d => d.Barangay)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_SOPUsers_Barangay");
 
@@ -200,15 +202,15 @@ namespace SOPCOVIDChecker.Data
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_SOPUsers_Facility");
 
-                entity.HasOne(d => d.Muncity)
+                entity.HasOne(d => d.MuncityNavigation)
                     .WithMany(p => p.Sopusers)
-                    .HasForeignKey(d => d.MuncityId)
+                    .HasForeignKey(d => d.Muncity)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_SOPUsers_Muncity");
 
-                entity.HasOne(d => d.Province)
+                entity.HasOne(d => d.ProvinceNavigation)
                     .WithMany(p => p.Sopusers)
-                    .HasForeignKey(d => d.ProvinceId)
+                    .HasForeignKey(d => d.Province)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_SOPUsers_Province");
             });
