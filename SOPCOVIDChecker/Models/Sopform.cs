@@ -35,11 +35,11 @@ namespace SOPCOVIDChecker.Models
         [StringLength(50)]
         public string RequesterContact { get; set; }
         [Required]
-        [Column("type_speciment")]
+        [Column("type_specimen")]
         [StringLength(50)]
-        public string TypeSpeciment { get; set; }
-        [Column("datetime_speciment_receipt")]
-        public DateTime DatetimeSpecimentReceipt { get; set; }
+        public string TypeSpecimen { get; set; }
+        [Column("datetime_specimen_receipt")]
+        public DateTime DatetimeSpecimenReceipt { get; set; }
         [Column("date_result", TypeName = "date")]
         public DateTime DateResult { get; set; }
         [Column("patient_id")]

@@ -31,7 +31,6 @@ namespace SOPCOVIDChecker.Controllers
             _context = context;
         }
 
-        [Authorize(Policy = "Admin")]
         public IActionResult Register()
         {
             ViewBag.Facilities = new SelectList(_context.Facility.ToList(), "Id", "Name");
@@ -40,7 +39,6 @@ namespace SOPCOVIDChecker.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Policy = "Admin")]
         public async Task<IActionResult> Register(AddUserModel model)
         {
             var errors = ModelState.Values.SelectMany(v => v.Errors);
@@ -76,7 +74,7 @@ namespace SOPCOVIDChecker.Controllers
             else
             {
                 if (User.FindFirstValue(ClaimTypes.Role).Equals("user"))
-                    return RedirectToAction("Index", "Patients");
+                    return RedirectToAction("Index", "Sop");
                 else if (User.FindFirstValue(ClaimTypes.Role).Equals("admin"))
                 {
                     return RedirectToAction("Index", "Admin");
@@ -103,7 +101,7 @@ namespace SOPCOVIDChecker.Controllers
                 {
                     await LoginAsync(user, model.RememberMe);
                     if (user.UserLevel.Equals("user"))
-                        return RedirectToAction("Index", "Patients");
+                        return RedirectToAction("Index", "Sop");
                     else if (user.UserLevel.Equals("admin"))
                     {
                         return RedirectToAction("Index", "Admin");

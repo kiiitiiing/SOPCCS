@@ -27,9 +27,6 @@ namespace SOPCOVIDChecker.Models.AccountViewModels
         [Display(Name = "email")]
         public string Email { get; set; }
         [Required]
-        [Display(Name = "designation")]
-        public string Designation { get; set; }
-        [Required]
         [Display(Name = "username")]
         public string Username { get; set; }
         [Required]

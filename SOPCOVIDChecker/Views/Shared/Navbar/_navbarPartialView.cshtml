@@ -3,15 +3,9 @@
     @if (User.FindFirstValue(ClaimTypes.Role) == "user")
     {
         <li class="nav-item ">
-            <a class="nav-link" asp-area="" asp-controller="Patients" asp-action="Index">
+            <a class="nav-link" asp-area="" asp-controller="Sop" asp-action="Index">
                 <i class="fa fa-home"></i>
                 &nbsp;Home
-            </a>
-        </li>
-        <li class="nav-item ">
-            <a class="nav-link" asp-area="" asp-controller="Patients" asp-action="Activities">
-                <i class="fas fa-hospital"></i>
-                &nbsp;Activities
             </a>
         </li>
         <!-- MANAGE -->

@@ -1,0 +1,144 @@
+﻿@model Sopform
+
+<div class="modal-content" id="register_modal">
+    <div class="modal-header">
+        <h4>
+            <i class="fa fa-user-plus"></i>
+            &nbsp;New SOP
+        </h4>
+        <button type="button" class="close" data-dismiss="modal">
+            <span aria-hidden="true">×</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form asp-action="AddSopModal">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>First name:</label>
+                        <input class="form-control" asp-for="Patient.Firstname" />
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Middle name:</label>
+                        <input class="form-control" asp-for="Patient.Middlename" />
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Last name:</label>
+                        <input class="form-control" asp-for="Patient.Lastname" />
+                    </div>
+                </div>
+                @*<div class="col-md-12">
+                    <div class="form-group">
+                        <label>Contact number:</label>
+                        <input class="form-control" asp-for="Patient.ContactNumber" />
+                    </div>
+                </div>*@
+            </div>
+            <div class="row">
+                <div class="col-sm-4">
+                    <label>Date of birth:</label>
+                    <input id="patient_dob" type="date" class="form-control" asp-for="Patient.DateOfBirth" onchange="CaclAge($(this).val());" />
+                </div>
+                <div class="col-sm-4">
+                    <label>Age:</label>
+                    <input type="number" class="form-control" asp-for="Patient.Age" readonly />
+                </div>
+                <div class="col-sm-4">
+                    <label>Gender:</label><br />
+                    <input type="radio" id="male" asp-for="Patient.Gender" value="true" checked />
+                    <label for="male">Male</label>
+                    <input type="radio" id="female" asp-for="Patient.Gender" value="false" />
+                    <label for="male">Female</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4">
+                    Province:
+                    <select asp-for="Patient.ProvinceId" asp-items="ViewBag.Province" id="patientProvince" title="province" class="form-control col-sm-12">
+                    </select>
+                </div>
+                <div class="col-sm-4">
+                    City/Municipality:
+                    <select id="muncityFilters"
+                            asp-for="Patient.MuncityId"
+                            asp-items="ViewBag.Muncity"
+                            title="City/Municipality"
+                            class="form-control col-sm-12"
+                            onchange="MuncityOnChange($(this).val(),'@Url.Action("FilteredBarangay","Helper", new {muncityId=""})');">
+                        <option value="">Select City/Municipaliy</option>
+                    </select>
+                </div>
+                <div class="col-sm-4">
+                    Barangay:
+                    <select id="barangays" asp-for="Patient.BarangayId" asp-items="ViewBag.BarangayP" title="Barangay" class="form-control col-sm-12">
+                        <option value="">Select Barangay</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-8">
+                    <label>PCR result:</label>
+                    <input type="text" class="form-control" asp-for="PcrResult" />
+                </div>
+                <div class="col-sm-4">
+                    <label>Date & Time of Collection:</label>
+                    <input type="datetime-local" class="form-control" asp-for="DatetimeCollection" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4">
+                    <label>Requested By:</label>
+                    <input type="text" class="form-control" asp-for="RequestedBy" />
+                </div>
+                <div class="col-sm-4">
+                    <label>Contact number:</label>
+                    <input type="text" class="form-control" asp-for="RequesterContact" />
+                </div>
+                <div class="col-sm-4">
+                    <label>Sample ID:</label>
+                    <input type="text" class="form-control" asp-for="SampleId" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4">
+                    <label>Type of Speciment &amp; Collection Medium:</label>
+                    <input type="text" class="form-control" asp-for="TypeSpecimen" />
+                </div>
+                <div class="col-sm-4">
+                    <label>Date &amp; Time if Specimen Receipt:</label>
+                    <input type="datetime-local" class="form-control" asp-for="DatetimeSpecimenReceipt" />
+                </div>
+                <div class="col-sm-4">
+                    <label>Date of Result Release:</label>
+                    <input type="date" class="form-control" asp-for="DateResult" />
+                </div>
+            </div>
+            @if (ViewBag.Errors != null)
+            {
+                <div class="row" style="margin-top: 20px;">
+                    <div class="col-sm-12 center" style="align-content:center">
+                        <span class="text-danger text-sm">Please input the required fields.</span>
+                    </div>
+                </div>
+            }
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-sm btn-danger fa-pull-left" type="button" data-dismiss="modal">
+            Cancel
+        </button>
+        <button class="btn btn-sm btn-success fa-pull-right" data-action="small_modal" data-save="modal">
+            Submit
+        </button>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.select2').select2()
+    })
+</script>

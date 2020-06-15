@@ -155,7 +155,7 @@ namespace SOPCOVIDChecker.Data
 
                 entity.Property(e => e.SampleId).IsUnicode(false);
 
-                entity.Property(e => e.TypeSpeciment).IsUnicode(false);
+                entity.Property(e => e.TypeSpecimen).IsUnicode(false);
 
                 entity.HasOne(d => d.DiseaseReportingUnit)
                     .WithMany(p => p.Sopform)
