@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +14,7 @@ using SOPCOVIDChecker.Services;
 
 namespace SOPCOVIDChecker.Controllers
 {
+    [Authorize(Policy = "RHUUsers")]
     public class SopController : Controller
     {
         private readonly SOPCCContext _context;
@@ -39,7 +41,7 @@ namespace SOPCOVIDChecker.Controllers
                     Sex = x.Patient.Sex,
                     DateOfBirth = x.Patient.Dob,
                     PCRResult = x.PcrResult,
-                    DRU = x.DiseaseReportingUnit.Abbrevation,
+                    DRU = x.DiseaseReportingUnit.Abbr,
                     Address = x.Patient.GetAddress(),
                     DateTimeCollection = x.DatetimeCollection,
                     RequestedBy = x.RequestedBy,

@@ -20,7 +20,7 @@ namespace DPADIS.Services
         Task<(bool, Sopusers)> ValidateUserCredentialsAsync(string username, string password);
         void ChangePasswordAsync(Sopusers user, string newPassword);
 
-        Task<bool> RegisterUserAsync(AddUserModel model);
+        Task<bool> RegisterUserAsync(AddUserModel model, string level);
         Task UpdateUserAsync(UpdateUserModel model);
 
     }
@@ -83,7 +83,7 @@ namespace DPADIS.Services
             _context.SaveChanges();
         }
 
-        public Task<bool> RegisterUserAsync(AddUserModel model)
+        public Task<bool> RegisterUserAsync(AddUserModel model, string level)
         {
             if (_context.Sopusers.Any(x => x.Username.Equals(model.Username)))
             {
@@ -102,9 +102,9 @@ namespace DPADIS.Services
                 newUser.FacilityId = model.FacilityId;
                 newUser.Username = model.Username;
                 newUser.Password = hashedPass;
-                newUser.UserLevel = "user";
-                newUser.Barangay = (int)facility.Barangay;
-                newUser.Muncity = (int)facility.Muncity;
+                newUser.UserLevel = level;
+                newUser.Barangay = facility.Barangay;
+                newUser.Muncity = facility.Muncity;
                 newUser.Province = (int)facility.Province;
                 newUser.CreatedAt = DateTime.Now;
                 newUser.UpdatedAt = DateTime.Now;

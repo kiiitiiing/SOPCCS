@@ -149,3 +149,15 @@ C:\Users\KitingKo\source\repos\SOPCOVIDChecker\SOPCOVIDChecker\obj\Debug\netcore
 C:\Users\KitingKo\source\repos\SOPCOVIDChecker\SOPCOVIDChecker\obj\Debug\netcoreapp3.1\Razor\Views\Sop\AddSopModal.cshtml.g.cs
 C:\Users\KitingKo\source\repos\SOPCOVIDChecker\SOPCOVIDChecker\obj\Debug\netcoreapp3.1\Razor\Views\Sop\SopIndex.cshtml.g.cs
 C:\Users\KitingKo\source\repos\SOPCOVIDChecker\SOPCOVIDChecker\obj\Debug\netcoreapp3.1\Razor\Views\Sop\SopIndexPartial.cshtml.g.cs
+C:\Users\KitingKo\source\repos\SOPCOVIDChecker\SOPCOVIDChecker\obj\Debug\netcoreapp3.1\Razor\Views\Admin\Index.cshtml.g.cs
+C:\Users\KitingKo\source\repos\SOPCOVIDChecker\SOPCOVIDChecker\obj\Debug\netcoreapp3.1\Razor\Views\Pesu\Index.cshtml.g.cs
+C:\Users\KitingKo\source\repos\SOPCOVIDChecker\SOPCOVIDChecker\obj\Debug\netcoreapp3.1\Razor\Views\Resu\Index.cshtml.g.cs
+C:\Users\KitingKo\source\repos\SOPCOVIDChecker\SOPCOVIDChecker\obj\Debug\netcoreapp3.1\Razor\Views\Result\Index.cshtml.g.cs
+C:\Users\KitingKo\source\repos\SOPCOVIDChecker\SOPCOVIDChecker\obj\Debug\netcoreapp3.1\Razor\Views\Admin\RhuUsers.cshtml.g.cs
+C:\Users\KitingKo\source\repos\SOPCOVIDChecker\SOPCOVIDChecker\obj\Debug\netcoreapp3.1\Razor\Views\Admin\RhuUsersPartial.cshtml.g.cs
+C:\Users\KitingKo\source\repos\SOPCOVIDChecker\SOPCOVIDChecker\obj\Debug\netcoreapp3.1\Razor\Views\Admin\PesuUsers.cshtml.g.cs
+C:\Users\KitingKo\source\repos\SOPCOVIDChecker\SOPCOVIDChecker\obj\Debug\netcoreapp3.1\Razor\Views\Admin\PesuUsersPartial.cshtml.g.cs
+C:\Users\KitingKo\source\repos\SOPCOVIDChecker\SOPCOVIDChecker\obj\Debug\netcoreapp3.1\Razor\Views\Admin\ResuUsers.cshtml.g.cs
+C:\Users\KitingKo\source\repos\SOPCOVIDChecker\SOPCOVIDChecker\obj\Debug\netcoreapp3.1\Razor\Views\Admin\ResuUsersPartial.cshtml.g.cs
+C:\Users\KitingKo\source\repos\SOPCOVIDChecker\SOPCOVIDChecker\obj\Debug\netcoreapp3.1\Razor\Views\Admin\LabUsers.cshtml.g.cs
+C:\Users\KitingKo\source\repos\SOPCOVIDChecker\SOPCOVIDChecker\obj\Debug\netcoreapp3.1\Razor\Views\Admin\LabUsersPartial.cshtml.g.cs

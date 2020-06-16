@@ -43,9 +43,9 @@ namespace SOPCOVIDChecker.Models
         [Column("facility_id")]
         public int FacilityId { get; set; }
         [Column("barangay")]
-        public int Barangay { get; set; }
+        public int? Barangay { get; set; }
         [Column("muncity")]
-        public int Muncity { get; set; }
+        public int? Muncity { get; set; }
         [Column("province")]
         public int Province { get; set; }
         [Column("created_at")]

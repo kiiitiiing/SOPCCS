@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SOPCOVIDChecker.Data;
@@ -10,6 +11,7 @@ using SOPCOVIDChecker.Models;
 
 namespace SOPCOVIDChecker.Controllers
 {
+    [Authorize(Policy = "LABUsers")]
     public class ResultController : Controller
     {
         private readonly SOPCCContext _context;
@@ -19,6 +21,14 @@ namespace SOPCOVIDChecker.Controllers
             _context = context;
         }
 
+        #region
+        public IActionResult Index()
+        {
+            return View();
+        }
+        #endregion
+
+        #region RESULT FORM
         public async Task<IActionResult> ResultForm(string sampleId)
         {
             var sop = await _context.Sopform
@@ -51,6 +61,7 @@ namespace SOPCOVIDChecker.Controllers
             ViewBag.Errors = errors;
             return PartialView(model);
         }
+        #endregion
 
         #region HELPERS
         public int UserId => int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));

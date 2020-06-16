@@ -147,6 +147,11 @@ namespace SOPCOVIDChecker.Services
             return string.IsNullOrEmpty(text) ? "" : text;
         }
 
+        public static string AddressCheck(this int? id)
+        {
+            return id == null ? "" : id.ToString();
+        }
+
         public static string GetSex(this int sex)
         {
             if (sex == 1)

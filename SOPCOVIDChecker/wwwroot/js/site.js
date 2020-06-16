@@ -221,12 +221,20 @@ function LoadList(q, container, urls) {
                 action = 'SopIndexPartial';
                 controller = 'Sop'
             }
-            else if (container.attr('id') == 'patients-actions') {
-                action = 'ActivitiesPartial';
-                controller = 'Patients';
+            else if (container.attr('id') == 'admin-rhu') {
+                action = 'RhuUsersPartial';
+                controller = 'Admin';
             }
-            else if (container.attr('id') == 'admin-patients') {
-                action = 'IndexPartial';
+            else if (container.attr('id') == 'admin-pesu') {
+                action = 'PesuUsersPartial';
+                controller = 'Admin';
+            }
+            else if (container.attr('id') == 'admin-resu') {
+                action = 'ResuUsersPartial';
+                controller = 'Admin';
+            }
+            else if (container.attr('id') == 'admin-lab') {
+                action = 'LabUsersPartial';
                 controller = 'Admin';
             }
             $.when(CallPartialView(response, controller, action)).done(function (output) {
@@ -245,7 +253,7 @@ function LoadList(q, container, urls) {
 //TEMPLATES
 
 function CallPartialView(data, controller, action) {
-    console.log(JSON.stringify(data));
+    console.log("/SOPCCS/" + controller + "/" + action);
     return $.ajax({
         url: "/SOPCCS/" + controller + "/" + action,
         type: "POST",

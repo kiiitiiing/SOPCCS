@@ -1,0 +1,47 @@
+﻿
+@{
+    ViewData["Title"] = "RESU Users";
+}
+
+<div class="col-md-12">
+    <div class="card card-success card-outline">
+        <div class="card-header">
+            <div class="fa-pull-right form-inline ml-3">
+                <div class="form-actions no-color">
+                    <input type="text" class="form-control form-control-sm" id="searchDetail" placeholder="Search name" name="name" />
+                    <button type="button" id="searchPatientBtn" class="btn btn-sm btn-success">
+                        <i class="fa fa-search"></i>
+                        &nbsp;Search
+                    </button>
+                    <button type="button" id="register"
+                            class="btn btn-sm btn-primary"
+                            data-toggle="ajax-modal"
+                            data-target="#small_modal"
+                            data-action="#small_content"
+                            data-url="@Url.Action("Register","Account")">
+                        <i class="fa fa-user"></i>
+                        &nbsp;Add User
+                    </button>
+                </div>
+            </div>
+            <h4>RESU Users</h4>
+        </div>
+        <div class="card-body">
+        </div>
+        <div id="admin-resu" style="margin: auto; margin-bottom: 20px;"></div>
+    </div>
+</div>
+
+<script>
+        var vessel = $('#admin-resu');
+        LoadList('', vessel, '@Url.Action("ResuJson","Admin")');
+
+        $(function () {
+            $('#searchPatientBtn').on('click', function (event) {
+                event.preventDefault();
+                event.stopImmediatePropagation();
+                var q = $('#searchDetail').val();
+                LoadList(q, vessel, '@Url.Action("ResuJson", "Admin")');
+            });
+        })
+</script>

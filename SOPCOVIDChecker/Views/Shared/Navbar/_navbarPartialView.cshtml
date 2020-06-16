@@ -1,9 +1,126 @@
 ﻿<ul class="navbar-nav flex-grow-1">
     <!-- NAVBAR -->
-    @if (User.FindFirstValue(ClaimTypes.Role) == "user")
+    @if (User.FindFirstValue(ClaimTypes.Role) == "RHU")
     {
         <li class="nav-item ">
-            <a class="nav-link" asp-area="" asp-controller="Sop" asp-action="Index">
+            <a class="nav-link" asp-area="" asp-controller="Sop" asp-action="SopIndex">
+                <i class="fa fa-home"></i>
+                &nbsp;Home
+            </a>
+        </li>
+        <!-- MANAGE -->
+        <li class="nav-item dropdown">
+            <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                <i class="fa fa-user-injured"></i>
+                &nbsp;Patient
+            </a>
+
+            <ul class="dropdown-menu border-0 shadow">
+                <li>
+
+                    <a class="dropdown-item" asp-controller="Admission" asp-action="Index">
+                        <i class="fas fa-procedures"></i>
+                        &nbsp;Admit
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item" asp-controller="Discharge" asp-action="Index">
+                        <i class="fas fa-ambulance"></i>
+                        &nbsp;Discharge
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item" asp-controller="Patients" asp-action="Excel">
+                        <i class="fas fa-upload"></i>
+                        &nbsp;Upload
+                    </a>
+                </li>
+            </ul>
+        </li>
+    }
+
+    @if (User.FindFirstValue(ClaimTypes.Role) == "PESU")
+    {
+        <li class="nav-item ">
+            <a class="nav-link" asp-area="" asp-controller="Sop" asp-action="SopIndex">
+                <i class="fa fa-home"></i>
+                &nbsp;Home
+            </a>
+        </li>
+        <!-- MANAGE -->
+        <li class="nav-item dropdown">
+            <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                <i class="fa fa-user-injured"></i>
+                &nbsp;Patient
+            </a>
+
+            <ul class="dropdown-menu border-0 shadow">
+                <li>
+
+                    <a class="dropdown-item" asp-controller="Admission" asp-action="Index">
+                        <i class="fas fa-procedures"></i>
+                        &nbsp;Admit
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item" asp-controller="Discharge" asp-action="Index">
+                        <i class="fas fa-ambulance"></i>
+                        &nbsp;Discharge
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item" asp-controller="Patients" asp-action="Excel">
+                        <i class="fas fa-upload"></i>
+                        &nbsp;Upload
+                    </a>
+                </li>
+            </ul>
+        </li>
+    }
+
+    @if (User.FindFirstValue(ClaimTypes.Role) == "RESU")
+    {
+        <li class="nav-item ">
+            <a class="nav-link" asp-area="" asp-controller="Sop" asp-action="SopIndex">
+                <i class="fa fa-home"></i>
+                &nbsp;Home
+            </a>
+        </li>
+        <!-- MANAGE -->
+        <li class="nav-item dropdown">
+            <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                <i class="fa fa-user-injured"></i>
+                &nbsp;Patient
+            </a>
+
+            <ul class="dropdown-menu border-0 shadow">
+                <li>
+
+                    <a class="dropdown-item" asp-controller="Admission" asp-action="Index">
+                        <i class="fas fa-procedures"></i>
+                        &nbsp;Admit
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item" asp-controller="Discharge" asp-action="Index">
+                        <i class="fas fa-ambulance"></i>
+                        &nbsp;Discharge
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item" asp-controller="Patients" asp-action="Excel">
+                        <i class="fas fa-upload"></i>
+                        &nbsp;Upload
+                    </a>
+                </li>
+            </ul>
+        </li>
+    }
+
+    @if (User.FindFirstValue(ClaimTypes.Role) == "LAB")
+    {
+        <li class="nav-item ">
+            <a class="nav-link" asp-area="" asp-controller="Sop" asp-action="SopIndex">
                 <i class="fa fa-home"></i>
                 &nbsp;Home
             </a>
@@ -48,17 +165,46 @@
                 &nbsp;Home
             </a>
         </li>
-        <li class="nav-item ">
-            <a class="nav-link" asp-area="" asp-controller="Admin" asp-action="Users">
-                <i class="fa fa-user-md"></i>
+
+        <li class="nav-item dropdown">
+            <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-users"></i>
                 &nbsp;Users
             </a>
+
+            <ul class="dropdown-menu border-0 shadow">
+                <li>
+
+                    <a class="dropdown-item" asp-controller="Admin" asp-action="RhuUsers">
+                        <i class="fas fa-procedures"></i>
+                        &nbsp;RHU
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item" asp-controller="Admin" asp-action="PesuUsers">
+                        <i class="fas fa-ambulance"></i>
+                        &nbsp;PESU
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item" asp-controller="Admin" asp-action="ResuUsers">
+                        <i class="fas fa-upload"></i>
+                        &nbsp;RESU
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item" asp-controller="Admin" asp-action="LabUsers">
+                        <i class="fa fa-hospital"></i>
+                        &nbsp;LAB
+                    </a>
+                </li>
+            </ul>
         </li>
     }
-    <li class="nav-item fa-pull-right">
-        <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Logout">
-            <i class="fa fa-sign-out-alt"></i>
-            &nbsp;Logout
-        </a>
-    </li>
-</ul>
+        <li class="nav-item fa-pull-right">
+            <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Logout">
+                <i class="fa fa-sign-out-alt"></i>
+                &nbsp;Logout
+            </a>
+        </li>
+    </ul>

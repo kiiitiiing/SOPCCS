@@ -11,7 +11,6 @@ namespace SOPCOVIDChecker.Models.AccountViewModels
         [Required]
         [Display(Name = "first name")]
         public string Firstname { get; set; }
-        [Required]
         [Display(Name = "middle name")]
         public string Middlename { get; set; }
         [Required]

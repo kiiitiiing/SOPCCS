@@ -13,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using SOPCOVIDChecker.Data;
 using SOPCOVIDChecker.Models;
 using SOPCOVIDChecker.Models.AccountViewModels;
+using SOPCOVIDChecker.Services;
 
 namespace SOPCOVIDChecker.Controllers
 {
@@ -41,10 +42,11 @@ namespace SOPCOVIDChecker.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(AddUserModel model)
         {
+            ViewBag.Facilities = new SelectList(_context.Facility.ToList(), "Id", "Name");
             var errors = ModelState.Values.SelectMany(v => v.Errors);
             if (ModelState.IsValid)
             {
-                if (await _userService.RegisterUserAsync(model))
+                if (await _userService.RegisterUserAsync(model, "RHU"))
                 {
                     return PartialView(model);
                 }
@@ -73,12 +75,17 @@ namespace SOPCOVIDChecker.Controllers
             }
             else
             {
-                if (User.FindFirstValue(ClaimTypes.Role).Equals("user"))
+
+                if (User.FindFirstValue(ClaimTypes.Role).Equals("RHU"))
                     return RedirectToAction("SopIndex", "Sop");
+                else if (User.FindFirstValue(ClaimTypes.Role).Equals("PESU"))
+                    return RedirectToAction("Index", "Pesu");
+                else if (User.FindFirstValue(ClaimTypes.Role).Equals("RESU"))
+                    return RedirectToAction("Index", "Resu");
+                else if (User.FindFirstValue(ClaimTypes.Role).Equals("LAB"))
+                    return RedirectToAction("Index", "Result");
                 else if (User.FindFirstValue(ClaimTypes.Role).Equals("admin"))
-                {
                     return RedirectToAction("Index", "Admin");
-                }
                 else
                     return NotFound();
             }
@@ -100,12 +107,16 @@ namespace SOPCOVIDChecker.Controllers
                 if (isValid)
                 {
                     await LoginAsync(user, model.RememberMe);
-                    if (user.UserLevel.Equals("user"))
+                    if (user.UserLevel.Equals("RHU"))
                         return RedirectToAction("SopIndex", "Sop");
+                    else if (user.UserLevel.Equals("PESU"))
+                        return RedirectToAction("Index", "Pesu");
+                    else if (user.UserLevel.Equals("RESU"))
+                        return RedirectToAction("Index", "Resu");
+                    else if (user.UserLevel.Equals("LAB"))
+                        return RedirectToAction("Index", "Result");
                     else if (user.UserLevel.Equals("admin"))
-                    {
                         return RedirectToAction("Index", "Admin");
-                    }
                 }
                 else
                 {
@@ -193,8 +204,8 @@ namespace SOPCOVIDChecker.Controllers
                 new Claim("Facility", user.FacilityId.ToString()),
                 new Claim("FacilityName", user.Facility.Name),
                 new Claim("Province", user.Province.ToString()),
-                new Claim("Muncity", user.Muncity.ToString()),
-                new Claim("Barangay", user.Barangay.ToString()),
+                new Claim("Muncity", user.Muncity.AddressCheck()),
+                new Claim("Barangay", user.Barangay.AddressCheck()),
             };
 
             var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);

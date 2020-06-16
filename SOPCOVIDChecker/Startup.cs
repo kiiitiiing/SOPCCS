@@ -53,7 +53,10 @@ namespace SOPCOVIDChecker
 
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("Users", polBuilder => polBuilder.RequireClaim(ClaimTypes.Role, "user"));
+                options.AddPolicy("RHUUsers", polBuilder => polBuilder.RequireClaim(ClaimTypes.Role, "RHU"));
+                options.AddPolicy("PESUUsers", polBuilder => polBuilder.RequireClaim(ClaimTypes.Role, "PESU"));
+                options.AddPolicy("RESUUsers", polBuilder => polBuilder.RequireClaim(ClaimTypes.Role, "RESU"));
+                options.AddPolicy("LABUsers", polBuilder => polBuilder.RequireClaim(ClaimTypes.Role, "LAB"));
                 options.AddPolicy("Admin", polBuilder => polBuilder.RequireClaim(ClaimTypes.Role, "admin"));
             });
             services.Configure<CookiePolicyOptions>(options =>
