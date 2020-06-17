@@ -48,11 +48,16 @@ namespace SOPCOVIDChecker.Models
         public string ApprovedBy { get; set; }
         [Column("sop_form_id")]
         public int SopFormId { get; set; }
+        [Column("created_by")]
+        public int? CreatedBy { get; set; }
         [Column("created_at")]
         public DateTime CreatedAt { get; set; }
         [Column("updated_at")]
         public DateTime UpdatedAt { get; set; }
 
+        [ForeignKey(nameof(CreatedBy))]
+        [InverseProperty(nameof(Sopusers.ResultForm))]
+        public virtual Sopusers CreatedByNavigation { get; set; }
         [ForeignKey(nameof(SopFormId))]
         [InverseProperty(nameof(Sopform.ResultForm))]
         public virtual Sopform SopForm { get; set; }

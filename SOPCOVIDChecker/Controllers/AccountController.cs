@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using DPADIS.Services;
+using SOPCOVIDChecker.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
@@ -13,7 +13,6 @@ using Microsoft.Extensions.Configuration;
 using SOPCOVIDChecker.Data;
 using SOPCOVIDChecker.Models;
 using SOPCOVIDChecker.Models.AccountViewModels;
-using SOPCOVIDChecker.Services;
 
 namespace SOPCOVIDChecker.Controllers
 {
@@ -81,7 +80,7 @@ namespace SOPCOVIDChecker.Controllers
                 else if (User.FindFirstValue(ClaimTypes.Role).Equals("PESU"))
                     return RedirectToAction("Index", "Pesu");
                 else if (User.FindFirstValue(ClaimTypes.Role).Equals("RESU"))
-                    return RedirectToAction("Index", "Resu");
+                    return RedirectToAction("ResuIndexIndex", "Resu");
                 else if (User.FindFirstValue(ClaimTypes.Role).Equals("LAB"))
                     return RedirectToAction("Index", "Result");
                 else if (User.FindFirstValue(ClaimTypes.Role).Equals("admin"))
@@ -112,7 +111,7 @@ namespace SOPCOVIDChecker.Controllers
                     else if (user.UserLevel.Equals("PESU"))
                         return RedirectToAction("Index", "Pesu");
                     else if (user.UserLevel.Equals("RESU"))
-                        return RedirectToAction("Index", "Resu");
+                        return RedirectToAction("ResuIndex", "Resu");
                     else if (user.UserLevel.Equals("LAB"))
                         return RedirectToAction("Index", "Result");
                     else if (user.UserLevel.Equals("admin"))

@@ -147,6 +147,11 @@ namespace SOPCOVIDChecker.Data
 
                 entity.Property(e => e.VerifiedBy).IsUnicode(false);
 
+                entity.HasOne(d => d.CreatedByNavigation)
+                    .WithMany(p => p.ResultForm)
+                    .HasForeignKey(d => d.CreatedBy)
+                    .HasConstraintName("FK_ResultForm_SOPUsers");
+
                 entity.HasOne(d => d.SopForm)
                     .WithMany(p => p.ResultForm)
                     .HasForeignKey(d => d.SopFormId)
@@ -170,7 +175,7 @@ namespace SOPCOVIDChecker.Data
                     .WithMany(p => p.Sopform)
                     .HasForeignKey(d => d.DiseaseReportingUnitId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_SOPForm_Facility");
+                    .HasConstraintName("FK_SOPForm_SOPUsers");
 
                 entity.HasOne(d => d.Patient)
                     .WithMany(p => p.Sopform)

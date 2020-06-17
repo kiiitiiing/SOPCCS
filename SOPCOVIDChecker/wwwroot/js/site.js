@@ -23,7 +23,6 @@
     });
 
     $('a[data-toggle="ajax-modal"]').click(function (event) {
-        console.log('wtf');
         var url = $(this).data('url');
         var target = $(this).data('target');
         var action = $(this).data('action');
@@ -68,10 +67,10 @@
                 if (errors == '') {
                     $.when(modals.find('.modal.show').modal('hide')).done(function () {
                         LoadingModal('#' + contentId);
-                        if (contentId == 'add_patient_modal') {
+                        if (contentId == 'new_sop') {
                             Toast("Added new patient")
-                            var vessel = $('#patients-patients');
-                            LoadPatients('', vessel, 'Patients', 'PatientsJson');
+                            var vessel = $('#sop-sop');
+                            LoadList('', vessel, '/SOPCCS/Sop/SopFormJson');
                         }
                         else if (contentId == 'admin_patient_modal') {
                             Toast("Admitted patient")
@@ -101,7 +100,31 @@
         var contentId = largeModal.find('.modal-dialog.modal-lg').attr('id');
         LoadingModal('#' + contentId);
     });
-})
+});
+
+function OpenModal(btn) {
+    var url = btn.data('url');
+    var target = btn.data('target');
+    var action = btn.data('action');
+    console.log(url);
+    var content = $(action);
+    $.when($(target).modal('show')).done(function () {
+        $.ajax({
+            url: url,
+            tpye: 'get',
+            async: true,
+            success: function (data) {
+                content.html(data);
+            },
+            timeout: 60000,
+            error: function (xhr, ajaxOptions, thrownError) {
+                $('body').find('#loadings').modal('toggle');
+                alert(xhr.responseText);
+                alert(thrownError);
+            }
+        });
+    });
+}
 
 function MuncityOnChange(id,url) {
     var barangaysSelect = $('#barangays');
@@ -186,6 +209,11 @@ function Toast(message) {
 
 }
 
+function AddLoading() {
+    var loadi = '<div class="d-flex justify-content-center align-items-center" style="position: absolute !important; top: 1; left: 50%"><i class="fas fa-2x fa-sync fa-spin"></i></div>';
+    return loadi;
+}
+
 
 //PAGINATIONS
 function LoadList(q, container, urls) {
@@ -236,6 +264,10 @@ function LoadList(q, container, urls) {
             else if (container.attr('id') == 'admin-lab') {
                 action = 'LabUsersPartial';
                 controller = 'Admin';
+            }
+            else if (container.attr('id') == 'resu-index') {
+                action = 'ResuIndexPartial';
+                controller = 'Resu';
             }
             $.when(CallPartialView(response, controller, action)).done(function (output) {
                 $('.total_ctr').html(ctr);

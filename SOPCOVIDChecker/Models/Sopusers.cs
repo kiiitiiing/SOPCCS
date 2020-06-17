@@ -8,6 +8,12 @@ namespace SOPCOVIDChecker.Models
     [Table("SOPUsers")]
     public partial class Sopusers
     {
+        public Sopusers()
+        {
+            ResultForm = new HashSet<ResultForm>();
+            Sopform = new HashSet<Sopform>();
+        }
+
         [Key]
         [Column("id")]
         public int Id { get; set; }
@@ -65,5 +71,9 @@ namespace SOPCOVIDChecker.Models
         [ForeignKey(nameof(Province))]
         [InverseProperty("Sopusers")]
         public virtual Province ProvinceNavigation { get; set; }
+        [InverseProperty("CreatedByNavigation")]
+        public virtual ICollection<ResultForm> ResultForm { get; set; }
+        [InverseProperty("DiseaseReportingUnit")]
+        public virtual ICollection<Sopform> Sopform { get; set; }
     }
 }

@@ -28,48 +28,55 @@ using SOPCOVIDChecker.Models;
 #nullable disable
 #nullable restore
 #line 3 "C:\Users\KitingKo\source\repos\SOPCOVIDChecker\SOPCOVIDChecker\Views\_ViewImports.cshtml"
-using SOPCOVIDChecker.Models.AccountViewModels;
+using SOPCOVIDChecker.Models.ResuViewModel;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
 #line 4 "C:\Users\KitingKo\source\repos\SOPCOVIDChecker\SOPCOVIDChecker\Views\_ViewImports.cshtml"
-using SOPCOVIDChecker.Models.SopViewModel;
+using SOPCOVIDChecker.Models.AccountViewModels;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
 #line 5 "C:\Users\KitingKo\source\repos\SOPCOVIDChecker\SOPCOVIDChecker\Views\_ViewImports.cshtml"
-using SOPCOVIDChecker.Models.AdminViewModel;
+using SOPCOVIDChecker.Models.SopViewModel;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
 #line 6 "C:\Users\KitingKo\source\repos\SOPCOVIDChecker\SOPCOVIDChecker\Views\_ViewImports.cshtml"
-using System.Security.Claims;
+using SOPCOVIDChecker.Models.AdminViewModel;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
 #line 7 "C:\Users\KitingKo\source\repos\SOPCOVIDChecker\SOPCOVIDChecker\Views\_ViewImports.cshtml"
-using System.Globalization;
+using System.Security.Claims;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
 #line 8 "C:\Users\KitingKo\source\repos\SOPCOVIDChecker\SOPCOVIDChecker\Views\_ViewImports.cshtml"
+using System.Globalization;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 9 "C:\Users\KitingKo\source\repos\SOPCOVIDChecker\SOPCOVIDChecker\Views\_ViewImports.cshtml"
 using SOPCOVIDChecker.Services;
 
 #line default
 #line hidden
 #nullable disable
     [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"45c2ba7fd9a13ceececcb45ea7e17041471b6f2b", @"/Views/Shared/Navbar/_navbarPartialView.cshtml")]
-    [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"5c922a36aa9b467a90532c346c61b4225799251a", @"/Views/_ViewImports.cshtml")]
+    [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"519d5f25b27282f78adef58f0ce574341b1c4600", @"/Views/_ViewImports.cshtml")]
     public class Views_Shared_Navbar__navbarPartialView : global::Microsoft.AspNetCore.Mvc.Razor.RazorPage<dynamic>
     {
         private static readonly global::Microsoft.AspNetCore.Razor.TagHelpers.TagHelperAttribute __tagHelperAttribute_0 = new global::Microsoft.AspNetCore.Razor.TagHelpers.TagHelperAttribute("class", new global::Microsoft.AspNetCore.Html.HtmlString("nav-link"), global::Microsoft.AspNetCore.Razor.TagHelpers.HtmlAttributeValueStyle.DoubleQuotes);
@@ -123,7 +130,7 @@ using SOPCOVIDChecker.Services;
 #line hidden
 #nullable disable
             WriteLiteral("        <li class=\"nav-item \">\r\n            ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "45c2ba7fd9a13ceececcb45ea7e17041471b6f2b10100", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "45c2ba7fd9a13ceececcb45ea7e17041471b6f2b10314", async() => {
                 WriteLiteral("\r\n                <i class=\"fa fa-home\"></i>\r\n                &nbsp;Home\r\n            ");
             }
             );
@@ -156,7 +163,7 @@ using SOPCOVIDChecker.Services;
                 <li>
 
                     ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "45c2ba7fd9a13ceececcb45ea7e17041471b6f2b12272", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "45c2ba7fd9a13ceececcb45ea7e17041471b6f2b12486", async() => {
                 WriteLiteral("\r\n                        <i class=\"fas fa-procedures\"></i>\r\n                        &nbsp;Admit\r\n                    ");
             }
             );
@@ -175,7 +182,7 @@ using SOPCOVIDChecker.Services;
             Write(__tagHelperExecutionContext.Output);
             __tagHelperExecutionContext = __tagHelperScopeManager.End();
             WriteLiteral("\r\n                </li>\r\n                <li>\r\n                    ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "45c2ba7fd9a13ceececcb45ea7e17041471b6f2b13906", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "45c2ba7fd9a13ceececcb45ea7e17041471b6f2b14120", async() => {
                 WriteLiteral("\r\n                        <i class=\"fas fa-ambulance\"></i>\r\n                        &nbsp;Discharge\r\n                    ");
             }
             );
@@ -194,7 +201,7 @@ using SOPCOVIDChecker.Services;
             Write(__tagHelperExecutionContext.Output);
             __tagHelperExecutionContext = __tagHelperScopeManager.End();
             WriteLiteral("\r\n                </li>\r\n                <li>\r\n                    ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "45c2ba7fd9a13ceececcb45ea7e17041471b6f2b15543", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "45c2ba7fd9a13ceececcb45ea7e17041471b6f2b15757", async() => {
                 WriteLiteral("\r\n                        <i class=\"fas fa-upload\"></i>\r\n                        &nbsp;Upload\r\n                    ");
             }
             );
@@ -230,7 +237,7 @@ using SOPCOVIDChecker.Services;
 #line hidden
 #nullable disable
             WriteLiteral("        <li class=\"nav-item \">\r\n            ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "45c2ba7fd9a13ceececcb45ea7e17041471b6f2b17734", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "45c2ba7fd9a13ceececcb45ea7e17041471b6f2b17948", async() => {
                 WriteLiteral("\r\n                <i class=\"fa fa-home\"></i>\r\n                &nbsp;Home\r\n            ");
             }
             );
@@ -263,7 +270,7 @@ using SOPCOVIDChecker.Services;
                 <li>
 
                     ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "45c2ba7fd9a13ceececcb45ea7e17041471b6f2b19906", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "45c2ba7fd9a13ceececcb45ea7e17041471b6f2b20120", async() => {
                 WriteLiteral("\r\n                        <i class=\"fas fa-procedures\"></i>\r\n                        &nbsp;Admit\r\n                    ");
             }
             );
@@ -282,7 +289,7 @@ using SOPCOVIDChecker.Services;
             Write(__tagHelperExecutionContext.Output);
             __tagHelperExecutionContext = __tagHelperScopeManager.End();
             WriteLiteral("\r\n                </li>\r\n                <li>\r\n                    ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "45c2ba7fd9a13ceececcb45ea7e17041471b6f2b21540", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "45c2ba7fd9a13ceececcb45ea7e17041471b6f2b21754", async() => {
                 WriteLiteral("\r\n                        <i class=\"fas fa-ambulance\"></i>\r\n                        &nbsp;Discharge\r\n                    ");
             }
             );
@@ -301,7 +308,7 @@ using SOPCOVIDChecker.Services;
             Write(__tagHelperExecutionContext.Output);
             __tagHelperExecutionContext = __tagHelperScopeManager.End();
             WriteLiteral("\r\n                </li>\r\n                <li>\r\n                    ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "45c2ba7fd9a13ceececcb45ea7e17041471b6f2b23177", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "45c2ba7fd9a13ceececcb45ea7e17041471b6f2b23391", async() => {
                 WriteLiteral("\r\n                        <i class=\"fas fa-upload\"></i>\r\n                        &nbsp;Upload\r\n                    ");
             }
             );
@@ -337,7 +344,7 @@ using SOPCOVIDChecker.Services;
 #line hidden
 #nullable disable
             WriteLiteral("        <li class=\"nav-item \">\r\n            ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "45c2ba7fd9a13ceececcb45ea7e17041471b6f2b25368", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "45c2ba7fd9a13ceececcb45ea7e17041471b6f2b25582", async() => {
                 WriteLiteral("\r\n                <i class=\"fa fa-home\"></i>\r\n                &nbsp;Home\r\n            ");
             }
             );
@@ -370,7 +377,7 @@ using SOPCOVIDChecker.Services;
                 <li>
 
                     ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "45c2ba7fd9a13ceececcb45ea7e17041471b6f2b27540", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "45c2ba7fd9a13ceececcb45ea7e17041471b6f2b27754", async() => {
                 WriteLiteral("\r\n                        <i class=\"fas fa-procedures\"></i>\r\n                        &nbsp;Admit\r\n                    ");
             }
             );
@@ -389,7 +396,7 @@ using SOPCOVIDChecker.Services;
             Write(__tagHelperExecutionContext.Output);
             __tagHelperExecutionContext = __tagHelperScopeManager.End();
             WriteLiteral("\r\n                </li>\r\n                <li>\r\n                    ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "45c2ba7fd9a13ceececcb45ea7e17041471b6f2b29174", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "45c2ba7fd9a13ceececcb45ea7e17041471b6f2b29388", async() => {
                 WriteLiteral("\r\n                        <i class=\"fas fa-ambulance\"></i>\r\n                        &nbsp;Discharge\r\n                    ");
             }
             );
@@ -408,7 +415,7 @@ using SOPCOVIDChecker.Services;
             Write(__tagHelperExecutionContext.Output);
             __tagHelperExecutionContext = __tagHelperScopeManager.End();
             WriteLiteral("\r\n                </li>\r\n                <li>\r\n                    ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "45c2ba7fd9a13ceececcb45ea7e17041471b6f2b30811", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "45c2ba7fd9a13ceececcb45ea7e17041471b6f2b31025", async() => {
                 WriteLiteral("\r\n                        <i class=\"fas fa-upload\"></i>\r\n                        &nbsp;Upload\r\n                    ");
             }
             );
@@ -444,7 +451,7 @@ using SOPCOVIDChecker.Services;
 #line hidden
 #nullable disable
             WriteLiteral("        <li class=\"nav-item \">\r\n            ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "45c2ba7fd9a13ceececcb45ea7e17041471b6f2b33003", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "45c2ba7fd9a13ceececcb45ea7e17041471b6f2b33217", async() => {
                 WriteLiteral("\r\n                <i class=\"fa fa-home\"></i>\r\n                &nbsp;Home\r\n            ");
             }
             );
@@ -477,7 +484,7 @@ using SOPCOVIDChecker.Services;
                 <li>
 
                     ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "45c2ba7fd9a13ceececcb45ea7e17041471b6f2b35175", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "45c2ba7fd9a13ceececcb45ea7e17041471b6f2b35389", async() => {
                 WriteLiteral("\r\n                        <i class=\"fas fa-procedures\"></i>\r\n                        &nbsp;Admit\r\n                    ");
             }
             );
@@ -496,7 +503,7 @@ using SOPCOVIDChecker.Services;
             Write(__tagHelperExecutionContext.Output);
             __tagHelperExecutionContext = __tagHelperScopeManager.End();
             WriteLiteral("\r\n                </li>\r\n                <li>\r\n                    ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "45c2ba7fd9a13ceececcb45ea7e17041471b6f2b36809", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "45c2ba7fd9a13ceececcb45ea7e17041471b6f2b37023", async() => {
                 WriteLiteral("\r\n                        <i class=\"fas fa-ambulance\"></i>\r\n                        &nbsp;Discharge\r\n                    ");
             }
             );
@@ -515,7 +522,7 @@ using SOPCOVIDChecker.Services;
             Write(__tagHelperExecutionContext.Output);
             __tagHelperExecutionContext = __tagHelperScopeManager.End();
             WriteLiteral("\r\n                </li>\r\n                <li>\r\n                    ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "45c2ba7fd9a13ceececcb45ea7e17041471b6f2b38446", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "45c2ba7fd9a13ceececcb45ea7e17041471b6f2b38660", async() => {
                 WriteLiteral("\r\n                        <i class=\"fas fa-upload\"></i>\r\n                        &nbsp;Upload\r\n                    ");
             }
             );
@@ -551,7 +558,7 @@ using SOPCOVIDChecker.Services;
 #line hidden
 #nullable disable
             WriteLiteral("        <li class=\"nav-item \">\r\n            ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "45c2ba7fd9a13ceececcb45ea7e17041471b6f2b40644", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "45c2ba7fd9a13ceececcb45ea7e17041471b6f2b40858", async() => {
                 WriteLiteral("\r\n                <i class=\"fa fa-home\"></i>\r\n                &nbsp;Home\r\n            ");
             }
             );
@@ -582,7 +589,7 @@ using SOPCOVIDChecker.Services;
                 <li>
 
                     ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "45c2ba7fd9a13ceececcb45ea7e17041471b6f2b42820", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "45c2ba7fd9a13ceececcb45ea7e17041471b6f2b43034", async() => {
                 WriteLiteral("\r\n                        <i class=\"fas fa-procedures\"></i>\r\n                        &nbsp;RHU\r\n                    ");
             }
             );
@@ -601,7 +608,7 @@ using SOPCOVIDChecker.Services;
             Write(__tagHelperExecutionContext.Output);
             __tagHelperExecutionContext = __tagHelperScopeManager.End();
             WriteLiteral("\r\n                </li>\r\n                <li>\r\n                    ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "45c2ba7fd9a13ceececcb45ea7e17041471b6f2b44456", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "45c2ba7fd9a13ceececcb45ea7e17041471b6f2b44670", async() => {
                 WriteLiteral("\r\n                        <i class=\"fas fa-ambulance\"></i>\r\n                        &nbsp;PESU\r\n                    ");
             }
             );
@@ -620,7 +627,7 @@ using SOPCOVIDChecker.Services;
             Write(__tagHelperExecutionContext.Output);
             __tagHelperExecutionContext = __tagHelperScopeManager.End();
             WriteLiteral("\r\n                </li>\r\n                <li>\r\n                    ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "45c2ba7fd9a13ceececcb45ea7e17041471b6f2b46092", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "45c2ba7fd9a13ceececcb45ea7e17041471b6f2b46306", async() => {
                 WriteLiteral("\r\n                        <i class=\"fas fa-upload\"></i>\r\n                        &nbsp;RESU\r\n                    ");
             }
             );
@@ -639,7 +646,7 @@ using SOPCOVIDChecker.Services;
             Write(__tagHelperExecutionContext.Output);
             __tagHelperExecutionContext = __tagHelperScopeManager.End();
             WriteLiteral("\r\n                </li>\r\n                <li>\r\n                    ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "45c2ba7fd9a13ceececcb45ea7e17041471b6f2b47725", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "45c2ba7fd9a13ceececcb45ea7e17041471b6f2b47939", async() => {
                 WriteLiteral("\r\n                        <i class=\"fa fa-hospital\"></i>\r\n                        &nbsp;LAB\r\n                    ");
             }
             );
@@ -666,7 +673,7 @@ using SOPCOVIDChecker.Services;
 #line hidden
 #nullable disable
             WriteLiteral("        <li class=\"nav-item fa-pull-right\">\r\n            ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "45c2ba7fd9a13ceececcb45ea7e17041471b6f2b49642", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "45c2ba7fd9a13ceececcb45ea7e17041471b6f2b49856", async() => {
                 WriteLiteral("\r\n                <i class=\"fa fa-sign-out-alt\"></i>\r\n                &nbsp;Logout\r\n            ");
             }
             );

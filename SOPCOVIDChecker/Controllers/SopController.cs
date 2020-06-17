@@ -24,6 +24,7 @@ namespace SOPCOVIDChecker.Controllers
             _context = context;
         }
 
+        #region SOP FORM LIST
         [HttpGet]
         public async Task<ActionResult<List<SopLess>>> SopFormJson(string q)
         {
@@ -31,9 +32,10 @@ namespace SOPCOVIDChecker.Controllers
                 .Include(x => x.Patient).ThenInclude(x => x.BarangayNavigation)
                 .Include(x => x.Patient).ThenInclude(x => x.MuncityNavigation)
                 .Include(x => x.Patient).ThenInclude(x => x.ProvinceNavigation)
-                .Include(x => x.DiseaseReportingUnit)
+                .Include(x => x.DiseaseReportingUnit).ThenInclude(x => x.Facility)
+                .Where(x=>x.DiseaseReportingUnit.FacilityId == UserFacility)
                 .OrderByDescending(x => x.CreatedAt)
-                .Select(x=> new SopLess 
+                .Select(x => new SopLess
                 {
                     SampleId = x.SampleId,
                     PatientName = x.Patient.GetFullName(),
@@ -41,7 +43,8 @@ namespace SOPCOVIDChecker.Controllers
                     Sex = x.Patient.Sex,
                     DateOfBirth = x.Patient.Dob,
                     PCRResult = x.PcrResult,
-                    DRU = x.DiseaseReportingUnit.Abbr,
+                    DRU = string.IsNullOrEmpty(x.DiseaseReportingUnit.Facility.Abbr)?
+                        x.DiseaseReportingUnit.Facility.Name : x.DiseaseReportingUnit.Facility.Abbr,
                     Address = x.Patient.GetAddress(),
                     DateTimeCollection = x.DatetimeCollection,
                     RequestedBy = x.RequestedBy,
@@ -69,7 +72,8 @@ namespace SOPCOVIDChecker.Controllers
         {
             return PartialView(model);
         }
-
+        #endregion
+        #region ADD SOP FORM
         public IActionResult AddSopModal()
         {
             ViewBag.Province = GetProvinces();
@@ -93,7 +97,8 @@ namespace SOPCOVIDChecker.Controllers
             model.Patient.UpdatedAt = DateTime.Now;
             model.CreatedAt = DateTime.Now;
             model.UpdatedAt = DateTime.Now;
-            model.DiseaseReportingUnitId = UserFacility;
+            model.DiseaseReportingUnitId = UserId;
+            model.ResultForm.Add(NewResultForm());
 
             if (ModelState.IsValid)
             {
@@ -107,8 +112,26 @@ namespace SOPCOVIDChecker.Controllers
 
             return PartialView(model);
         }
-
+        #endregion
         #region HELPERS
+
+        public ResultForm NewResultForm()
+        {
+            var form = new ResultForm
+            {
+                LabTestPerformed = "",
+                TestResult = "",
+                FinalResult = "",
+                Interpretation = "",
+                PerformedBy = "",
+                VerifiedBy = "",
+                ApprovedBy = "",
+                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now
+            };
+
+            return form;
+        }
 
         public SelectList GetMuncities(int id)
         {

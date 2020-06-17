@@ -13,7 +13,7 @@ using Microsoft.Extensions.Options;
 using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 
-namespace DPADIS.Services
+namespace SOPCOVIDChecker.Services
 {
     public interface IUserService
     {
