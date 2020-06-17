@@ -90,6 +90,14 @@ namespace SOPCOVIDChecker.Controllers
                 return PartialView(model);
             }
 
+            var sop = await _context.Sopform
+                .Include(x => x.Patient).ThenInclude(x => x.BarangayNavigation)
+                .Include(x => x.Patient).ThenInclude(x => x.MuncityNavigation)
+                .Include(x => x.Patient).ThenInclude(x => x.ProvinceNavigation)
+                .Include(x => x.DiseaseReportingUnit).ThenInclude(x => x.Facility)
+                .SingleOrDefaultAsync(x => x.Id == model.SopFormId);
+
+            model.SopForm = sop;
             ViewBag.Errors = errors;
             return PartialView(model);
         }

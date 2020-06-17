@@ -65,7 +65,6 @@
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="9"></td>
                     </tr>
                     <tr>
                         <td colspan="3" rowspan="2">
@@ -76,7 +75,6 @@
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="9"></td>
                     </tr>
                     <tr>
                         <td colspan="3">
@@ -115,7 +113,6 @@
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="17"></td>
                     </tr>
                     <tr>
                         <td colspan="17" class="text-center">
@@ -123,14 +120,11 @@
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="17"></td>
                     </tr>
                     <tr>
-                        <td colspan="7">
-                            <label>LABORATORY TEST PERFORMED:</label>
-                        </td>
-                        <td colspan="10">
-                            <textarea class="" asp-for="LabTestPerformed" style="height: 100%; width: 100%; border: 0;" />
+                        <td colspan="17">
+                            <label>LABORATORY TEST PERFORMED:</label><br />
+                            <textarea class="form-control" asp-for="LabTestPerformed" style="height: 100%; width: 100%;" />
                         </td>
                     </tr>
                     <tr>
@@ -149,29 +143,83 @@
                         <td colspan="8">
                             <label>
                                 TEST RESULT AND UNITS OR MEASUREMENTS:
-                            </label>
+                            </label><br />
+                            <input class="form-control" asp-for="TestResult" style="height: 100% !important; width: 100% !important; box-sizing: border-box;" />
                         </td>
                         <td colspan="9">
-                            <input class="form-control" asp-for="TestResult" style="height: 100% !important; width: 100% !important; box-sizing: border-box; border: 0;" />
+                            <label>
+                                BIOLOGICAL REFERENCE INTERVALS:
+                            </label><br />
+                            <input class="form-control" asp-for="BiologicalReferrence" style="height: 100% !important; width: 100% !important; box-sizing: border-box;" />
+                        </td>
+                    </tr>
+                    <tr></tr>
+                    <tr>
+                        <td colspan="17" class="text-center">
+                            <label>INTERPRETATION OF RESULTS WHEN APPROPRIATE</label>
                         </td>
                     </tr>
                     <tr>
                         <td colspan="8">
-                            <label>
-                                BIOLOGICAL REFERENCE INTERVALS:
-                            </label>
+                            <select class="form-control final_result" asp-for="FinalResult" onchange="ResultChange($(this));">
+                                <option value="" selected hidden>
+                                    Choose Result
+                                </option>
+                                <option>
+                                    SARS-CoV-2 (causative agent of COVID-19) viral RNA detected
+                                </option>
+                                <option>
+                                    SARS-CoV-2 (causative agent of COVID-19) viral RNA not detected
+                                </option>
+                                <option>
+                                    Invalid due to specimen quality
+                                </option>
+                            </select>
                         </td>
                         <td colspan="9">
-                            <input class="form-control" asp-for="BiologicalReferrence" style="height: 100% !important; width: 100% !important; box-sizing: border-box; border: 0;" />
+                            <textarea class="form-control" asp-for="Interpretation" id="interpret" rows="2" style="height: 100% !important; width: 100% !important; font-size: 10px; box-sizing: border-box;" readonly/>
+                        </td>
+                    </tr>
+                    <tr></tr>
+                    <tr>
+                        <td colspan="17" class="text-center">
+                            <label style="font-style:italic">This laboratory result should be interpreted together with the available clinical and epidemiological information.</label>
+                        </td>
+                    </tr>
+                    <tr></tr>
+                    <tr>
+                        <td colspan="17" style=" padding-left: 20px; padding-right: 20px;">
+                            <label>Comments:</label><br />
+                            <textarea class="form-control" rows="3" asp-for="Comments"></textarea>
                         </td>
                     </tr>
                 </tbody>
             </table>
+            <div class="row" style="margin-top:15px;">
+                <div class="col-md-4">
+                    <label>Performed:</label><br />
+                    <select class="form-control" asp-for="PerformedBy">
+                        <option value="" selected hidden>Select MedTech</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label>Verified:</label><br />
+                    <select class="form-control" asp-for="PerformedBy">
+                        <option value="" selected hidden>Select Supervisor</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label>Approved:</label><br />
+                    <select class="form-control" asp-for="PerformedBy">
+                        <option value="" selected hidden>Select Chief</option>
+                    </select>
+                </div>
+            </div>
             @if (ViewBag.Errors != null)
             {
                 <div class="row" style="margin-top: 20px;">
                     <div class="col-sm-12 center" style="align-content:center">
-                        <span class="text-danger text-sm">Please select a Laboratory.</span>
+                        <span class="text-danger text-sm">Please Input requred fields.</span>
                     </div>
                 </div>
             }
@@ -191,4 +239,22 @@
     $(function () {
         $('.select2').select2()
     })
+
+    function ResultChange(value) {
+        var interInput = $('#interpret');
+        switch (value[0].selectedIndex) {
+            case 1: {
+                interInput.val('Positive\nfor SARS - CoV - 2(causative agent of COVID - 19');
+                break;
+            }
+            case 2: {
+                interInput.val('Negative\nfor SARS - CoV - 2(causative agent of COVID - 19)');
+                break;
+            }
+            case 3: {
+                interInput.val('Negative for test internal control\n(most likely due to poor specimen quality)');
+                break;
+            }
+        }
+    }
 </script>
