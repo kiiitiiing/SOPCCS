@@ -32,8 +32,10 @@ namespace SOPCOVIDChecker.Controllers
                 .Include(x => x.Patient).ThenInclude(x => x.BarangayNavigation)
                 .Include(x => x.Patient).ThenInclude(x => x.MuncityNavigation)
                 .Include(x => x.Patient).ThenInclude(x => x.ProvinceNavigation)
+                .Include(x => x.ResultForm)
                 .Include(x => x.DiseaseReportingUnit).ThenInclude(x => x.Facility)
-                .Where(x=>x.DiseaseReportingUnit.FacilityId == UserFacility)
+                .Where(x => x.DiseaseReportingUnit.FacilityId == UserFacility)
+                .Where(x => x.ResultForm.First().CreatedBy == null)
                 .OrderByDescending(x => x.CreatedAt)
                 .Select(x => new SopLess
                 {
@@ -43,7 +45,7 @@ namespace SOPCOVIDChecker.Controllers
                     Sex = x.Patient.Sex,
                     DateOfBirth = x.Patient.Dob,
                     PCRResult = x.PcrResult,
-                    DRU = string.IsNullOrEmpty(x.DiseaseReportingUnit.Facility.Abbr)?
+                    DRU = string.IsNullOrEmpty(x.DiseaseReportingUnit.Facility.Abbr) ?
                         x.DiseaseReportingUnit.Facility.Name : x.DiseaseReportingUnit.Facility.Abbr,
                     Address = x.Patient.GetAddress(),
                     DateTimeCollection = x.DatetimeCollection,
@@ -89,10 +91,7 @@ namespace SOPCOVIDChecker.Controllers
             var errors = ModelState.Values.SelectMany(x => x.Errors);
             ViewBag.Muncity = GetMuncities(UserProvince);
             ViewBag.Province = GetProvinces();
-            if(model.Patient.Barangay != 0)
-            {
-                ViewBag.Barangay = GetBarangays(model.Patient.Muncity, model.Patient.Province);
-            }
+            ViewBag.Barangay = GetBarangays(model.Patient.Muncity, model.Patient.Province);
             model.Patient.CreatedAt = DateTime.Now;
             model.Patient.UpdatedAt = DateTime.Now;
             model.CreatedAt = DateTime.Now;

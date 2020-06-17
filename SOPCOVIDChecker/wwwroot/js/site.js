@@ -72,11 +72,11 @@
                             var vessel = $('#sop-sop');
                             LoadList('', vessel, '/SOPCCS/Sop/SopFormJson');
                         }
-                        else if (contentId == 'admin_patient_modal') {
-                            Toast("Admitted patient")
-                            LoadListPatients();
+                        else if (contentId == 'lab_modal') {
+                            Toast("Sent to Lab")
+                            var vessel = $('#sop-sop');
+                            LoadList('', vessel, '/SOPCCS/Resu/ResuIndex');
                         }
-                        Toast('');
                     });
                 }
                 else
@@ -268,6 +268,10 @@ function LoadList(q, container, urls) {
             else if (container.attr('id') == 'resu-index') {
                 action = 'ResuIndexPartial';
                 controller = 'Resu';
+            }
+            else if (container.attr('id') == 'lab-index') {
+                action = 'LabIndexPartial';
+                controller = 'Result';
             }
             $.when(CallPartialView(response, controller, action)).done(function (output) {
                 $('.total_ctr').html(ctr);

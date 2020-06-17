@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewData["Title"] = "RESU";
+    ViewData["Title"] = "LABORATORY";
 }
 
 <div class="card card-warning card-outline">
@@ -8,7 +8,7 @@
         <div class="row">
             <div class="col-md-6">
                 <h4>
-                    SAMPLES SENT FOR CONFIRMATION<br />
+                    SAMPLES FOR CONFIRMATION<br />
                     <small>Total: <span class="total_ctr"></span></small>
                 </h4>
             </div>
@@ -27,7 +27,7 @@
             </div>
         </div>
     </div>
-    <div class="card-body" id="list_sop_resu" style="overflow:auto !important;">
+    <div class="card-body" id="list_lab_conf" style="overflow:auto !important;">
         <div class="overlay d-flex justify-content-center align-items-center">
             <i class="fas fa-2x fa-sync fa-spin"></i>
         </div>
@@ -35,20 +35,20 @@
         <br />
 
     </div>
-    <div id="resu-index" style="margin: auto; margin-bottom: 20px;"></div>
+    <div id="lab-index" style="margin: auto; margin-bottom: 20px;"></div>
 </div>
 
 
 <script>
-    var vessel = $('#resu-index');
-    LoadList('', vessel, '@Url.Action("ResuFormJson","Resu")');
+    var vessel = $('#lab-index');
+    LoadList('', vessel, '@Url.Action("LabJson","Result")');
 
     $(function () {
         $('#searchPatientBtn').on('click', function (event) {
             event.preventDefault();
             event.stopImmediatePropagation();
             var q = $('#searchDetail').val();
-            LoadList(q, vessel, '@Url.Action("ResuFormJson", "Resu")');
+            LoadList(q, vessel, '@Url.Action("LabJson", "Result")');
         });
     })
 </script>

@@ -81,7 +81,7 @@
     @if (User.FindFirstValue(ClaimTypes.Role) == "RESU")
     {
         <li class="nav-item ">
-            <a class="nav-link" asp-area="" asp-controller="Sop" asp-action="SopIndex">
+            <a class="nav-link" asp-area="" asp-controller="Resu" asp-action="ResuIndex">
                 <i class="fa fa-home"></i>
                 &nbsp;Home
             </a>
@@ -120,7 +120,7 @@
     @if (User.FindFirstValue(ClaimTypes.Role) == "LAB")
     {
         <li class="nav-item ">
-            <a class="nav-link" asp-area="" asp-controller="Sop" asp-action="SopIndex">
+            <a class="nav-link" asp-area="" asp-controller="Result" asp-action="LabIndex">
                 <i class="fa fa-home"></i>
                 &nbsp;Home
             </a>

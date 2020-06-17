@@ -151,7 +151,6 @@ C:\Users\KitingKo\source\repos\SOPCOVIDChecker\SOPCOVIDChecker\obj\Debug\netcore
 C:\Users\KitingKo\source\repos\SOPCOVIDChecker\SOPCOVIDChecker\obj\Debug\netcoreapp3.1\Razor\Views\Sop\SopIndexPartial.cshtml.g.cs
 C:\Users\KitingKo\source\repos\SOPCOVIDChecker\SOPCOVIDChecker\obj\Debug\netcoreapp3.1\Razor\Views\Admin\Index.cshtml.g.cs
 C:\Users\KitingKo\source\repos\SOPCOVIDChecker\SOPCOVIDChecker\obj\Debug\netcoreapp3.1\Razor\Views\Pesu\Index.cshtml.g.cs
-C:\Users\KitingKo\source\repos\SOPCOVIDChecker\SOPCOVIDChecker\obj\Debug\netcoreapp3.1\Razor\Views\Result\Index.cshtml.g.cs
 C:\Users\KitingKo\source\repos\SOPCOVIDChecker\SOPCOVIDChecker\obj\Debug\netcoreapp3.1\Razor\Views\Admin\RhuUsers.cshtml.g.cs
 C:\Users\KitingKo\source\repos\SOPCOVIDChecker\SOPCOVIDChecker\obj\Debug\netcoreapp3.1\Razor\Views\Admin\RhuUsersPartial.cshtml.g.cs
 C:\Users\KitingKo\source\repos\SOPCOVIDChecker\SOPCOVIDChecker\obj\Debug\netcoreapp3.1\Razor\Views\Admin\PesuUsers.cshtml.g.cs
@@ -163,3 +162,6 @@ C:\Users\KitingKo\source\repos\SOPCOVIDChecker\SOPCOVIDChecker\obj\Debug\netcore
 C:\Users\KitingKo\source\repos\SOPCOVIDChecker\SOPCOVIDChecker\obj\Debug\netcoreapp3.1\Razor\Views\Resu\ResuIndex.cshtml.g.cs
 C:\Users\KitingKo\source\repos\SOPCOVIDChecker\SOPCOVIDChecker\obj\Debug\netcoreapp3.1\Razor\Views\Resu\ResuIndexPartial.cshtml.g.cs
 C:\Users\KitingKo\source\repos\SOPCOVIDChecker\SOPCOVIDChecker\obj\Debug\netcoreapp3.1\Razor\Views\Resu\SendToLabModal.cshtml.g.cs
+C:\Users\KitingKo\source\repos\SOPCOVIDChecker\SOPCOVIDChecker\obj\Debug\netcoreapp3.1\Razor\Views\Result\LabIndex.cshtml.g.cs
+C:\Users\KitingKo\source\repos\SOPCOVIDChecker\SOPCOVIDChecker\obj\Debug\netcoreapp3.1\Razor\Views\Result\LabIndexPartial.cshtml.g.cs
+C:\Users\KitingKo\source\repos\SOPCOVIDChecker\SOPCOVIDChecker\obj\Debug\netcoreapp3.1\Razor\Views\Result\ResultForm.cshtml.g.cs

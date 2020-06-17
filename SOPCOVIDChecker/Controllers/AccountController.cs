@@ -82,7 +82,7 @@ namespace SOPCOVIDChecker.Controllers
                 else if (User.FindFirstValue(ClaimTypes.Role).Equals("RESU"))
                     return RedirectToAction("ResuIndexIndex", "Resu");
                 else if (User.FindFirstValue(ClaimTypes.Role).Equals("LAB"))
-                    return RedirectToAction("Index", "Result");
+                    return RedirectToAction("LabIndex", "Result");
                 else if (User.FindFirstValue(ClaimTypes.Role).Equals("admin"))
                     return RedirectToAction("Index", "Admin");
                 else
@@ -113,7 +113,7 @@ namespace SOPCOVIDChecker.Controllers
                     else if (user.UserLevel.Equals("RESU"))
                         return RedirectToAction("ResuIndex", "Resu");
                     else if (user.UserLevel.Equals("LAB"))
-                        return RedirectToAction("Index", "Result");
+                        return RedirectToAction("LabIndex", "Result");
                     else if (user.UserLevel.Equals("admin"))
                         return RedirectToAction("Index", "Admin");
                 }

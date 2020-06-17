@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SOPCOVIDChecker.Data;
 using SOPCOVIDChecker.Models;
+using SOPCOVIDChecker.Models.ResuViewModel;
+using SOPCOVIDChecker.Services;
 
 namespace SOPCOVIDChecker.Controllers
 {
@@ -21,28 +23,58 @@ namespace SOPCOVIDChecker.Controllers
             _context = context;
         }
 
-        #region
-        public IActionResult Index()
+        #region DASHBOARD
+        public async Task<ActionResult<List<ResultLess>>> LabJson(string q)
+        {
+            var form = await _context.ResultForm
+                .Include(x => x.SopForm).ThenInclude(x => x.DiseaseReportingUnit).ThenInclude(x => x.Facility)
+                .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.BarangayNavigation)
+                .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.MuncityNavigation)
+                .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.ProvinceNavigation)
+                .Include(x => x.CreatedByNavigation).ThenInclude(x => x.Facility)
+                .Where(x => x.CreatedBy != null)
+                .OrderByDescending(x => x.CreatedAt)
+                .Select(x => new ResultLess
+                {
+                    ResultFormId = x.Id,
+                    SOPId = x.SopFormId,
+                    PatientId = x.SopForm.PatientId,
+                    PatientName = x.SopForm.Patient.GetFullName(),
+                    DRU = x.SopForm.DiseaseReportingUnit.Facility.Name,
+                    PCRResult = x.SopForm.PcrResult,
+                    SampleId = x.SopForm.SampleId,
+                    SampleTaken = x.SopForm.DatetimeCollection
+                })
+                .ToListAsync();
+
+            if (!string.IsNullOrEmpty(q))
+            {
+                form = form.Where(x => x.PatientName.Contains(q, StringComparison.OrdinalIgnoreCase) || x.SampleId.Equals(q)).ToList();
+            }
+
+            return form;
+        }
+        public IActionResult LabIndex()
         {
             return View();
+        }
+        public IActionResult LabIndexPartial([FromBody]IEnumerable<ResultLess> model)
+        {
+            return PartialView(model);
         }
         #endregion
 
         #region RESULT FORM
-        public async Task<IActionResult> ResultForm(string sampleId)
+        public async Task<IActionResult> ResultForm(int resultId)
         {
-            var sop = await _context.Sopform
-                .Include(x => x.Patient)
-                .Include(x => x.DiseaseReportingUnit)
-                .SingleOrDefaultAsync(x => x.SampleId == sampleId);
+            var sop = await _context.ResultForm
+                .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.BarangayNavigation)
+                .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.MuncityNavigation)
+                .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.ProvinceNavigation)
+                .Include(x => x.SopForm).ThenInclude(x => x.DiseaseReportingUnit).ThenInclude(x => x.Facility)
+                .SingleOrDefaultAsync(x => x.Id == resultId);
 
-            return PartialView(new ResultForm
-            {
-                SopForm = sop,
-                SopFormId = sop.Id,
-                CreatedAt = DateTime.Now,
-                UpdatedAt = DateTime.Now
-            });
+            return PartialView(sop);
         }
 
         [HttpPost]
