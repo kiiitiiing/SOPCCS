@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SOPCOVIDChecker.Data;
 using SOPCOVIDChecker.Models;
+using SOPCOVIDChecker.Models.ResuViewModel;
 using SOPCOVIDChecker.Models.SopViewModel;
 using SOPCOVIDChecker.Services;
 
@@ -112,6 +113,48 @@ namespace SOPCOVIDChecker.Controllers
             return PartialView(model);
         }
         #endregion
+        #region STATUS
+        public async Task<ActionResult<List<ResultLess>>> SampleStatusJson(string q)
+        {
+            var sop = await _context.ResultForm
+                .Include(x => x.SopForm).ThenInclude(x => x.DiseaseReportingUnit).ThenInclude(x => x.Facility)
+                .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.BarangayNavigation)
+                .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.MuncityNavigation)
+                .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.ProvinceNavigation)
+                .Include(x => x.CreatedByNavigation).ThenInclude(x => x.Facility)
+                .Where(x=>x.SopForm.DiseaseReportingUnit.FacilityId == UserFacility)
+                .Where(x => x.CreatedBy != null)
+                .OrderByDescending(x => x.UpdatedAt)
+                .Select(x => new ResultLess
+                {
+                    SampleId = x.SopForm.SampleId,
+                    ResultFormId = x.Id,
+                    SOPId = x.SopFormId,
+                    PatientId = x.SopForm.PatientId,
+                    PatientName = x.SopForm.Patient.GetFullName(),
+                    Lab = x.CreatedByNavigation.Facility.Name,
+                    PCRResult = x.SopForm.PcrResult,
+                    Address = x.SopForm.Patient.GetAddress(),
+                    Status = x.Result()
+                })
+                .ToListAsync();
+
+            if(!string.IsNullOrEmpty(q))
+            {
+                sop = sop.Where(x => x.PatientName.Contains(q, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+
+            return sop;
+        }
+        public IActionResult SampleStatus()
+        {
+            return View();
+        }
+        public IActionResult SampleStatusPartial([FromBody]IEnumerable<ResultLess> model)
+        {
+            return PartialView(model);
+        }
+        #endregion
         #region HELPERS
 
         public ResultForm NewResultForm()
@@ -122,9 +165,9 @@ namespace SOPCOVIDChecker.Controllers
                 TestResult = "",
                 FinalResult = "",
                 Interpretation = "",
-                PerformedBy = "",
-                VerifiedBy = "",
-                ApprovedBy = "",
+                PerformedBy = null,
+                VerifiedBy = null,
+                ApprovedBy = null,
                 CreatedAt = DateTime.Now,
                 UpdatedAt = DateTime.Now
             };

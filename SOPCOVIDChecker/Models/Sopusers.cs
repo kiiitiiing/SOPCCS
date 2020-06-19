@@ -10,7 +10,10 @@ namespace SOPCOVIDChecker.Models
     {
         public Sopusers()
         {
-            ResultForm = new HashSet<ResultForm>();
+            ResultFormApprovedByNavigation = new HashSet<ResultForm>();
+            ResultFormCreatedByNavigation = new HashSet<ResultForm>();
+            ResultFormPerformedByNavigation = new HashSet<ResultForm>();
+            ResultFormVerifiedByNavigation = new HashSet<ResultForm>();
             Sopform = new HashSet<Sopform>();
         }
 
@@ -54,6 +57,15 @@ namespace SOPCOVIDChecker.Models
         public int? Muncity { get; set; }
         [Column("province")]
         public int Province { get; set; }
+        [Column("designation")]
+        [StringLength(255)]
+        public string Designation { get; set; }
+        [Column("license_no")]
+        [StringLength(255)]
+        public string LicenseNo { get; set; }
+        [Column("postfix")]
+        [StringLength(50)]
+        public string Postfix { get; set; }
         [Column("created_at")]
         public DateTime CreatedAt { get; set; }
         [Column("updated_at")]
@@ -71,8 +83,14 @@ namespace SOPCOVIDChecker.Models
         [ForeignKey(nameof(Province))]
         [InverseProperty("Sopusers")]
         public virtual Province ProvinceNavigation { get; set; }
-        [InverseProperty("CreatedByNavigation")]
-        public virtual ICollection<ResultForm> ResultForm { get; set; }
+        [InverseProperty(nameof(ResultForm.ApprovedByNavigation))]
+        public virtual ICollection<ResultForm> ResultFormApprovedByNavigation { get; set; }
+        [InverseProperty(nameof(ResultForm.CreatedByNavigation))]
+        public virtual ICollection<ResultForm> ResultFormCreatedByNavigation { get; set; }
+        [InverseProperty(nameof(ResultForm.PerformedByNavigation))]
+        public virtual ICollection<ResultForm> ResultFormPerformedByNavigation { get; set; }
+        [InverseProperty(nameof(ResultForm.VerifiedByNavigation))]
+        public virtual ICollection<ResultForm> ResultFormVerifiedByNavigation { get; set; }
         [InverseProperty("DiseaseReportingUnit")]
         public virtual ICollection<Sopform> Sopform { get; set; }
     }

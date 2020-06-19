@@ -45,7 +45,7 @@ namespace SOPCOVIDChecker
             })
             .AddCookie(options =>
             {
-                options.LoginPath = "/Account/Login";
+                options.LoginPath = "/SOPCCS/Account/Login";
                 options.LogoutPath = "/SOPCCS/Account/Logout";
                 options.AccessDeniedPath = "/SOPCCS/Account/NotFound";
                 options.ExpireTimeSpan = TimeSpan.FromHours(3);

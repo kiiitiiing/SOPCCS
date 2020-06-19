@@ -15,5 +15,8 @@ namespace SOPCOVIDChecker.Models.ResuViewModel
         public DateTime SampleTaken { get; set; }
         public string DRU { get; set; }
         public string PCRResult { get; set; }
+        public string Status { get; set; }
+        public string Address { get; set; }
+        public string Lab { get; set; }
     }
 }

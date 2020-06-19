@@ -34,18 +34,12 @@ namespace SOPCOVIDChecker.Models
         public string Interpretation { get; set; }
         [Column("comments", TypeName = "text")]
         public string Comments { get; set; }
-        [Required]
         [Column("performed_by")]
-        [StringLength(255)]
-        public string PerformedBy { get; set; }
-        [Required]
+        public int? PerformedBy { get; set; }
         [Column("verified_by")]
-        [StringLength(255)]
-        public string VerifiedBy { get; set; }
-        [Required]
+        public int? VerifiedBy { get; set; }
         [Column("approved_by")]
-        [StringLength(255)]
-        public string ApprovedBy { get; set; }
+        public int? ApprovedBy { get; set; }
         [Column("sop_form_id")]
         public int SopFormId { get; set; }
         [Column("created_by")]
@@ -55,11 +49,20 @@ namespace SOPCOVIDChecker.Models
         [Column("updated_at")]
         public DateTime UpdatedAt { get; set; }
 
+        [ForeignKey(nameof(ApprovedBy))]
+        [InverseProperty(nameof(Sopusers.ResultFormApprovedByNavigation))]
+        public virtual Sopusers ApprovedByNavigation { get; set; }
         [ForeignKey(nameof(CreatedBy))]
-        [InverseProperty(nameof(Sopusers.ResultForm))]
+        [InverseProperty(nameof(Sopusers.ResultFormCreatedByNavigation))]
         public virtual Sopusers CreatedByNavigation { get; set; }
+        [ForeignKey(nameof(PerformedBy))]
+        [InverseProperty(nameof(Sopusers.ResultFormPerformedByNavigation))]
+        public virtual Sopusers PerformedByNavigation { get; set; }
         [ForeignKey(nameof(SopFormId))]
         [InverseProperty(nameof(Sopform.ResultForm))]
         public virtual Sopform SopForm { get; set; }
+        [ForeignKey(nameof(VerifiedBy))]
+        [InverseProperty(nameof(Sopusers.ResultFormVerifiedByNavigation))]
+        public virtual Sopusers VerifiedByNavigation { get; set; }
     }
 }

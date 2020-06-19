@@ -1,5 +1,11 @@
 ﻿@model ResultForm
 
+<style>
+    .text-dangers {
+        color: #dc3545 !important;
+    }
+</style>
+
 <div class="modal-content" id="result_modal">
     <div class="modal-header">
         <h4>
@@ -21,7 +27,7 @@
                 <tbody>
                     <tr>
                         <td colspan="17">
-                            <label>Name of Patient: </label><span class="text-danger">@Model.SopForm.Patient.GetFullName().ToUpper()</span>
+                            <label>Name of Patient: </label><span class="text-dangers">@Model.SopForm.Patient.GetFullName().ToUpper()</span>
                         </td>
                     </tr>
                     <tr>
@@ -29,19 +35,19 @@
                             <label>Age:</label>
                         </td>
                         <td colspan="2">
-                            <span class="text-danger">@Model.SopForm.Patient.Dob.ComputeAge()</span>
+                            <span class="text-dangers">@Model.SopForm.Patient.Dob.ComputeAge()</span>
                         </td>
                         <td>
                             <label>Sex:</label>
                         </td>
                         <td colspan="4">
-                            <span class="text-danger">@Model.SopForm.Patient.Sex</span>
+                            <span class="text-dangers">@Model.SopForm.Patient.Sex</span>
                         </td>
                         <td colspan="3">
                             <label>Date of Birth: </label>
                         </td>
                         <td colspan="6">
-                            <span class="text-danger">@Model.SopForm.Patient.Dob.ToString("dd/MM/yyyy")</span>
+                            <span class="text-dangers">@Model.SopForm.Patient.Dob.ToString("dd/MM/yyyy")</span>
                         </td>
                     </tr>
                     <tr>
@@ -52,16 +58,16 @@
                             <label>Referral:</label>
                         </td>
                         <td colspan="5" rowspan="4">
-                            <span class="text-danger"></span><br />
-                            <span class="text-danger"></span><br />
-                            <span class="text-danger"></span><br />
-                            <span class="text-danger">@Model.SopForm.DiseaseReportingUnit.Facility.Name</span>
+                            <span class="text-dangers"></span><br />
+                            <span class="text-dangers"></span><br />
+                            <span class="text-dangers"></span><br />
+                            <span class="text-dangers">@Model.SopForm.DiseaseReportingUnit.Facility.Name</span>
                         </td>
                         <td colspan="3" rowspan="2">
                             <label>Sample ID:</label>
                         </td>
                         <td colspan="6" rowspan="2">
-                            <span class="text-danger">@Model.SopForm.SampleId</span>
+                            <span class="text-dangers">@Model.SopForm.SampleId</span>
                         </td>
                     </tr>
                     <tr>
@@ -71,7 +77,7 @@
                             <label>Admission Date:</label>
                         </td>
                         <td colspan="6" rowspan="2">
-                            <span class="text-danger">N/A</span>
+                            <span class="text-dangers">N/A</span>
                         </td>
                     </tr>
                     <tr>
@@ -81,13 +87,13 @@
                             <label>Requisitioner:</label>
                         </td>
                         <td colspan="5">
-                            <span class="text-danger">@Model.SopForm.RequestedBy</span>
+                            <span class="text-dangers">@Model.SopForm.RequestedBy</span>
                         </td>
                         <td rowspan="2">
                             <label>Address:</label>
                         </td>
                         <td colspan="8" rowspan="2" style="white-space: nowrap;">
-                            <span class="text-danger">@Model.SopForm.Patient.GetAddress()</span>
+                            <span class="text-dangers">@Model.SopForm.Patient.GetAddress()</span>
                         </td>
                     </tr>
                     <tr>
@@ -95,7 +101,7 @@
                             <label>Specimen Type:</label>
                         </td>
                         <td colspan="5">
-                            <span class="text-danger">@Model.SopForm.TypeSpecimen</span>
+                            <span class="text-dangers">@Model.SopForm.TypeSpecimen</span>
                         </td>
                     </tr>
                     <tr>
@@ -103,13 +109,13 @@
                             <label>Date & Time of Specimen Collection:</label>
                         </td>
                         <td colspan="3">
-                            <span class="text-danger">@Model.SopForm.DatetimeCollection.GetDate("dd/MM/yyyy hh:mm tt")</span>
+                            <span class="text-dangers">@Model.SopForm.DatetimeCollection.GetDate("dd/MM/yyyy hh:mm tt")</span>
                         </td>
                         <td colspan="6">
                             <label>Date & Time of Specimen Collection:</label>
                         </td>
                         <td colspan="3">
-                            <span class="text-danger">@Model.SopForm.DatetimeSpecimenReceipt.GetDate("dd/MM/yyyy hh:mm tt")</span>
+                            <span class="text-dangers">@Model.SopForm.DatetimeSpecimenReceipt.GetDate("dd/MM/yyyy hh:mm tt")</span>
                         </td>
                     </tr>
                     <tr>
@@ -124,7 +130,9 @@
                     <tr>
                         <td colspan="17">
                             <label>LABORATORY TEST PERFORMED:</label><br />
-                            <textarea class="form-control" asp-for="LabTestPerformed" style="height: 100%; width: 100%;" />
+                            <textarea class="form-control" asp-for="LabTestPerformed" style="height: 100%; width: 100%;">
+                                @Model.LabTestPerformed
+                            </textarea>
                         </td>
                     </tr>
                     <tr>
@@ -135,7 +143,7 @@
                             <label>TEST RESULT:</label>
                         </td>
                         <td colspan="14" rowspan="2">
-                            <span class="text-danger">@Model.SopForm.PcrResult</span>
+                            <span class="text-dangers">@Model.SopForm.PcrResult</span>
                         </td>
                     </tr>
                     <tr>
@@ -165,19 +173,21 @@
                                 <option value="" selected hidden>
                                     Choose Result
                                 </option>
-                                <option>
+                                <option value="SARS-CoV-2 (causative agent of COVID-19) viral RNA detected">
                                     SARS-CoV-2 (causative agent of COVID-19) viral RNA detected
                                 </option>
-                                <option>
+                                <option value="SARS-CoV-2 (causative agent of COVID-19) viral RNA not detected">
                                     SARS-CoV-2 (causative agent of COVID-19) viral RNA not detected
                                 </option>
-                                <option>
+                                <option value="Invalid due to specimen quality">
                                     Invalid due to specimen quality
                                 </option>
                             </select>
                         </td>
                         <td colspan="9">
-                            <textarea class="form-control" asp-for="Interpretation" id="interpret" rows="2" style="height: 100% !important; width: 100% !important; font-size: 10px; box-sizing: border-box;" readonly/>
+                            <textarea class="form-control" asp-for="Interpretation" id="interpret" rows="2" style="height: 100% !important; width: 100% !important; font-size: 10px; box-sizing: border-box;" readonly>
+                                @Model.Interpretation
+                            </textarea>
                         </td>
                     </tr>
                     <tr></tr>
@@ -198,19 +208,19 @@
             <div class="row" style="margin-top:15px;">
                 <div class="col-md-4">
                     <label>Performed:</label><br />
-                    <select class="form-control" asp-for="PerformedBy">
+                    <select class="form-control" asp-for="PerformedBy" asp-items="ViewBag.Perform" required>
                         <option value="" selected hidden>Select MedTech</option>
                     </select>
                 </div>
                 <div class="col-md-4">
                     <label>Verified:</label><br />
-                    <select class="form-control" asp-for="PerformedBy">
+                    <select class="form-control" asp-for="VerifiedBy" asp-items="ViewBag.Verify" required>
                         <option value="" selected hidden>Select Supervisor</option>
                     </select>
                 </div>
                 <div class="col-md-4">
                     <label>Approved:</label><br />
-                    <select class="form-control" asp-for="PerformedBy">
+                    <select class="form-control" asp-for="ApprovedBy" asp-items="ViewBag.Approve" required>
                         <option value="" selected hidden>Select Chief</option>
                     </select>
                 </div>
@@ -225,12 +235,15 @@
             }
         </form>
     </div>
-    <div class="modal-footer">
+    <div class="modal-footer" style="display: inline-block !important;">
         <button class="btn btn-sm btn-danger fa-pull-left" type="button" data-dismiss="modal">
             Cancel
         </button>
-        <button class="btn btn-sm btn-success fa-pull-right" data-action="small_modal" data-save="modal">
+        <button class="btn btn-sm btn-success fa-pull-right" data-action="large_modal" data-save="modal">
             Submit
+        </button>
+        <button class="btn btn-sm btn-primary fa-pull-right" type="button" onclick="alert('PRINT!');">
+            Print
         </button>
     </div>
 </div>

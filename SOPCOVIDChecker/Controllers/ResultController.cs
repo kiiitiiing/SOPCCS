@@ -5,9 +5,12 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SOPCOVIDChecker.Data;
 using SOPCOVIDChecker.Models;
+using SOPCOVIDChecker.Models.AdminViewModel;
+using SOPCOVIDChecker.Models.ResultViewModel;
 using SOPCOVIDChecker.Models.ResuViewModel;
 using SOPCOVIDChecker.Services;
 
@@ -17,10 +20,12 @@ namespace SOPCOVIDChecker.Controllers
     public class ResultController : Controller
     {
         private readonly SOPCCContext _context;
+        private readonly IUserService _userService;
 
-        public ResultController(SOPCCContext context)
+        public ResultController(SOPCCContext context, IUserService userService)
         {
             _context = context;
+            _userService = userService;
         }
 
         #region DASHBOARD
@@ -33,7 +38,7 @@ namespace SOPCOVIDChecker.Controllers
                 .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.ProvinceNavigation)
                 .Include(x => x.CreatedByNavigation).ThenInclude(x => x.Facility)
                 .Where(x => x.CreatedBy != null)
-                .OrderByDescending(x => x.CreatedAt)
+                .OrderByDescending(x => x.UpdatedAt)
                 .Select(x => new ResultLess
                 {
                     ResultFormId = x.Id,
@@ -74,6 +79,10 @@ namespace SOPCOVIDChecker.Controllers
                 .Include(x => x.SopForm).ThenInclude(x => x.DiseaseReportingUnit).ThenInclude(x => x.Facility)
                 .SingleOrDefaultAsync(x => x.Id == resultId);
 
+            ViewBag.Perform = GetStaff("perform");
+            ViewBag.Verify = GetStaff("verify");
+            ViewBag.Approve = GetStaff("approve");
+
             return PartialView(sop);
         }
 
@@ -83,27 +92,112 @@ namespace SOPCOVIDChecker.Controllers
         {
             var errors = ModelState.Values.SelectMany(x => x.Errors);
 
-            if(ModelState.IsValid)
-            {
-                _context.Add(model);
-                await _context.SaveChangesAsync();
-                return PartialView(model);
-            }
+            ViewBag.Perform = GetStaff("perform");
+            ViewBag.Verify = GetStaff("verify");
+            ViewBag.Approve = GetStaff("approve");
 
-            var sop = await _context.Sopform
+            if (ModelState.IsValid)
+            {
+                model.UpdatedAt = DateTime.Now;
+                _context.Update(model);
+                await _context.SaveChangesAsync();
+
+                var sop = await _context.Sopform
                 .Include(x => x.Patient).ThenInclude(x => x.BarangayNavigation)
                 .Include(x => x.Patient).ThenInclude(x => x.MuncityNavigation)
                 .Include(x => x.Patient).ThenInclude(x => x.ProvinceNavigation)
                 .Include(x => x.DiseaseReportingUnit).ThenInclude(x => x.Facility)
                 .SingleOrDefaultAsync(x => x.Id == model.SopFormId);
 
-            model.SopForm = sop;
+                model.SopForm = sop;
+                return PartialView(model);
+            }
+
+            
             ViewBag.Errors = errors;
+            return PartialView(model);
+        }
+        #endregion
+        #region ADD STAFF
+        public IActionResult AddStaff()
+        {
+            ViewBag.Facilities = new SelectList(_context.Facility.ToList(), "Id", "Name");
+            return PartialView();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddStaff(LabUsersModel model)
+        {
+            ViewBag.Facilities = new SelectList(_context.Facility.ToList(), "Id", "Name");
+            model.FacilityId = UserFacility;
+            var errors = ModelState.Values.SelectMany(v => v.Errors);
+            if (ModelState.IsValid)
+            {
+                if (await _userService.RegisterLabUserAsync(model))
+                {
+                    return PartialView(model);
+                }
+            }
+
+            ViewBag.Errors = errors;
+            return PartialView(model);
+        }
+        #endregion
+        #region LAB STAFF
+        public async Task<ActionResult<List<UserLess>>> LabUsersJson(string q)
+        {
+            var rhuUsers = await _context.Sopusers
+                .Include(x => x.Facility)
+                .Include(x => x.BarangayNavigation)
+                .Include(x => x.MuncityNavigation)
+                .Include(x => x.ProvinceNavigation)
+                .Where(x=>x.UserLevel == "perform" || x.UserLevel == "verify" || x.UserLevel == "approve")
+                .Where(x => x.FacilityId == UserFacility)
+                .Select(x => new UserLess
+                {
+                    Id = x.Id,
+                    Name = x.GetFullName(),
+                    ContactNo = x.ContactNo,
+                    Email = x.Email,
+                    Designation = x.Designation,
+                    Facility = x.Facility.Name
+                })
+                .ToListAsync();
+
+            return rhuUsers;
+        }
+        public IActionResult LabUsers()
+        {
+            return View();
+        }
+
+        public IActionResult LabUsersPartial([FromBody]IEnumerable<UserLess> model)
+        {
             return PartialView(model);
         }
         #endregion
 
         #region HELPERS
+
+        public partial class SelectUser
+        {
+            public int Id { get; set; }
+            public string Name { get; set; }
+        }
+        public SelectList GetStaff(string role)
+        {
+            var staff = _context.Sopusers
+                .Where(x => x.FacilityId == UserFacility && x.UserLevel == role)
+                .Select(x => new SelectUser
+                {
+                    Id = x.Id,
+                    Name = x.GetFullName()
+                })
+                .ToList();
+            return new SelectList(staff, "Id", "Name");
+        }
+
         public int UserId => int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
         public int UserFacility => int.Parse(User.FindFirstValue("Facility"));
         public int UserProvince => int.Parse(User.FindFirstValue("Province"));

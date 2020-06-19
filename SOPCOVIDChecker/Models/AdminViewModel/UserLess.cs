@@ -12,6 +12,7 @@ namespace SOPCOVIDChecker.Models.AdminViewModel
         public string ContactNo { get; set; }
         public string Email { get; set; }
         public string Facility { get; set; }
+        public string Designation { get; set; }
         public string Address { get; set; }
         public string Username { get; set; }
     }

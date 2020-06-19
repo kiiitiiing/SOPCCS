@@ -80,7 +80,7 @@ namespace SOPCOVIDChecker.Controllers
             ViewBag.Labs = GetLabs();
             if (ModelState.IsValid)
             {
-                var resultForm = await _context.ResultForm.FindAsync(model.ResultFormId);
+                var resultForm = await _context.ResultForm.SingleOrDefaultAsync(x=>x.Id == model.ResultFormId);
                 resultForm.CreatedBy = model.LabAccId;
                 _context.Update(resultForm);
                 await _context.SaveChangesAsync();

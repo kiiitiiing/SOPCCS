@@ -1,0 +1,60 @@
+﻿@model List<ResultLess>
+
+@if (Model.Count() != 0)
+{
+    <table class="table table-bordered table-striped" style="white-space: nowrap!important; overflow-y: auto !important;">
+        <thead class="bg-gray">
+            <tr>
+                <th class="text-center text-sm">
+                    SAMPLE ID
+                </th>
+                <th class="text-center text-sm">
+                    PATIENT NAME
+                </th>
+                <th class="text-center text-sm">
+                    PCR RESULT
+                </th>
+                <th class="text-center text-sm">
+                    SENT TO
+                </th>
+                <th class="text-center text-sm">
+                    RESULT
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var sop in Model)
+            {
+                var facility = !string.IsNullOrEmpty(sop.Lab) ? sop.Lab : "RESU";
+                <tr>
+                    <td class="text-center text-sm">
+                        <label>@sop.SampleId</label>
+                    </td>
+                    <td class="text-center text-sm">
+                        @sop.PatientName
+                    </td>
+                    <td class="text-center text-sm">
+                        @sop.PCRResult
+                    </td>
+                    <td class="text-center text-sm">
+                        @facility
+                    </td>
+                    <td class="text-center text-sm">
+                        @sop.Status
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-warning">
+        <span>
+            <i class="fa fa-exclamation-triangle"></i> No Sample found!
+        </span>
+    </div>
+}
+
+<script>
+</script>

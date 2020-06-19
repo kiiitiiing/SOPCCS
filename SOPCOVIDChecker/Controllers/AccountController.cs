@@ -80,7 +80,7 @@ namespace SOPCOVIDChecker.Controllers
                 else if (User.FindFirstValue(ClaimTypes.Role).Equals("PESU"))
                     return RedirectToAction("Index", "Pesu");
                 else if (User.FindFirstValue(ClaimTypes.Role).Equals("RESU"))
-                    return RedirectToAction("ResuIndexIndex", "Resu");
+                    return RedirectToAction("ResuIndex", "Resu");
                 else if (User.FindFirstValue(ClaimTypes.Role).Equals("LAB"))
                     return RedirectToAction("LabIndex", "Result");
                 else if (User.FindFirstValue(ClaimTypes.Role).Equals("admin"))

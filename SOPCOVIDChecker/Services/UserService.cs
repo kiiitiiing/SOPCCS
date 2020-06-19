@@ -12,6 +12,7 @@ using SOPCOVIDChecker.Models.AccountViewModels;
 using Microsoft.Extensions.Options;
 using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
+using SOPCOVIDChecker.Models.ResultViewModel;
 
 namespace SOPCOVIDChecker.Services
 {
@@ -19,7 +20,7 @@ namespace SOPCOVIDChecker.Services
     {
         Task<(bool, Sopusers)> ValidateUserCredentialsAsync(string username, string password);
         void ChangePasswordAsync(Sopusers user, string newPassword);
-
+        Task<bool> RegisterLabUserAsync(LabUsersModel model);
         Task<bool> RegisterUserAsync(AddUserModel model, string level);
         Task UpdateUserAsync(UpdateUserModel model);
 
@@ -136,6 +137,39 @@ namespace SOPCOVIDChecker.Services
             user.UpdatedAt = DateTime.Now;
             _context.Add(user);
             _context.SaveChanges();
+        }
+
+        public Task<bool> RegisterLabUserAsync(LabUsersModel model)
+        {
+            var facility = _context.Facility.First(x => x.Id.Equals(model.FacilityId));
+            Sopusers newUser = new Sopusers();
+            newUser.Fname = model.Firstname;
+            newUser.Mname = model.Middlename;
+            newUser.Lname = model.Lastname;
+            newUser.ContactNo = model.ContactNumber;
+            newUser.Email = model.Email;
+            newUser.Designation = model.Designation;
+            newUser.Postfix = model.Postfix;
+            newUser.LicenseNo = model.LicenseNo;
+            newUser.FacilityId = model.FacilityId;
+            newUser.Username = model.Firstname+(model.Middlename??"")+model.Lastname+ DateTime.Now.ToString("ddMMyyyyHHmmss");
+            newUser.Password = model.Firstname + (model.Middlename ?? "") + model.Lastname + DateTime.Now.ToString("ddMMyyyyHHmmss");
+            newUser.UserLevel = model.Role;
+            newUser.Barangay = facility.Barangay;
+            newUser.Muncity = facility.Muncity;
+            newUser.Province = facility.Province;
+            newUser.CreatedAt = DateTime.Now;
+            newUser.UpdatedAt = DateTime.Now;
+            try
+            {
+                _context.Add(newUser);
+                _context.SaveChanges();
+                return Task.FromResult(true);
+            }
+            catch(Exception)
+            {
+                return Task.FromResult(false);
+            }
         }
     }
 }

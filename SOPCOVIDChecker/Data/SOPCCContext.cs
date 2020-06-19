@@ -129,8 +129,6 @@ namespace SOPCOVIDChecker.Data
 
             modelBuilder.Entity<ResultForm>(entity =>
             {
-                entity.Property(e => e.ApprovedBy).IsUnicode(false);
-
                 entity.Property(e => e.BiologicalReferrence).IsUnicode(false);
 
                 entity.Property(e => e.FinalResult).IsUnicode(false);
@@ -139,24 +137,35 @@ namespace SOPCOVIDChecker.Data
 
                 entity.Property(e => e.LabTestPerformed).IsUnicode(false);
 
-                entity.Property(e => e.PerformedBy).IsUnicode(false);
-
                 entity.Property(e => e.TestResult).IsUnicode(false);
 
                 entity.Property(e => e.TestResultsUnits).IsUnicode(false);
 
-                entity.Property(e => e.VerifiedBy).IsUnicode(false);
+                entity.HasOne(d => d.ApprovedByNavigation)
+                    .WithMany(p => p.ResultFormApprovedByNavigation)
+                    .HasForeignKey(d => d.ApprovedBy)
+                    .HasConstraintName("FK_Approve_SOPUsers");
 
                 entity.HasOne(d => d.CreatedByNavigation)
-                    .WithMany(p => p.ResultForm)
+                    .WithMany(p => p.ResultFormCreatedByNavigation)
                     .HasForeignKey(d => d.CreatedBy)
                     .HasConstraintName("FK_ResultForm_SOPUsers");
+
+                entity.HasOne(d => d.PerformedByNavigation)
+                    .WithMany(p => p.ResultFormPerformedByNavigation)
+                    .HasForeignKey(d => d.PerformedBy)
+                    .HasConstraintName("FK_Perform_SOPUsers");
 
                 entity.HasOne(d => d.SopForm)
                     .WithMany(p => p.ResultForm)
                     .HasForeignKey(d => d.SopFormId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_ResultForm_SOPForm");
+
+                entity.HasOne(d => d.VerifiedByNavigation)
+                    .WithMany(p => p.ResultFormVerifiedByNavigation)
+                    .HasForeignKey(d => d.VerifiedBy)
+                    .HasConstraintName("FK_Verify_SOPUsers");
             });
 
             modelBuilder.Entity<Sopform>(entity =>
@@ -188,15 +197,21 @@ namespace SOPCOVIDChecker.Data
             {
                 entity.Property(e => e.ContactNo).IsUnicode(false);
 
+                entity.Property(e => e.Designation).IsUnicode(false);
+
                 entity.Property(e => e.Email).IsUnicode(false);
 
                 entity.Property(e => e.Fname).IsUnicode(false);
+
+                entity.Property(e => e.LicenseNo).IsUnicode(false);
 
                 entity.Property(e => e.Lname).IsUnicode(false);
 
                 entity.Property(e => e.Mname).IsUnicode(false);
 
                 entity.Property(e => e.Password).IsUnicode(false);
+
+                entity.Property(e => e.Postfix).IsUnicode(false);
 
                 entity.Property(e => e.UserLevel).IsUnicode(false);
 

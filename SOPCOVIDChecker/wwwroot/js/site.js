@@ -64,7 +64,9 @@
             success: function (output) {
                 var newBody = $('.modal-body', output);
                 var errors = newBody.find('span.text-danger').text();
-                if (errors == '') {
+                console.log(errors);
+                if (errors == '' && contentId != 'result_modal') {
+                    console.log('wtf')
                     $.when(modals.find('.modal.show').modal('hide')).done(function () {
                         LoadingModal('#' + contentId);
                         if (contentId == 'new_sop') {
@@ -74,10 +76,18 @@
                         }
                         else if (contentId == 'lab_modal') {
                             Toast("Sent to Lab")
-                            var vessel = $('#sop-sop');
+                            var vessel = $('#resu-index');
                             LoadList('', vessel, '/SOPCCS/Resu/ResuIndex');
                         }
+                        else if (contentId == 'add_staff_modal') {
+                            Toast("Added new staff!")
+                            var vessel = $('#result-staff');
+                            LoadList('', vessel, '/SOPCCS/Result/LabUsers');
+                        } 
                     });
+                }
+                else if (errors == '' && contentId == 'result_modal') {
+                    Toast("Form Complete!")
                 }
                 else
                     content.find('.modal-body').replaceWith(newBody);
@@ -243,37 +253,8 @@ function LoadList(q, container, urls) {
             }
         },
         callback: function (response, pagination) {
-            var action = '';
-            var controller = '';
-            if (container.attr('id') == 'sop-sop') {
-                action = 'SopIndexPartial';
-                controller = 'Sop'
-            }
-            else if (container.attr('id') == 'admin-rhu') {
-                action = 'RhuUsersPartial';
-                controller = 'Admin';
-            }
-            else if (container.attr('id') == 'admin-pesu') {
-                action = 'PesuUsersPartial';
-                controller = 'Admin';
-            }
-            else if (container.attr('id') == 'admin-resu') {
-                action = 'ResuUsersPartial';
-                controller = 'Admin';
-            }
-            else if (container.attr('id') == 'admin-lab') {
-                action = 'LabUsersPartial';
-                controller = 'Admin';
-            }
-            else if (container.attr('id') == 'resu-index') {
-                action = 'ResuIndexPartial';
-                controller = 'Resu';
-            }
-            else if (container.attr('id') == 'lab-index') {
-                action = 'LabIndexPartial';
-                controller = 'Result';
-            }
-            $.when(CallPartialView(response, controller, action)).done(function (output) {
+            var params = GetParams(container.attr('id'));
+            $.when(CallPartialView(response, params[1], params[0])).done(function (output) {
                 $('.total_ctr').html(ctr);
                 if (ctr <= size)
                     container.hide();
@@ -284,6 +265,64 @@ function LoadList(q, container, urls) {
             })
         }
     })
+}
+
+function GetParams(id) {
+    var params = [];
+    switch (id) {
+        case 'sop-sop': {
+            params.push('SopIndexPartial');
+            params.push('Sop');
+            break;
+        }
+        case 'admin-rhu': {
+            params.push('RhuUsersPartial');
+            params.push('Admin');
+            break;
+        }
+        case 'admin-pesu': {
+            params.push('PesuUsersPartial');
+            params.push('Admin');
+            break;
+        }
+        case 'admin-resu': {
+            params.push('ResuUsersPartial');
+            params.push('Admin');
+            break;
+        }
+        case 'admin-lab': {
+            params.push('LabUsersPartial');
+            params.push('Admin');
+            break;
+        }
+        case 'resu-index': {
+            params.push('ResuIndexPartial');
+            params.push('Resu');
+            break;
+        }
+        case 'lab-index': {
+            params.push('LabIndexPartial');
+            params.push('Result');
+            break;
+        } 
+        case 'result-staff': {
+            params.push('LabUsersPartial');
+            params.push('Result');
+            break;
+        } 
+        case 'sop-status': {
+            params.push('SampleStatusPartial');
+            params.push('Sop');
+            break;
+        }
+        case 'pesu-status': {
+            params.push('PesuStatusPartial');
+            params.push('Pesu');
+            break;
+        }
+    }
+
+    return params;
 }
 
 //TEMPLATES

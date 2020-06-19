@@ -105,6 +105,31 @@ namespace SOPCOVIDChecker.Services
             return Convert.ToInt32(DateTime.Now.Subtract(date).TotalMinutes);
         }
 
+        public static string Result(this ResultForm result)
+        {
+            var status = "";
+            if(result.CreatedBy == null)
+            {
+                status = "RESU";
+            }
+            else if(result.CreatedBy != null && result.ApprovedBy == null)
+            {
+                status = "PENDING";
+            }
+            else
+            {
+                if (result.Interpretation.Contains("Positive"))
+                {
+                    status = "POSITIVE";
+                }
+                else
+                {
+                    status = "NEGATIVE";
+                }
+            }
+
+            return status;
+        }
         public static string GetDate(this DateTime date, string format)
         {
             if (date != default)
