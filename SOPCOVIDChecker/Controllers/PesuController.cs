@@ -41,6 +41,7 @@ namespace SOPCOVIDChecker.Controllers
                     PatientId = x.SopForm.PatientId,
                     PatientName = x.SopForm.Patient.GetFullName(),
                     Lab = x.CreatedByNavigation.Facility.Name,
+                    DRU = x.SopForm.DiseaseReportingUnit.Facility.Name,
                     PCRResult = x.SopForm.PcrResult,
                     Address = x.SopForm.Patient.GetAddress(),
                     Status = x.Result()

@@ -19,39 +19,10 @@
     @if (User.FindFirstValue(ClaimTypes.Role) == "PESU")
     {
         <li class="nav-item ">
-            <a class="nav-link" asp-area="" asp-controller="Sop" asp-action="SopIndex">
+            <a class="nav-link" asp-area="" asp-controller="Pesu" asp-action="PesuStatus">
                 <i class="fa fa-home"></i>
                 &nbsp;Home
             </a>
-        </li>
-        <!-- MANAGE -->
-        <li class="nav-item dropdown">
-            <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                <i class="fa fa-user-injured"></i>
-                &nbsp;Patient
-            </a>
-
-            <ul class="dropdown-menu border-0 shadow">
-                <li>
-
-                    <a class="dropdown-item" asp-controller="Admission" asp-action="Index">
-                        <i class="fas fa-procedures"></i>
-                        &nbsp;Admit
-                    </a>
-                </li>
-                <li>
-                    <a class="dropdown-item" asp-controller="Discharge" asp-action="Index">
-                        <i class="fas fa-ambulance"></i>
-                        &nbsp;Discharge
-                    </a>
-                </li>
-                <li>
-                    <a class="dropdown-item" asp-controller="Patients" asp-action="Excel">
-                        <i class="fas fa-upload"></i>
-                        &nbsp;Upload
-                    </a>
-                </li>
-            </ul>
         </li>
     }
 
@@ -63,34 +34,11 @@
                 &nbsp;Home
             </a>
         </li>
-        <!-- MANAGE -->
-        <li class="nav-item dropdown">
-            <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                <i class="fa fa-user-injured"></i>
-                &nbsp;Patient
+        <li class="nav-item ">
+            <a class="nav-link" asp-area="" asp-controller="Resu" asp-action="ResuStatus">
+                <i class="far fa-file-alt"></i>
+                &nbsp;Results
             </a>
-
-            <ul class="dropdown-menu border-0 shadow">
-                <li>
-
-                    <a class="dropdown-item" asp-controller="Admission" asp-action="Index">
-                        <i class="fas fa-procedures"></i>
-                        &nbsp;Admit
-                    </a>
-                </li>
-                <li>
-                    <a class="dropdown-item" asp-controller="Discharge" asp-action="Index">
-                        <i class="fas fa-ambulance"></i>
-                        &nbsp;Discharge
-                    </a>
-                </li>
-                <li>
-                    <a class="dropdown-item" asp-controller="Patients" asp-action="Excel">
-                        <i class="fas fa-upload"></i>
-                        &nbsp;Upload
-                    </a>
-                </li>
-            </ul>
         </li>
     }
 

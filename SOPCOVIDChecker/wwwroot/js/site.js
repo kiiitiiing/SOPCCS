@@ -320,6 +320,11 @@ function GetParams(id) {
             params.push('Pesu');
             break;
         }
+        case 'resu-status': {
+            params.push('ResuStatusPartial');
+            params.push('Resu');
+            break;
+        }
     }
 
     return params;

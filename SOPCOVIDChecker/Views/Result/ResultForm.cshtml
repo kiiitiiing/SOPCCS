@@ -121,6 +121,16 @@
                     <tr>
                     </tr>
                     <tr>
+                        <td colspan="7" rowspan="2">
+                            <label>Date & Time of Release of Result:</label>
+                        </td>
+                        <td colspan="10" rowspan="2">
+                            <input class="form-control" asp-for="SopForm.DateResult" />
+                        </td>
+                    </tr>
+                    <tr>
+                    </tr>
+                    <tr>
                         <td colspan="17" class="text-center">
                             <label>LABORATORY TEST RESULT</label>
                         </td>
@@ -152,7 +162,21 @@
                             <label>
                                 TEST RESULT AND UNITS OR MEASUREMENTS:
                             </label><br />
-                            <input class="form-control" asp-for="TestResult" style="height: 100% !important; width: 100% !important; box-sizing: border-box;" />
+
+                            <select class="form-control final_result" asp-for="TestResult" onchange="ResultChange($(this));">
+                                <option value="" selected hidden>
+                                    Choose Result
+                                </option>
+                                <option value="SARS-CoV-2 (causative agent of COVID-19) viral RNA detected">
+                                    SARS-CoV-2 (causative agent of COVID-19) viral RNA detected
+                                </option>
+                                <option value="SARS-CoV-2 (causative agent of COVID-19) viral RNA not detected">
+                                    SARS-CoV-2 (causative agent of COVID-19) viral RNA not detected
+                                </option>
+                                <option value="Invalid due to specimen quality">
+                                    Invalid due to specimen quality
+                                </option>
+                            </select>
                         </td>
                         <td colspan="9">
                             <label>
@@ -169,20 +193,6 @@
                     </tr>
                     <tr>
                         <td colspan="8">
-                            <select class="form-control final_result" asp-for="FinalResult" onchange="ResultChange($(this));">
-                                <option value="" selected hidden>
-                                    Choose Result
-                                </option>
-                                <option value="SARS-CoV-2 (causative agent of COVID-19) viral RNA detected">
-                                    SARS-CoV-2 (causative agent of COVID-19) viral RNA detected
-                                </option>
-                                <option value="SARS-CoV-2 (causative agent of COVID-19) viral RNA not detected">
-                                    SARS-CoV-2 (causative agent of COVID-19) viral RNA not detected
-                                </option>
-                                <option value="Invalid due to specimen quality">
-                                    Invalid due to specimen quality
-                                </option>
-                            </select>
                         </td>
                         <td colspan="9">
                             <textarea class="form-control" asp-for="Interpretation" id="interpret" rows="2" style="height: 100% !important; width: 100% !important; font-size: 10px; box-sizing: border-box;" readonly>

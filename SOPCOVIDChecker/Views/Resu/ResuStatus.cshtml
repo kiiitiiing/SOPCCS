@@ -1,0 +1,54 @@
+﻿
+@{
+    ViewData["Title"] = "RESU STATUS";
+}
+
+<div class="card card-warning card-outline">
+    <div class="card-header">
+        <div class="row">
+            <div class="col-md-6">
+                <h4>
+                    SAMPLES IN @ViewBag.Province.ToUpper()<br />
+                    <small>Total: <span class="total_ctr"></span></small>
+                </h4>
+            </div>
+            <div class="col-md-6">
+                <div class="fa-pull-right form-inline ml-3">
+                    <!-- INPUT -->
+                    <input class="form-control form-control-sm"
+                           name="search"
+                           id="searchDetail"
+                           placeholder="Search name"
+                           type="text" />
+                    <button id="searchPatientBtn" type="button" class="btn btn-sm btn-success">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body" id="list_sop_resu" style="overflow:auto !important;">
+        <div class="overlay d-flex justify-content-center align-items-center">
+            <i class="fas fa-2x fa-sync fa-spin"></i>
+        </div>
+        <br />
+        <br />
+
+    </div>
+    <div id="resu-status" style="margin: auto; margin-bottom: 20px;"></div>
+</div>
+
+
+<script>
+    var vessel = $('#resu-status');
+    LoadList('', vessel, '@Url.Action("ResuStatusJson", "Resu")');
+
+    $(function () {
+        $('#searchPatientBtn').on('click', function (event) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            var q = $('#searchDetail').val();
+            LoadList(q, vessel, '@Url.Action("ResuStatusJson", "Resu")');
+        });
+    })
+</script>
