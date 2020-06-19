@@ -95,6 +95,8 @@ namespace SOPCOVIDChecker.Controllers
             ViewBag.Barangay = GetBarangays(model.Patient.Muncity, model.Patient.Province);
             model.Patient.CreatedAt = DateTime.Now;
             model.Patient.UpdatedAt = DateTime.Now;
+            model.DateResult = default;
+            model.DatetimeSpecimenReceipt = default;
             model.CreatedAt = DateTime.Now;
             model.UpdatedAt = DateTime.Now;
             model.DiseaseReportingUnitId = UserId;

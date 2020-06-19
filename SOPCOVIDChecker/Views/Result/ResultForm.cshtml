@@ -67,7 +67,7 @@
                             <label>Sample ID:</label>
                         </td>
                         <td colspan="6" rowspan="2">
-                            <span class="text-dangers">@Model.SopForm.SampleId</span>
+                            <input class="form-control" asp-for="SopForm.SampleId" />
                         </td>
                     </tr>
                     <tr>
@@ -112,10 +112,10 @@
                             <span class="text-dangers">@Model.SopForm.DatetimeCollection.GetDate("dd/MM/yyyy hh:mm tt")</span>
                         </td>
                         <td colspan="6">
-                            <label>Date & Time of Specimen Collection:</label>
+                            <label>Date & Time of Specimen Receipt:</label>
                         </td>
                         <td colspan="3">
-                            <span class="text-dangers">@Model.SopForm.DatetimeSpecimenReceipt.GetDate("dd/MM/yyyy hh:mm tt")</span>
+                            <input class="form-control" asp-for="SopForm.DatetimeSpecimenReceipt" />
                         </td>
                     </tr>
                     <tr>

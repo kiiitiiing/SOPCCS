@@ -20,6 +20,7 @@ namespace SOPCOVIDChecker.Models
         [Column("sample_id")]
         [StringLength(50)]
         public string SampleId { get; set; }
+        [Required]
         [Column("pcr_result")]
         [StringLength(255)]
         public string PcrResult { get; set; }

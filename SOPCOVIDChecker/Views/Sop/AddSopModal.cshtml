@@ -12,6 +12,8 @@
     </div>
     <div class="modal-body">
         <form asp-action="AddSopModal">
+            <input hidden asp-for="PcrResult" value="none" />
+            <input hidden asp-for="SampleId" value="none" />
             <div class="row">
                 <div class="col-md-4">
                     <div class="form-group">
@@ -31,12 +33,6 @@
                         <input class="form-control" asp-for="Patient.Lname" />
                     </div>
                 </div>
-                @*<div class="col-md-12">
-                    <div class="form-group">
-                        <label>Contact number:</label>
-                        <input class="form-control" asp-for="Patient.ContactNumber" />
-                    </div>
-                </div>*@
             </div>
             <div class="row">
                 <div class="col-sm-4">
@@ -80,16 +76,6 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-sm-8">
-                    <label>PCR result:</label>
-                    <input type="text" class="form-control" asp-for="PcrResult" />
-                </div>
-                <div class="col-sm-4">
-                    <label>Date & Time of Collection:</label>
-                    <input type="datetime-local" class="form-control" asp-for="DatetimeCollection" />
-                </div>
-            </div>
-            <div class="row">
                 <div class="col-sm-4">
                     <label>Requested By:</label>
                     <input type="text" class="form-control" asp-for="RequestedBy" />
@@ -99,22 +85,20 @@
                     <input type="text" class="form-control" asp-for="RequesterContact" />
                 </div>
                 <div class="col-sm-4">
-                    <label>Sample ID:</label>
-                    <input type="text" class="form-control" asp-for="SampleId" />
+                    <label>Date & Time of Collection:</label>
+                    <input type="datetime-local" class="form-control" asp-for="DatetimeCollection" />
                 </div>
             </div>
             <div class="row">
-                <div class="col-sm-4">
+                <div class="col-sm-6">
                     <label>Type of Speciment &amp; Collection Medium:</label>
-                    <input type="text" class="form-control" asp-for="TypeSpecimen" />
-                </div>
-                <div class="col-sm-4">
-                    <label>Date &amp; Time if Specimen Receipt:</label>
-                    <input type="datetime-local" class="form-control" asp-for="DatetimeSpecimenReceipt" />
-                </div>
-                <div class="col-sm-4">
-                    <label>Date of Result Release:</label>
-                    <input type="date" class="form-control" asp-for="DateResult" />
+                    <select type="text" class="form-control" asp-for="TypeSpecimen">
+                        <option value="" selected hidden>Select Type</option>
+                        <option value="NPS IN UTM">NPS IN UTM</option>
+                        <option value="OPS IN UTM">OPS IN UTM</option>
+                        <option value="NPS/OPS IN UTM">NPS/OPS IN UTM</option>
+                        <option value="TRACHEAL ASPIRATE">TRACHEAL ASPIRATE</option>
+                    </select>
                 </div>
             </div>
             @if (ViewBag.Errors != null)
