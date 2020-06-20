@@ -54,7 +54,9 @@ namespace SOPCOVIDChecker.Controllers
                     RequesterContact = x.RequesterContact,
                     SpecimenCollection = x.TypeSpecimen,
                     DateTimeReceipt = x.DatetimeSpecimenReceipt,
-                    DateResult = x.DateResult
+                    DateResult = x.DateResult,
+                    DateOnset = x.DateOnsetSymptoms,
+                    Swabber = x.Swabber
                 })
                 .ToListAsync();
 

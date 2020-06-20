@@ -115,7 +115,7 @@
                             <label>Date & Time of Specimen Receipt:</label>
                         </td>
                         <td colspan="3">
-                            <input class="form-control" asp-for="SopForm.DatetimeSpecimenReceipt" />
+                            <input class="form-control" asp-for="SopForm.DatetimeSpecimenReceipt" value=""/>
                         </td>
                     </tr>
                     <tr>
@@ -125,7 +125,7 @@
                             <label>Date & Time of Release of Result:</label>
                         </td>
                         <td colspan="10" rowspan="2">
-                            <input class="form-control" asp-for="SopForm.DateResult" />
+                            <input class="form-control" asp-for="SopForm.DateResult" value=""/>
                         </td>
                     </tr>
                     <tr>
@@ -140,9 +140,10 @@
                     <tr>
                         <td colspan="17">
                             <label>LABORATORY TEST PERFORMED:</label><br />
-                            <textarea class="form-control" asp-for="LabTestPerformed" style="height: 100%; width: 100%;">
-                                @Model.LabTestPerformed
-                            </textarea>
+                                                                     <pre>
+                                SARS-CoV-2 (causative agent of COVID-19) virus
+                                detection by Real-Time Polymerase Chain Reaction
+                            </pre>
                         </td>
                     </tr>
                     <tr>
@@ -153,16 +154,6 @@
                             <label>TEST RESULT:</label>
                         </td>
                         <td colspan="14" rowspan="2">
-                            <span class="text-dangers">@Model.SopForm.PcrResult</span>
-                        </td>
-                    </tr>
-                    <tr>
-                    <tr>
-                        <td colspan="8">
-                            <label>
-                                TEST RESULT AND UNITS OR MEASUREMENTS:
-                            </label><br />
-
                             <select class="form-control final_result" asp-for="TestResult" onchange="ResultChange($(this));">
                                 <option value="" selected hidden>
                                     Choose Result
@@ -178,13 +169,8 @@
                                 </option>
                             </select>
                         </td>
-                        <td colspan="9">
-                            <label>
-                                BIOLOGICAL REFERENCE INTERVALS:
-                            </label><br />
-                            <input class="form-control" asp-for="BiologicalReferrence" style="height: 100% !important; width: 100% !important; box-sizing: border-box;" />
-                        </td>
                     </tr>
+                    <tr>
                     <tr></tr>
                     <tr>
                         <td colspan="17" class="text-center">

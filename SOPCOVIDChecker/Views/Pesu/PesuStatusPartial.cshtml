@@ -6,13 +6,13 @@
         <thead class="bg-gray">
             <tr>
                 <th class="text-center text-sm">
-                    SAMPLE ID
-                </th>
-                <th class="text-center text-sm">
                     PATIENT NAME
                 </th>
                 <th class="text-center text-sm">
                     DRU
+                </th>
+                <th class="text-center text-sm">
+                    PCR RESULT
                 </th>
                 <th class="text-center text-sm">
                     SENT TO
@@ -28,13 +28,13 @@
                 var facility = !string.IsNullOrEmpty(sop.Lab) ? sop.Lab : "RESU";
                 <tr>
                     <td class="text-center text-sm">
-                        <label>@sop.SampleId</label>
-                    </td>
-                    <td class="text-center text-sm">
                         @sop.PatientName
                     </td>
                     <td class="text-center text-sm">
                         @sop.DRU
+                    </td>
+                    <td class="text-center text-sm">
+                        @sop.PCRResult
                     </td>
                     <td class="text-center text-sm">
                         @facility

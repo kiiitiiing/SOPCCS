@@ -172,3 +172,4 @@ C:\Users\KitingKo\source\repos\SOPCOVIDChecker\SOPCOVIDChecker\obj\Debug\netcore
 C:\Users\KitingKo\source\repos\SOPCOVIDChecker\SOPCOVIDChecker\obj\Debug\netcoreapp3.1\SOPCOVIDChecker.dll
 C:\Users\KitingKo\source\repos\SOPCOVIDChecker\SOPCOVIDChecker\obj\Debug\netcoreapp3.1\SOPCOVIDChecker.pdb
 C:\Users\KitingKo\source\repos\SOPCOVIDChecker\SOPCOVIDChecker\obj\Debug\netcoreapp3.1\SOPCOVIDChecker.genruntimeconfig.cache
+C:\Users\KitingKo\source\repos\SOPCOVIDChecker\SOPCOVIDChecker\obj\Debug\netcoreapp3.1\SOPCOVIDChecker.csprojAssemblyReference.cache

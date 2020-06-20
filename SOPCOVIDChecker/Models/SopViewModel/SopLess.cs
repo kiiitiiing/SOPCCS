@@ -21,5 +21,7 @@ namespace SOPCOVIDChecker.Models.SopViewModel
         public string SpecimenCollection { get; set; }
         public DateTime DateTimeReceipt { get; set; }
         public DateTime DateResult { get; set; }
+        public DateTime DateOnset { get; set; }
+        public string Swabber { get; set; }
     }
 }

@@ -4,7 +4,7 @@
     <div class="modal-header">
         <h4>
             <i class="fa fa-user-plus"></i>
-            &nbsp;New SOP
+            &nbsp;Data Entry
         </h4>
         <button type="button" class="close" data-dismiss="modal">
             <span aria-hidden="true">×</span>
@@ -53,12 +53,17 @@
             </div>
             <div class="row">
                 <div class="col-sm-4">
-                    Province:
-                    <select asp-for="Patient.Province" asp-items="ViewBag.Province" id="patientProvince" title="province" class="form-control col-sm-12">
+                    <label>
+                        Province:
+                    </label>
+                    <input asp-for="Patient.Province" hidden />
+                    <select asp-for="Patient.Province" asp-items="ViewBag.Province" id="patientProvince" title="province" class="form-control col-sm-12" disabled>
                     </select>
                 </div>
                 <div class="col-sm-4">
-                    City/Municipality:
+                    <label>
+                        City/Municipality:
+                    </label>
                     <select id="muncityFilters"
                             asp-for="Patient.Muncity"
                             asp-items="ViewBag.Muncity"
@@ -69,10 +74,16 @@
                     </select>
                 </div>
                 <div class="col-sm-4">
-                    Barangay:
+                    <label>Barangay:</label>
                     <select id="barangays" asp-for="Patient.Barangay" asp-items="ViewBag.BarangayP" title="Barangay" class="form-control col-sm-12">
                         <option value="">Select Barangay</option>
                     </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <label>Address:</label>
+                    <input type="text" class="form-control" asp-for="Patient.Address" placeholder="Sitio/Purok/Subdivision/Village/Street"/>
                 </div>
             </div>
             <div class="row">
@@ -85,13 +96,21 @@
                     <input type="text" class="form-control" asp-for="RequesterContact" />
                 </div>
                 <div class="col-sm-4">
-                    <label>Date & Time of Collection:</label>
-                    <input type="datetime-local" class="form-control" asp-for="DatetimeCollection" />
+                    <label>Date Onset of Symptoms:</label>
+                    <input type="date" class="form-control" asp-for="DateOnsetSymptoms" />
                 </div>
             </div>
             <div class="row">
-                <div class="col-sm-6">
-                    <label>Type of Speciment &amp; Collection Medium:</label>
+                <div class="col-sm-4">
+                    <label>Name of Swabber:</label>
+                    <input type="text" class="form-control" asp-for="Swabber" />
+                </div>
+                <div class="col-sm-4">
+                    <label>Date & Time of Collection:</label>
+                    <input type="datetime-local" class="form-control" asp-for="DatetimeCollection" />
+                </div>
+                <div class="col-sm-4">
+                    <label>Type of Specimen &amp; Collection Medium:</label>
                     <select type="text" class="form-control" asp-for="TypeSpecimen">
                         <option value="" selected hidden>Select Type</option>
                         <option value="NPS IN UTM">NPS IN UTM</option>

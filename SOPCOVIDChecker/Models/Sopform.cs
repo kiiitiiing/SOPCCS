@@ -39,8 +39,13 @@ namespace SOPCOVIDChecker.Models
         [Column("type_specimen")]
         [StringLength(50)]
         public string TypeSpecimen { get; set; }
+        [Column("date_onset_symptoms", TypeName = "date")]
+        public DateTime DateOnsetSymptoms { get; set; }
         [Column("datetime_specimen_receipt")]
         public DateTime DatetimeSpecimenReceipt { get; set; }
+        [Required]
+        [StringLength(255)]
+        public string Swabber { get; set; }
         [Column("date_result", TypeName = "date")]
         public DateTime DateResult { get; set; }
         [Column("patient_id")]

@@ -83,6 +83,8 @@ namespace SOPCOVIDChecker.Controllers
             ViewBag.Verify = GetStaff("verify");
             ViewBag.Approve = GetStaff("approve");
 
+            
+
             return PartialView(sop);
         }
 

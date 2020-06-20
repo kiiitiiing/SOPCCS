@@ -114,17 +114,17 @@ namespace SOPCOVIDChecker.Services
             }
             else if(result.CreatedBy != null && result.ApprovedBy == null)
             {
-                status = "PENDING";
+                status = "PROCESSING";
             }
             else
             {
                 if (result.Interpretation.Contains("Positive"))
                 {
-                    status = "POSITIVE";
+                    status = "RELEASED";
                 }
                 else
                 {
-                    status = "NEGATIVE";
+                    status = "RELEASED";
                 }
             }
 

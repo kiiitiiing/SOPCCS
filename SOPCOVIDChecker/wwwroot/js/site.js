@@ -171,6 +171,7 @@ function CaclAge(date) {
 
 function GetBarangayFiltered(id,url) {
     var urls = url + '?muncityId=' + id;
+    console.log(urls);
     return $.ajax({
         url: urls,
         type: 'get',

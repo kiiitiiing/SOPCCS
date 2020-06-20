@@ -41,6 +41,9 @@ namespace SOPCOVIDChecker.Models
         public int Muncity { get; set; }
         [Column("province")]
         public int Province { get; set; }
+        [Column("address")]
+        [StringLength(255)]
+        public string Address { get; set; }
         [Column("created_at")]
         public DateTime CreatedAt { get; set; }
         [Column("updated_at")]
