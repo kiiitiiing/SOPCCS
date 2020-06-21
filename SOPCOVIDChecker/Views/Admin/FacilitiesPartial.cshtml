@@ -1,0 +1,59 @@
+﻿@model List<FacilitiesModel>
+
+<div class="table-responsive">
+    <table class="table table-striped table-hover" style=" font-size: 14px;">
+        <thead>
+            <tr class="bg-black">
+                <th>Facility</th>
+                <th>Contact</th>
+                <th>Email</th>
+                <th>Chief Hospital</th>
+                <th>Level</th>
+                <th>Type</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td style="white-space: nowrap;">
+                        <a class="facilityId text-primary text-bold"
+                           style="cursor:pointer;"
+                           data-toggle="ajax-modal"
+                           data-id="@item.Id"
+                           data-target="#update-facility-modal"
+                           data-url="@Url.Action("UpdateFacility", "Admin", new { id = item.Id })">
+                            @item.Facility
+                        </a>
+                        <br />
+                        <small class="text-success">(@item.Address)</small>
+                    </td>
+                    <td>
+                        <small>
+                            @item.Contact
+                        </small>
+                    </td>
+                    <td>
+                        <small>
+                            @item.Email
+                        </small>
+                    </td>
+                    <td>
+                        <small>
+                            @item.Chief
+                        </small>
+                    </td>
+                    <td>
+                        @if (item.Level != "0")
+                        {
+                            <span class="badge bg-green">@item.Level</span>
+                        }
+                    </td>
+                    <td>
+                        <span class="badge bg-green">@item.Type</span>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

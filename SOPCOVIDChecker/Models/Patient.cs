@@ -32,6 +32,7 @@ namespace SOPCOVIDChecker.Models
         [Column("sex")]
         [StringLength(255)]
         public string Sex { get; set; }
+        [Required]
         [Column("contact_no")]
         [StringLength(50)]
         public string ContactNo { get; set; }
@@ -41,6 +42,7 @@ namespace SOPCOVIDChecker.Models
         public int Muncity { get; set; }
         [Column("province")]
         public int Province { get; set; }
+        [Required]
         [Column("address")]
         [StringLength(255)]
         public string Address { get; set; }

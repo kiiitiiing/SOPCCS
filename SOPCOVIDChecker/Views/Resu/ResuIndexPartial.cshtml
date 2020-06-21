@@ -17,11 +17,8 @@
                 <th class="text-center text-sm">
                     PCR RESULT
                 </th>
-                <th class="text-center text-sm">
+                <th class="text-center text-sm" colspan="2">
                     SAMPLE TAKEN
-                </th>
-                <th class="text-center text-sm">
-                    ACTION
                 </th>
             </tr>
         </thead>
@@ -45,16 +42,19 @@
                     @sop.SampleTaken.GetDate("dd-MMM-yy")
                 </td>
                 <td class="text-center text-sm">
-                    <button type="button" id="sendToLab"
-                            class="btn btn-sm btn-warning"
-                            data-toggle="ajax-modal"
-                            data-target="#small_modal"
-                            data-action="#small_content"
-                            data-url="@Url.Action("SendToLabModal","Resu", new { formId = sop.ResultFormId })"
-                            onclick="OpenModal($(this));">
-                        &nbsp;Lab
-                    </button>
+                    @sop.SampleTaken.GetDate("hh:mm tt")
                 </td>
+                @*<td class="text-center text-sm">
+            <button type="button" id="sendToLab"
+                    class="btn btn-sm btn-warning"
+                    data-toggle="ajax-modal"
+                    data-target="#small_modal"
+                    data-action="#small_content"
+                    data-url="@Url.Action("SendToLabModal","Resu", new { formId = sop.ResultFormId })"
+                    onclick="OpenModal($(this));">
+                &nbsp;Lab
+            </button>
+        </td>*@
             </tr>
             }
         </tbody>

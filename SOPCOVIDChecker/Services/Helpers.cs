@@ -110,7 +110,7 @@ namespace SOPCOVIDChecker.Services
             var status = "";
             if(result.CreatedBy == null)
             {
-                status = "RESU";
+                status = "PROCESSING";
             }
             else if(result.CreatedBy != null && result.ApprovedBy == null)
             {

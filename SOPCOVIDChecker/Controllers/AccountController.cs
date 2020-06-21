@@ -31,7 +31,7 @@ namespace SOPCOVIDChecker.Controllers
             _context = context;
         }
 
-        public IActionResult Register()
+        public IActionResult Register(string level)
         {
             ViewBag.Facilities = new SelectList(_context.Facility.ToList(), "Id", "Name");
             return PartialView();

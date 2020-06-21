@@ -173,3 +173,10 @@ C:\Users\KitingKo\source\repos\SOPCOVIDChecker\SOPCOVIDChecker\obj\Debug\netcore
 C:\Users\KitingKo\source\repos\SOPCOVIDChecker\SOPCOVIDChecker\obj\Debug\netcoreapp3.1\SOPCOVIDChecker.pdb
 C:\Users\KitingKo\source\repos\SOPCOVIDChecker\SOPCOVIDChecker\obj\Debug\netcoreapp3.1\SOPCOVIDChecker.genruntimeconfig.cache
 C:\Users\KitingKo\source\repos\SOPCOVIDChecker\SOPCOVIDChecker\obj\Debug\netcoreapp3.1\SOPCOVIDChecker.csprojAssemblyReference.cache
+C:\Users\KitingKo\source\repos\SOPCOVIDChecker\SOPCOVIDChecker\obj\Debug\netcoreapp3.1\Razor\Views\Admin\AddFacility.cshtml.g.cs
+C:\Users\KitingKo\source\repos\SOPCOVIDChecker\SOPCOVIDChecker\obj\Debug\netcoreapp3.1\Razor\Views\Admin\Facilities.cshtml.g.cs
+C:\Users\KitingKo\source\repos\SOPCOVIDChecker\SOPCOVIDChecker\obj\Debug\netcoreapp3.1\Razor\Views\Admin\FacilitiesPartial.cshtml.g.cs
+C:\Users\KitingKo\source\repos\SOPCOVIDChecker\SOPCOVIDChecker\obj\Debug\netcoreapp3.1\Razor\Views\Sop\Patients.cshtml.g.cs
+C:\Users\KitingKo\source\repos\SOPCOVIDChecker\SOPCOVIDChecker\obj\Debug\netcoreapp3.1\Razor\Views\Sop\PatientsPartial.cshtml.g.cs
+C:\Users\KitingKo\source\repos\SOPCOVIDChecker\SOPCOVIDChecker\obj\Debug\netcoreapp3.1\Razor\Views\Sop\AddPatient.cshtml.g.cs
+C:\Users\KitingKo\source\repos\SOPCOVIDChecker\SOPCOVIDChecker\obj\Debug\netcoreapp3.1\Razor\Views\Sop\EditPatient.cshtml.g.cs

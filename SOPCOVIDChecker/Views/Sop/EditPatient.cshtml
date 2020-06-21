@@ -1,0 +1,139 @@
+﻿@model Patient
+
+<div class="modal-content" id="edit_patient_modal">
+    <div class="modal-header">
+        <h4>
+            <i class="fa fa-user-plus"></i>
+            &nbsp;Edit Patient
+        </h4>
+        <button type="button" class="close" data-dismiss="modal">
+            <span aria-hidden="true">×</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form asp-action="EditPatient">
+            <input hidden asp-for="Id" />
+            <input hidden asp-for="CreatedAt" />
+            <input hidden asp-for="Province" />
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>
+                            First name:
+                        </label>
+                        <input class="form-control" asp-for="Fname" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>
+                            Middle name:
+                        </label>
+                        <input class="form-control" asp-for="Mname" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>
+                            Last name:
+                        </label>
+                        <input class="form-control" asp-for="Lname" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>
+                            Date of Birth:
+                        </label>
+                        <input type="date" class="form-control" asp-for="Dob" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>
+                            Sex:
+                        </label>
+                        <select class="form-control" asp-for="Sex">
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>
+                            Contact Number:
+                        </label>
+                        <input class="form-control" asp-for="ContactNo" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>
+                            City/Municipality:
+                        </label>
+                        <select id="muncityFilters"
+                                asp-for="Muncity"
+                                asp-items="ViewBag.Muncity"
+                                title="City/Municipality"
+                                class="form-control col-sm-12"
+                                onchange="MuncityOnChange($(this).val(),'@Url.Action("FilteredBarangay","Helper", new {muncityId=""})');">
+                            <option value="">Select City/Municipaliy</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>
+                            Barangay:
+                        </label>
+                        <select class="form-control" asp-for="Barangay" asp-items="ViewBag.Barangay" id="barangays" onchange="BarangayOnChange($(this).val());">
+                            <option value="" selected hidden>Select Barangay</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>
+                            Address:
+                        </label>
+                        <textarea class="form-control" asp-for="Address" placeholder="Sitio/Purok/Subdivision/Village/Street">
+                        </textarea>
+                    </div>
+                </div>
+            </div>
+            @if (ViewBag.Errors != null)
+            {
+                <div class="row" style="margin-top: 20px;">
+                    <div class="col-sm-12 center" style="align-content:center">
+                        <span class="text-danger text-sm">Please input the required fields.</span>
+                    </div>
+                </div>
+            }
+        </form>
+    </div>
+    <div class="modal-footer" style="display: inline-block !important;">
+        <button class="btn btn-sm btn-danger fa-pull-left" type="button" data-dismiss="modal">
+            Cancel
+        </button>
+        <button class="btn btn-sm btn-success fa-pull-right" data-action="small_modal" data-save="modal">
+            Submit
+        </button>
+    </div>
+</div>

@@ -32,6 +32,7 @@ namespace SOPCOVIDChecker.Models
         [Column("requested_by")]
         [StringLength(100)]
         public string RequestedBy { get; set; }
+        [Required]
         [Column("requester_contact")]
         [StringLength(50)]
         public string RequesterContact { get; set; }

@@ -37,6 +37,7 @@ namespace SOPCOVIDChecker.Models.AccountViewModels
         [Compare("Password")]
         [Display(Name = "confirm password")]
         public string ConfirmPassword { get; set; }
+        public string Level { get; set; }
 
     }
 }

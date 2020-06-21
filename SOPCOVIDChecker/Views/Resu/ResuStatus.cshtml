@@ -1,54 +1,99 @@
 ﻿
 @{
     ViewData["Title"] = "RESU STATUS";
+    var dateRange = ViewBag.StartDate + " - " + ViewBag.EndDate;
 }
 
-<div class="card card-warning card-outline">
-    <div class="card-header">
-        <div class="row">
-            <div class="col-md-6">
-                <h4>
-                    SAMPLES IN @ViewBag.Province.ToUpper()<br />
-                    <small>Total: <span class="total_ctr"></span></small>
-                </h4>
-            </div>
-            <div class="col-md-6">
-                <div class="fa-pull-right form-inline ml-3">
-                    <!-- INPUT -->
-                    <input class="form-control form-control-sm"
-                           name="search"
-                           id="searchDetail"
-                           placeholder="Search name"
-                           type="text" />
-                    <button id="searchPatientBtn" type="button" class="btn btn-sm btn-success">
-                        <i class="fa fa-search"></i>
-                    </button>
+    <div class="row">
+        <div class="col-md-3">
+            <!-- SELECT DATE -->
+            <div class="card card-danger card-green">
+                <!-- CARD DANGER HEADER -->
+                <div class="card-header">
+                    <h3 class="card-title">
+                        Filter Result
+                    </h3>
+                </div>
+                <!-- CARD DANGER BODY -->
+                <div class="card-body">
+                        <!-- SEARCH -->
+                    <div class="form-group ">
+                        <input class="form-control" id="searchDetail" type="text" placeholder="Patient name" name="search" value="" autocomplete="off" />
+                    </div>
+                    <!-- DATE FILTER -->
+                    <div class="form-group">
+                        <input class="form-control" id="daterange" type="text" name="daterange" value="@dateRange" autocomplete="off" readonly style="cursor: pointer;">
+                    </div>
+                    <!-- STATUS -->
+                    <div class="form-group">
+                        <select class="form-control" id="status" name="status">
+                            <option value="">Select All</option>
+                            <option value="PROCESSING">Processing</option>
+                            <option value="RELEASED">Released</option>
+                        </select>
+                    </div>
+                    <div class="form-group hide"></div>
+                    <!-- BUTTONS -->
+                    <div class="form-group">
+                        <!-- FILTER -->
+                        <button type="button" id="searchPatientBtn" value="Filter" class="btn btn-block btn-success">
+                            <i class="fa fa-filter"></i>
+                            &nbsp;Filter Result
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="card-body" id="list_sop_resu" style="overflow:auto !important;">
-        <div class="overlay d-flex justify-content-center align-items-center">
-            <i class="fas fa-2x fa-sync fa-spin"></i>
+        <div class="col-md-9">
+            <div class="card card-warning card-outline">
+                <div class="card-header">
+                    <h4>
+                        SAMPLES<br />
+                    </h4>
+                    <small class="badge bg-gradient-warning">
+                        Total: <span class="total_ctr"></span>
+                    </small>
+                </div>
+                <div class="card-body" id="list_sop_resu" style="overflow:auto !important;">
+                    <div class="overlay d-flex justify-content-center align-items-center">
+                        <i class="fas fa-2x fa-sync fa-spin"></i>
+                    </div>
+                    <br />
+                    <br />
+
+                </div>
+                <div id="resu-status" style="margin: auto; margin-bottom: 20px;"></div>
+            </div>
         </div>
-        <br />
-        <br />
-
     </div>
-    <div id="resu-status" style="margin: auto; margin-bottom: 20px;"></div>
-</div>
 
 
-<script>
+
+
+    <script>
     var vessel = $('#resu-status');
-    LoadList('', vessel, '@Url.Action("ResuStatusJson", "Resu")');
+    var c = [];
+    c.push(qFix($('#searchDetail').val()));
+    c.push(qFix($('#daterange').val()));
+    c.push(qFix($('#status').val()));
+    LoadList(c, vessel, '@Url.Action("ResuStatusJson", "Resu")');
 
     $(function () {
         $('#searchPatientBtn').on('click', function (event) {
             event.preventDefault();
             event.stopImmediatePropagation();
-            var q = $('#searchDetail').val();
+            var q = []
+            q.push(qFix($('#searchDetail').val()));
+            q.push(qFix($('#daterange').val()));
+            q.push(qFix($('#status').val()));
             LoadList(q, vessel, '@Url.Action("ResuStatusJson", "Resu")');
         });
+
+        $('input[name="daterange"]').daterangepicker({
+            format: 'DD/MM/YYYY',
+            startDate: '@ViewBag.StartDate',
+            endDate: '@ViewBag.EndDate',
+            opens: 'right'
+        });
     })
-</script>
+    </script>

@@ -33,15 +33,18 @@
 </div>
 
 <script>
-        var vessel = $('#admin-lab');
-        LoadList('', vessel, '@Url.Action("LabJson","Admin")');
+    var vessel = $('#admin-lab');
+    var c = [];
+    c.push(qFix($('#searchDetail').val()));
+    LoadList(c, vessel, '@Url.Action("LabJson","Admin")');
 
-        $(function () {
-            $('#searchPatientBtn').on('click', function (event) {
-                event.preventDefault();
-                event.stopImmediatePropagation();
-                var q = $('#searchDetail').val();
-                LoadList(q, vessel, '@Url.Action("LabJson", "Admin")');
-            });
-        })
+    $(function () {
+        $('#searchPatientBtn').on('click', function (event) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            var q = []
+            q.push(qFix($('#searchDetail').val()));
+            LoadList(q, vessel, '@Url.Action("LabJson", "Admin")');
+        });
+    })
 </script>

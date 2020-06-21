@@ -14,102 +14,31 @@
         <form asp-action="AddSopModal">
             <input hidden asp-for="PcrResult" value="none" />
             <input hidden asp-for="SampleId" value="none" />
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label>First name:</label>
-                        <input class="form-control" asp-for="Patient.Fname" autofocus />
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label>Middle name:</label>
-                        <input class="form-control" asp-for="Patient.Mname" />
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label>Last name:</label>
-                        <input class="form-control" asp-for="Patient.Lname" />
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-4">
-                    <label>Date of birth:</label>
-                    <input id="patient_dob" type="date" class="form-control" asp-for="Patient.Dob" onchange="CaclAge($(this).val());" />
-                </div>
-                <div class="col-sm-4">
-                    <label>Age:</label>
-                    <input type="number" class="form-control" id="Patient_Age" readonly />
-                </div>
-                <div class="col-sm-4">
-                    <label>Gender:</label><br />
-                    <input type="radio" id="male" asp-for="Patient.Sex" value="male" checked />
-                    <label for="male">Male</label>
-                    <input type="radio" id="female" asp-for="Patient.Sex" value="female" />
-                    <label for="male">Female</label>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-4">
-                    <label>
-                        Province:
-                    </label>
-                    <input asp-for="Patient.Province" hidden />
-                    <select asp-for="Patient.Province" asp-items="ViewBag.Province" id="patientProvince" title="province" class="form-control col-sm-12" disabled>
-                    </select>
-                </div>
-                <div class="col-sm-4">
-                    <label>
-                        City/Municipality:
-                    </label>
-                    <select id="muncityFilters"
-                            asp-for="Patient.Muncity"
-                            asp-items="ViewBag.Muncity"
-                            title="City/Municipality"
-                            class="form-control col-sm-12"
-                            onchange="MuncityOnChange($(this).val(),'@Url.Action("FilteredBarangay","Helper", new {muncityId=""})');">
-                        <option value="">Select City/Municipaliy</option>
-                    </select>
-                </div>
-                <div class="col-sm-4">
-                    <label>Barangay:</label>
-                    <select id="barangays" asp-for="Patient.Barangay" asp-items="ViewBag.BarangayP" title="Barangay" class="form-control col-sm-12">
-                        <option value="">Select Barangay</option>
-                    </select>
-                </div>
-            </div>
+            <input hidden asp-for="PatientId" />
             <div class="row">
                 <div class="col-sm-12">
-                    <label>Address:</label>
-                    <input type="text" class="form-control" asp-for="Patient.Address" placeholder="Sitio/Purok/Subdivision/Village/Street"/>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-4">
                     <label>Requested By:</label>
                     <input type="text" class="form-control" asp-for="RequestedBy" />
                 </div>
-                <div class="col-sm-4">
+                <div class="col-sm-12">
                     <label>Contact number:</label>
                     <input type="text" class="form-control" asp-for="RequesterContact" />
                 </div>
-                <div class="col-sm-4">
+                <div class="col-sm-12">
                     <label>Date Onset of Symptoms:</label>
                     <input type="date" class="form-control" asp-for="DateOnsetSymptoms" />
                 </div>
             </div>
             <div class="row">
-                <div class="col-sm-4">
+                <div class="col-sm-12">
                     <label>Name of Swabber:</label>
                     <input type="text" class="form-control" asp-for="Swabber" />
                 </div>
-                <div class="col-sm-4">
+                <div class="col-sm-12">
                     <label>Date & Time of Collection:</label>
                     <input type="datetime-local" class="form-control" asp-for="DatetimeCollection" />
                 </div>
-                <div class="col-sm-4">
+                <div class="col-sm-12">
                     <label>Type of Specimen &amp; Collection Medium:</label>
                     <select type="text" class="form-control" asp-for="TypeSpecimen">
                         <option value="" selected hidden>Select Type</option>

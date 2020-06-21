@@ -18,7 +18,7 @@
                             data-toggle="ajax-modal"
                             data-target="#small_modal"
                             data-action="#small_content"
-                            data-url="@Url.Action("Register","Account")">
+                            data-url="@Url.Action("Register","Account", new { level = "PESU" })">
                         <i class="fa fa-user"></i>
                         &nbsp;Add User
                     </button>
@@ -33,15 +33,18 @@
 </div>
 
 <script>
-        var vessel = $('#admin-pesu');
-        LoadList('', vessel, '@Url.Action("PesuJson","Admin")');
+    var vessel = $('#admin-pesu');
+    var c = [];
+    c.push(qFix($('#searchDetail').val()));
+    LoadList(c, vessel, '@Url.Action("PesuJson","Admin")');
 
-        $(function () {
-            $('#searchPatientBtn').on('click', function (event) {
-                event.preventDefault();
-                event.stopImmediatePropagation();
-                var q = $('#searchDetail').val();
-                LoadList(q, vessel, '@Url.Action("PesuJson", "Admin")');
-            });
-        })
+    $(function () {
+        $('#searchPatientBtn').on('click', function (event) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            var q = []
+            q.push(qFix($('#searchDetail').val()));
+            LoadList(q, vessel, '@Url.Action("PesuJson", "Admin")');
+        });
+    })
 </script>
