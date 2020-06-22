@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -22,6 +23,9 @@ namespace SOPCOVIDChecker.Controllers
         {
             _context = context;
         }
+
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
 
         #region DASHBOARD
 
@@ -58,6 +62,12 @@ namespace SOPCOVIDChecker.Controllers
 
         public IActionResult ResuIndex()
         {
+            var date = DateTime.Now;
+            StartDate = new DateTime(date.Year, date.Month, 1);
+            EndDate = DateTime.Now.Date;
+
+            ViewBag.StartDate = StartDate.Date.ToString("dd/MM/yyyy");
+            ViewBag.EndDate = EndDate.Date.ToString("dd/MM/yyyy");
             return View();
         }
         public IActionResult ResuIndexPartial([FromBody]IEnumerable<ResultLess> model)
@@ -91,6 +101,69 @@ namespace SOPCOVIDChecker.Controllers
         }
         #endregion
 
+
+        #region RESULT
+        public async Task<ActionResult<List<ResultLess>>> ResuStatusJson(string q, string dr, string f)
+        {
+            if (!string.IsNullOrEmpty(dr))
+            {
+                StartDate = DateTime.Parse(dr.Substring(0, dr.IndexOf(" ") + 1).Trim());
+                EndDate = DateTime.Parse(dr.Substring(dr.LastIndexOf(" ")).Trim()).AddDays(1).AddSeconds(-1);
+            }
+
+            var sop = await _context.ResultForm
+                .Include(x => x.SopForm).ThenInclude(x => x.DiseaseReportingUnit).ThenInclude(x => x.Facility)
+                .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.BarangayNavigation)
+                .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.MuncityNavigation)
+                .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.ProvinceNavigation)
+                .Include(x => x.CreatedByNavigation).ThenInclude(x => x.Facility)
+                .Where(x=>x.UpdatedAt >= StartDate && x.UpdatedAt <= EndDate)
+                .Where(x => x.SopForm.DiseaseReportingUnit.Facility.Province == UserProvince)
+                .OrderByDescending(x => x.UpdatedAt)
+                .Select(x => new ResultLess
+                {
+                    SampleId = x.SopForm.SampleId,
+                    ResultFormId = x.Id,
+                    SOPId = x.SopFormId,
+                    PatientId = x.SopForm.PatientId,
+                    PatientName = x.SopForm.Patient.GetFullName(),
+                    Lab = x.CreatedByNavigation.Facility.Abbr,
+                    DRU = x.SopForm.DiseaseReportingUnit.Facility.Name,
+                    PCRResult = x.SopForm.PcrResult,
+                    Address = x.SopForm.Patient.GetAddress(),
+                    Status = x.Result()
+                })
+                .ToListAsync();
+
+            if (!string.IsNullOrEmpty(q))
+            {
+                sop = sop.Where(x => x.PatientName.Contains(q, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+
+            if(!string.IsNullOrEmpty(f))
+            {
+                sop = sop.Where(x => x.Status.Equals(f)).ToList();
+            }
+
+            return sop;
+        }
+        public IActionResult ResuStatus()
+        {
+            var date = DateTime.Now;
+            StartDate = new DateTime(date.Year, date.Month, 1);
+            EndDate = DateTime.Now.Date;
+
+            ViewBag.StartDate = StartDate.Date.ToString("dd/MM/yyyy");
+            ViewBag.EndDate = EndDate.Date.ToString("dd/MM/yyyy");
+            ViewBag.Province = _context.Province.Find(UserProvince).Description;
+            return View();
+        }
+        public IActionResult ResuStatusPartial([FromBody] IEnumerable<ResultLess> model)
+        {
+            return PartialView(model);
+        }
+        #endregion
+
         #region HELPERS
         public partial class LabSelect
         {
@@ -110,6 +183,13 @@ namespace SOPCOVIDChecker.Controllers
                 });
             return new SelectList(labs, "LabId", "LabName");
         }
+
+        public int UserId => int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+        public int UserFacility => int.Parse(User.FindFirstValue("Facility"));
+        public int UserProvince => int.Parse(User.FindFirstValue("Province"));
+        public int UserMuncity => int.Parse(User.FindFirstValue("Muncity"));
+        public int UserBarangay => int.Parse(User.FindFirstValue("Barangay"));
+        public string UserName => User.FindFirstValue(ClaimTypes.GivenName) + " " + User.FindFirstValue(ClaimTypes.Surname);
         #endregion
     }
 }

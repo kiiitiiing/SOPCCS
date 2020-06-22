@@ -25,16 +25,27 @@ namespace SOPCOVIDChecker.Controllers
             _context = context;
         }
 
+
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+
         #region SOP FORM LIST
         [HttpGet]
-        public async Task<ActionResult<List<SopLess>>> SopFormJson(string q)
+        public async Task<ActionResult<List<SopLess>>> SopFormJson(string q, string dr, string f)
         {
+            if(!string.IsNullOrEmpty(dr))
+            {
+                StartDate = DateTime.Parse(dr.Substring(0, dr.IndexOf(" ") + 1).Trim());
+                EndDate = DateTime.Parse(dr.Substring(dr.LastIndexOf(" ")).Trim()).AddDays(1).AddSeconds(-1);
+            }
+
             var sop = await _context.Sopform
                 .Include(x => x.Patient).ThenInclude(x => x.BarangayNavigation)
                 .Include(x => x.Patient).ThenInclude(x => x.MuncityNavigation)
                 .Include(x => x.Patient).ThenInclude(x => x.ProvinceNavigation)
                 .Include(x => x.ResultForm)
                 .Include(x => x.DiseaseReportingUnit).ThenInclude(x => x.Facility)
+                .Where(x=>x.CreatedAt >= StartDate && x.CreatedAt <= EndDate)
                 .Where(x => x.DiseaseReportingUnit.FacilityId == UserFacility)
                 .Where(x => x.ResultForm.First().CreatedBy == null)
                 .OrderByDescending(x => x.CreatedAt)
@@ -54,7 +65,9 @@ namespace SOPCOVIDChecker.Controllers
                     RequesterContact = x.RequesterContact,
                     SpecimenCollection = x.TypeSpecimen,
                     DateTimeReceipt = x.DatetimeSpecimenReceipt,
-                    DateResult = x.DateResult
+                    DateResult = x.DateResult,
+                    DateOnset = x.DateOnsetSymptoms,
+                    Swabber = x.Swabber
                 })
                 .ToListAsync();
 
@@ -68,6 +81,12 @@ namespace SOPCOVIDChecker.Controllers
 
         public IActionResult SopIndex()
         {
+            var date = DateTime.Now;
+            StartDate = new DateTime(date.Year, date.Month, 1);
+            EndDate = DateTime.Now.Date;
+
+            ViewBag.StartDate = StartDate.Date.ToString("dd/MM/yyyy");
+            ViewBag.EndDate = EndDate.Date.ToString("dd/MM/yyyy");
             return View();
         }
 
@@ -77,11 +96,8 @@ namespace SOPCOVIDChecker.Controllers
         }
         #endregion
         #region ADD SOP FORM
-        public IActionResult AddSopModal()
+        public IActionResult AddSopModal(int patientId)
         {
-            ViewBag.Province = GetProvinces();
-            ViewBag.Muncity = GetMuncities(UserProvince);
-            
             return PartialView();
         }
 
@@ -90,11 +106,8 @@ namespace SOPCOVIDChecker.Controllers
         public async Task<IActionResult> AddSopModal(Sopform model)
         {
             var errors = ModelState.Values.SelectMany(x => x.Errors);
-            ViewBag.Muncity = GetMuncities(UserProvince);
-            ViewBag.Province = GetProvinces();
-            ViewBag.Barangay = GetBarangays(model.Patient.Muncity, model.Patient.Province);
-            model.Patient.CreatedAt = DateTime.Now;
-            model.Patient.UpdatedAt = DateTime.Now;
+            model.DateResult = default;
+            model.DatetimeSpecimenReceipt = default;
             model.CreatedAt = DateTime.Now;
             model.UpdatedAt = DateTime.Now;
             model.DiseaseReportingUnitId = UserId;
@@ -114,14 +127,22 @@ namespace SOPCOVIDChecker.Controllers
         }
         #endregion
         #region STATUS
-        public async Task<ActionResult<List<ResultLess>>> SampleStatusJson(string q)
+        public async Task<ActionResult<List<ResultLess>>> SampleStatusJson(string q, string dr, string f)
         {
+
+            if (!string.IsNullOrEmpty(dr))
+            {
+                StartDate = DateTime.Parse(dr.Substring(0, dr.IndexOf(" ") + 1).Trim());
+                EndDate = DateTime.Parse(dr.Substring(dr.LastIndexOf(" ")).Trim()).AddDays(1).AddSeconds(-1);
+            }
+
             var sop = await _context.ResultForm
                 .Include(x => x.SopForm).ThenInclude(x => x.DiseaseReportingUnit).ThenInclude(x => x.Facility)
                 .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.BarangayNavigation)
                 .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.MuncityNavigation)
                 .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.ProvinceNavigation)
                 .Include(x => x.CreatedByNavigation).ThenInclude(x => x.Facility)
+                .Where(x=>x.UpdatedAt >= StartDate && x.UpdatedAt <= EndDate)
                 .Where(x=>x.SopForm.DiseaseReportingUnit.FacilityId == UserFacility)
                 .Where(x => x.CreatedBy != null)
                 .OrderByDescending(x => x.UpdatedAt)
@@ -132,7 +153,7 @@ namespace SOPCOVIDChecker.Controllers
                     SOPId = x.SopFormId,
                     PatientId = x.SopForm.PatientId,
                     PatientName = x.SopForm.Patient.GetFullName(),
-                    Lab = x.CreatedByNavigation.Facility.Name,
+                    Lab = x.CreatedByNavigation.Facility.Abbr,
                     PCRResult = x.SopForm.PcrResult,
                     Address = x.SopForm.Patient.GetAddress(),
                     Status = x.Result()
@@ -144,14 +165,159 @@ namespace SOPCOVIDChecker.Controllers
                 sop = sop.Where(x => x.PatientName.Contains(q, StringComparison.OrdinalIgnoreCase)).ToList();
             }
 
+            if(!string.IsNullOrEmpty(f))
+            {
+                sop = sop.Where(x => x.Status.Equals(f)).ToList();
+            }
+
+            
+
             return sop;
         }
         public IActionResult SampleStatus()
         {
+            var date = DateTime.Now;
+            StartDate = new DateTime(date.Year, date.Month, 1);
+            EndDate = DateTime.Now.Date;
+
+            ViewBag.StartDate = StartDate.Date.ToString("dd/MM/yyyy");
+            ViewBag.EndDate = EndDate.Date.ToString("dd/MM/yyyy");
             return View();
         }
         public IActionResult SampleStatusPartial([FromBody]IEnumerable<ResultLess> model)
         {
+            return PartialView(model);
+        }
+        #endregion
+        #region PATIENTS
+        [HttpGet]
+        public async Task<ActionResult<List<ListPatientModel>>> PatientsJson(string q, string dr, string f)
+        {
+            var patients = await _context.Patient
+                .Include(x => x.BarangayNavigation)
+                .Include(x => x.MuncityNavigation)
+                .Include(x => x.ProvinceNavigation)
+                .OrderByDescending(x => x.CreatedAt)
+                .Select(x => new ListPatientModel
+                {
+                    Id = x.Id,
+                    Name = x.GetFullName(),
+                    DateOfBirth = x.Dob.GetDate("MMM d, yyyy"),
+                    Age = x.Dob.ComputeAge(),
+                    Sex = x.Sex,
+                    Address = x.GetAddress(),
+                    BarangayId = x.Barangay,
+                    MuncutyId = x.Muncity,
+                    ProvinceId = x.Province
+                })
+                .ToListAsync();
+
+            if (!string.IsNullOrEmpty(q))
+            {
+                patients = patients.Where(x => x.Name.Contains(q, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+
+            return patients;
+        }
+        public IActionResult Patients()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult PatientsPartial([FromBody] IEnumerable<ListPatientModel> model)
+        {
+            return PartialView(model);
+        }
+        #endregion
+        #region ADD PATIENT
+
+        public IActionResult AddPatient()
+        {
+            ViewBag.Muncity = GetMuncities(UserProvince);
+            return PartialView();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddPatient(Patient model)
+        {
+            model.Province = 2;
+            model.CreatedAt = DateTime.Now;
+            model.UpdatedAt = DateTime.Now;
+            var errors = ModelState.Values.SelectMany(v => v.Errors);
+            if (model.Muncity != 0)
+            {
+                ViewBag.Muncity = GetMuncities(UserProvince);
+            }
+            if (model.Barangay != 0)
+            {
+                ViewBag.Barangay = GetBarangays(model.Muncity, model.Province);
+            }
+            if (ModelState.IsValid)
+            {
+                if(_context.Patient.Any(x=>
+                    x.Fname.ToUpper().Equals(model.Fname.ToUpper()) &&
+                    x.Mname.ToUpper().Equals(model.Mname.ToUpper()) &&
+                    x.Lname.ToUpper().Equals(model.Lname.ToUpper()) &&
+                    x.Sex == model.Sex &&
+                    x.Dob == model.Dob))
+                {
+                    ViewBag.Duplicate = "Patient already exists";
+                    return PartialView(model);
+                }
+                else
+                {
+                    await _context.AddAsync(model);
+                    await _context.SaveChangesAsync();
+                    return PartialView(model);
+
+                }
+            }
+            ViewBag.Errors = errors;
+            return PartialView(model);
+        }
+        #endregion
+        #region EDIT PATIENT
+
+        public async Task<IActionResult> EditPatient(int patientId)
+        {
+            var patient = await _context.Patient
+                .Include(x => x.BarangayNavigation)
+                .Include(x => x.MuncityNavigation)
+                .Include(x => x.ProvinceNavigation)
+                .FirstOrDefaultAsync(x => x.Id == patientId);
+            if (patient.Muncity != 0)
+            {
+                ViewBag.Muncity = GetMuncities(patient.Province);
+            }
+            if (patient.Barangay != 0)
+            {
+                ViewBag.Barangay = GetBarangays(patient.Muncity, patient.Province);
+            }
+            return PartialView(patient);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditPatient(Patient model)
+        {
+            model.UpdatedAt = DateTime.Now;
+            var errors = ModelState.Values.SelectMany(v => v.Errors);
+            if (ModelState.IsValid)
+            {
+                _context.Update(model);
+                await _context.SaveChangesAsync();
+                return PartialView(model);
+            }
+            ViewBag.Errors = errors;
+            if (model.Muncity != 0)
+            {
+                ViewBag.Muncity = GetMuncities(UserProvince);
+            }
+            if (model.Barangay != 0)
+            {
+                ViewBag.Barangay = GetBarangays(model.Muncity, model.Province);
+            }
             return PartialView(model);
         }
         #endregion
@@ -168,6 +334,7 @@ namespace SOPCOVIDChecker.Controllers
                 PerformedBy = null,
                 VerifiedBy = null,
                 ApprovedBy = null,
+                CreatedBy = 10,
                 CreatedAt = DateTime.Now,
                 UpdatedAt = DateTime.Now
             };

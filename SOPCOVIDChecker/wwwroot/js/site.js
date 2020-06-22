@@ -72,7 +72,7 @@
                         if (contentId == 'new_sop') {
                             Toast("Added new patient")
                             var vessel = $('#sop-sop');
-                            LoadList('', vessel, '/SOPCCS/Sop/SopFormJson');
+                            Window.href = '/SOPCCS/Sop/SopIndex';
                         }
                         else if (contentId == 'lab_modal') {
                             Toast("Sent to Lab")
@@ -82,8 +82,15 @@
                         else if (contentId == 'add_staff_modal') {
                             Toast("Added new staff!")
                             var vessel = $('#result-staff');
-                            LoadList('', vessel, '/SOPCCS/Result/LabUsers');
-                        } 
+                            LoadList('', vessel, '/SOPCCS/Result/LabUsersJson');
+                        }  
+                        else if (contentId == 'add_patient_modal' || contentId == 'edit_patient_modal' ) {
+                            Toast("Succes!")
+                            var vessel = $('#sop-patients');
+                            var c = [];
+                            c.push(qFix($('#searchDetail').val()));
+                            LoadList(c, vessel, '/SOPCCS/Sop/PatientsJson');
+                        }
                     });
                 }
                 else if (errors == '' && contentId == 'result_modal') {
@@ -171,6 +178,7 @@ function CaclAge(date) {
 
 function GetBarangayFiltered(id,url) {
     var urls = url + '?muncityId=' + id;
+    console.log(urls);
     return $.ajax({
         url: urls,
         type: 'get',
@@ -230,7 +238,7 @@ function LoadList(q, container, urls) {
     //var container = $('#' + vessel);
     var size = 5;
     var ctr = 0;
-    var url = urls + '?q=' + q;
+    var url = urls + '?q=' + q[0] + '&dr=' + q[1] + '&f=' + q[2];
     var showArrows = true;
     console.log(url);
     container.pagination({
@@ -253,6 +261,7 @@ function LoadList(q, container, urls) {
             }
         },
         callback: function (response, pagination) {
+            console.log(container.attr('id'));
             var params = GetParams(container.attr('id'));
             $.when(CallPartialView(response, params[1], params[0])).done(function (output) {
                 $('.total_ctr').html(ctr);
@@ -265,6 +274,13 @@ function LoadList(q, container, urls) {
             })
         }
     })
+}
+
+function qFix(q) {
+    if (q === undefined)
+        return '';
+    else
+        return q;
 }
 
 function GetParams(id) {
@@ -295,6 +311,12 @@ function GetParams(id) {
             params.push('Admin');
             break;
         }
+        case 'admin-facilities': {
+            console.log('hmm');
+            params.push('FacilitiesPartial');
+            params.push('Admin');
+            break;
+        }
         case 'resu-index': {
             params.push('ResuIndexPartial');
             params.push('Resu');
@@ -318,6 +340,16 @@ function GetParams(id) {
         case 'pesu-status': {
             params.push('PesuStatusPartial');
             params.push('Pesu');
+            break;
+        }
+        case 'resu-status': {
+            params.push('ResuStatusPartial');
+            params.push('Resu');
+            break;
+        }
+        case 'sop-patients': {
+            params.push('PatientsPartial');
+            params.push('Sop');
             break;
         }
     }

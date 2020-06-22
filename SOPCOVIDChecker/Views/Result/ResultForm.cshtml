@@ -67,7 +67,7 @@
                             <label>Sample ID:</label>
                         </td>
                         <td colspan="6" rowspan="2">
-                            <span class="text-dangers">@Model.SopForm.SampleId</span>
+                            <input class="form-control" asp-for="SopForm.SampleId" />
                         </td>
                     </tr>
                     <tr>
@@ -112,10 +112,20 @@
                             <span class="text-dangers">@Model.SopForm.DatetimeCollection.GetDate("dd/MM/yyyy hh:mm tt")</span>
                         </td>
                         <td colspan="6">
-                            <label>Date & Time of Specimen Collection:</label>
+                            <label>Date & Time of Specimen Receipt:</label>
                         </td>
                         <td colspan="3">
-                            <span class="text-dangers">@Model.SopForm.DatetimeSpecimenReceipt.GetDate("dd/MM/yyyy hh:mm tt")</span>
+                            <input class="form-control" asp-for="SopForm.DatetimeSpecimenReceipt" value=""/>
+                        </td>
+                    </tr>
+                    <tr>
+                    </tr>
+                    <tr>
+                        <td colspan="7" rowspan="2">
+                            <label>Date & Time of Release of Result:</label>
+                        </td>
+                        <td colspan="10" rowspan="2">
+                            <input class="form-control" asp-for="SopForm.DateResult" value=""/>
                         </td>
                     </tr>
                     <tr>
@@ -130,9 +140,10 @@
                     <tr>
                         <td colspan="17">
                             <label>LABORATORY TEST PERFORMED:</label><br />
-                            <textarea class="form-control" asp-for="LabTestPerformed" style="height: 100%; width: 100%;">
-                                @Model.LabTestPerformed
-                            </textarea>
+                                                                     <pre>
+                                SARS-CoV-2 (causative agent of COVID-19) virus
+                                detection by Real-Time Polymerase Chain Reaction
+                            </pre>
                         </td>
                     </tr>
                     <tr>
@@ -143,33 +154,7 @@
                             <label>TEST RESULT:</label>
                         </td>
                         <td colspan="14" rowspan="2">
-                            <span class="text-dangers">@Model.SopForm.PcrResult</span>
-                        </td>
-                    </tr>
-                    <tr>
-                    <tr>
-                        <td colspan="8">
-                            <label>
-                                TEST RESULT AND UNITS OR MEASUREMENTS:
-                            </label><br />
-                            <input class="form-control" asp-for="TestResult" style="height: 100% !important; width: 100% !important; box-sizing: border-box;" />
-                        </td>
-                        <td colspan="9">
-                            <label>
-                                BIOLOGICAL REFERENCE INTERVALS:
-                            </label><br />
-                            <input class="form-control" asp-for="BiologicalReferrence" style="height: 100% !important; width: 100% !important; box-sizing: border-box;" />
-                        </td>
-                    </tr>
-                    <tr></tr>
-                    <tr>
-                        <td colspan="17" class="text-center">
-                            <label>INTERPRETATION OF RESULTS WHEN APPROPRIATE</label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="8">
-                            <select class="form-control final_result" asp-for="FinalResult" onchange="ResultChange($(this));">
+                            <select class="form-control final_result" asp-for="TestResult" onchange="ResultChange($(this));">
                                 <option value="" selected hidden>
                                     Choose Result
                                 </option>
@@ -183,6 +168,17 @@
                                     Invalid due to specimen quality
                                 </option>
                             </select>
+                        </td>
+                    </tr>
+                    <tr>
+                    <tr></tr>
+                    <tr>
+                        <td colspan="17" class="text-center">
+                            <label>INTERPRETATION OF RESULTS WHEN APPROPRIATE</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="8">
                         </td>
                         <td colspan="9">
                             <textarea class="form-control" asp-for="Interpretation" id="interpret" rows="2" style="height: 100% !important; width: 100% !important; font-size: 10px; box-sizing: border-box;" readonly>

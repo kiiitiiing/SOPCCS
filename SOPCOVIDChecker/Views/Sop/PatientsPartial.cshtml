@@ -1,0 +1,108 @@
+﻿@model List<ListPatientModel>
+
+
+@if (Model.Count() > 0)
+{
+    <table class="table table-hover table-striped">
+        <thead class="bg-gray-dark">
+            <tr>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Sex
+                </th>
+                <th>
+                    Age
+                </th>
+                <th style="white-space: nowrap;">
+                    Date of Birth
+                </th>
+                <th>
+                    Address
+                </th>
+                <th>
+                    Action
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var patient in Model)
+            {
+                <tr>
+                    <td>
+                        <a class="text-primary"
+                           data-toggle="ajax-modal"
+                           data-target="#small_modal"
+                           data-action="#small_content"
+                           data-url="@Url.Action("EditPatient","Sop", new { patientId = patient.Id })"
+                           style="cursor: pointer; font-weight:500;">
+                            @patient.Name
+                        </a>
+                    </td>
+                    <td>
+                        @patient.Sex
+                    </td>
+                    <td>
+                        @patient.Age
+                    </td>
+                    <td>
+                        @patient.DateOfBirth
+                    </td>
+                    <td>
+                        @patient.Address
+                    </td>
+                    <td>
+                        <a id="add-sop"
+                                class="btn btn-sm btn-primary"
+                                data-toggle="ajax-modal"
+                                data-target="#small_modal"
+                                data-action="#small_content"
+                                data-url="@Url.Action("AddSopModal","Sop")">
+                            <i class="far fa-file-alt"></i>
+                            &nbsp;FORM
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-warning">
+        <span>
+            <i class="fa fa-exclamation-triangle"></i> No patients found!
+        </span>
+    </div>
+}
+
+<script>
+    $(function () {
+        //EDIT PATIENT
+        $('a[data-toggle="ajax-modal"]').click(function (event) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            var url = $(this).data('url');
+            var target = $(this).data('target');
+            var action = $(this).data('action');
+            var content = $(action);
+            $.when($(target).modal('show')).done(function () {
+            $.ajax({
+                url: url,
+                tpye: 'get',
+                async: true,
+                success: function (data) {
+                    content.html(data);
+                },
+                timeout: 60000,
+                error: function (xhr, ajaxOptions, thrownError) {
+                    $('body').find('#loadings').modal('toggle');
+                    alert(xhr.responseText);
+                    alert(thrownError);
+                    }
+                });
+            });
+        });
+    });
+</script>

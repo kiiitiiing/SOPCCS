@@ -13,7 +13,6 @@ using SOPCOVIDChecker.Services;
 
 namespace SOPCOVIDChecker.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
     public class MobileController : ControllerBase
     {

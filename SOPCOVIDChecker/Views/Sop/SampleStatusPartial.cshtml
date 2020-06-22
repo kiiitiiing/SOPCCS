@@ -6,9 +6,6 @@
         <thead class="bg-gray">
             <tr>
                 <th class="text-center text-sm">
-                    SAMPLE ID
-                </th>
-                <th class="text-center text-sm">
                     PATIENT NAME
                 </th>
                 <th class="text-center text-sm">
@@ -26,9 +23,6 @@
             @foreach (var sop in Model)
             {
                 <tr>
-                    <td class="text-center text-sm">
-                        <label>@sop.SampleId</label>
-                    </td>
                     <td class="text-center text-sm">
                         @sop.PatientName
                     </td>

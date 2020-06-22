@@ -6,9 +6,6 @@
         <thead class="bg-gray">
             <tr>
                 <th class="text-center text-sm">
-                    SAMPLE ID
-                </th>
-                <th class="text-center text-sm">
                     PATIENT NAME
                 </th>
                 <th class="text-center text-sm">
@@ -21,16 +18,19 @@
                     DATE OF BIRTH
                 </th>
                 <th class="text-center text-sm">
-                    PCR RESULT
-                </th>
-                <th class="text-center text-sm">
                     DISEASE-REPORTING UNIT
                 </th>
                 <th class="text-center text-sm">
                     ADDRESS
                 </th>
+                <th class="text-center text-sm">
+                    DATE ONSET SYMPTOMS
+                </th>
                 <th class="text-center text-sm" colspan="2">
                     DATE &amp; TIME OF COLLECTION
+                </th>
+                <th class="text-center text-sm">
+                    NAME OF SWABBER
                 </th>
                 <th class="text-center text-sm">
                     REQUESTED BY
@@ -41,21 +41,12 @@
                 <th class="text-center text-sm">
                     TYPE OF SPECIMEN &amp; COLLECTION MEDIUM
                 </th>
-                <th class="text-center text-sm" colspan="2">
-                    DATE &amp; TIME OF SPECIMEN RECEIPT
-                </th>
-                <th class="text-center text-sm">
-                    DATE OF RESULT RELEASE
-                </th>
             </tr>
         </thead>
         <tbody>
             @foreach (var sop in Model)
             {
                 <tr>
-                    <td class="text-center text-sm">
-                        <label>@sop.SampleId</label>
-                    </td>
                     <td class="text-center text-sm">
                         @sop.PatientName
                     </td>
@@ -69,19 +60,22 @@
                         @sop.DateOfBirth.GetDate("dd-MMM-yy")
                     </td>
                     <td class="text-center text-sm">
-                        @sop.PCRResult
-                    </td>
-                    <td class="text-center text-sm">
                         @sop.DRU
                     </td>
                     <td class="text-center text-sm">
                         @sop.Address
                     </td>
                     <td class="text-center text-sm">
+                        @sop.DateOnset.GetDate("dd-MMM-yy")
+                    </td>
+                    <td class="text-center text-sm">
                         @sop.DateTimeCollection.GetDate("dd-MMM-yy")
                     </td>
                     <td class="text-center text-sm">
                         @sop.DateTimeCollection.GetDate("h:mm tt")
+                    </td>
+                    <td class="text-center text-sm">
+                        @sop.Swabber
                     </td>
                     <td class="text-center text-sm">
                         @sop.RequestedBy
@@ -94,12 +88,6 @@
                     </td>
                     <td class="text-center text-sm">
                         @sop.DateTimeReceipt.GetDate("dd-MMM-yy")
-                    </td>
-                    <td class="text-center text-sm">
-                        @sop.DateTimeReceipt.GetDate("h:mm tt")
-                    </td>
-                    <td class="text-center text-sm">
-                        @sop.DateResult.GetDate("dd-MMM-yy")
                     </td>
                 </tr>
             }

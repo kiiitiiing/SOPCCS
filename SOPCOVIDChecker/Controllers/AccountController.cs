@@ -31,7 +31,7 @@ namespace SOPCOVIDChecker.Controllers
             _context = context;
         }
 
-        public IActionResult Register()
+        public IActionResult Register(string level)
         {
             ViewBag.Facilities = new SelectList(_context.Facility.ToList(), "Id", "Name");
             return PartialView();
@@ -78,7 +78,7 @@ namespace SOPCOVIDChecker.Controllers
                 if (User.FindFirstValue(ClaimTypes.Role).Equals("RHU"))
                     return RedirectToAction("SopIndex", "Sop");
                 else if (User.FindFirstValue(ClaimTypes.Role).Equals("PESU"))
-                    return RedirectToAction("Index", "Pesu");
+                    return RedirectToAction("PesuStatus", "Pesu");
                 else if (User.FindFirstValue(ClaimTypes.Role).Equals("RESU"))
                     return RedirectToAction("ResuIndex", "Resu");
                 else if (User.FindFirstValue(ClaimTypes.Role).Equals("LAB"))
@@ -109,7 +109,7 @@ namespace SOPCOVIDChecker.Controllers
                     if (user.UserLevel.Equals("RHU"))
                         return RedirectToAction("SopIndex", "Sop");
                     else if (user.UserLevel.Equals("PESU"))
-                        return RedirectToAction("Index", "Pesu");
+                        return RedirectToAction("PesuStatus", "Pesu");
                     else if (user.UserLevel.Equals("RESU"))
                         return RedirectToAction("ResuIndex", "Resu");
                     else if (user.UserLevel.Equals("LAB"))

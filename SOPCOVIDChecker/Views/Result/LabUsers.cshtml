@@ -34,14 +34,19 @@
 
 <script>
     var vessel = $('#result-staff');
-    LoadList('', vessel, '@Url.Action("LabUsersJson","Result")');
+    var c = [];
+    c.push(qFix($('#searchDetail').val()));
+    LoadList(c, vessel, '@Url.Action("LabUsersJson","Result")');
 
     $(function () {
         $('#searchPatientBtn').on('click', function (event) {
             event.preventDefault();
             event.stopImmediatePropagation();
-            var q = $('#searchDetail').val();
+            var q = []
+            q.push(qFix($('#searchDetail').val()));
             LoadList(q, vessel, '@Url.Action("LabUsersJson", "Result")');
         });
     })
+
+
 </script>

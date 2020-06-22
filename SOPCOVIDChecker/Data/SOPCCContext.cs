@@ -91,6 +91,8 @@ namespace SOPCOVIDChecker.Data
 
             modelBuilder.Entity<Patient>(entity =>
             {
+                entity.Property(e => e.Address).IsUnicode(false);
+
                 entity.Property(e => e.ContactNo).IsUnicode(false);
 
                 entity.Property(e => e.Fname).IsUnicode(false);
@@ -177,6 +179,8 @@ namespace SOPCOVIDChecker.Data
                 entity.Property(e => e.RequesterContact).IsUnicode(false);
 
                 entity.Property(e => e.SampleId).IsUnicode(false);
+
+                entity.Property(e => e.Swabber).IsUnicode(false);
 
                 entity.Property(e => e.TypeSpecimen).IsUnicode(false);
 

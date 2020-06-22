@@ -103,7 +103,7 @@ namespace SOPCOVIDChecker.Services
                 newUser.FacilityId = model.FacilityId;
                 newUser.Username = model.Username;
                 newUser.Password = hashedPass;
-                newUser.UserLevel = level;
+                newUser.UserLevel = model.Level;
                 newUser.Barangay = facility.Barangay;
                 newUser.Muncity = facility.Muncity;
                 newUser.Province = (int)facility.Province;

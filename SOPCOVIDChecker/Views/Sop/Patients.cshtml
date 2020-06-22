@@ -1,0 +1,84 @@
+﻿@{
+    ViewData["Title"] = "Patient List";
+}
+
+
+<div class="content">
+    <div class="container">
+        <div class="row" style="margin-bottom: 40px;">
+            <!-- CARD DANGER -->
+            <div class="col-md-3">
+                <!-- FILTER -->
+                <div class="card card-danger card-green">
+                    <!-- CARD DANGER HEADER -->
+                    <div class="card-header">
+                        <h3 class="card-title">Filter Patients</h3>
+                    </div>
+                    <!-- CARD DANGER BODY -->
+                    <div class="card-body">
+                        <!-- SEARCH -->
+                        <div class="form-group">
+                            <input class="form-control form-control-sm" type="text" placeholder="Seach Name..." id="searchDetail" required />
+                        </div>
+                        <!-- BUTTONS -->
+                        <div class="form-group">
+                            <!-- FILTER -->
+                            <button class="btn btn-block btn-sm bg-gradient-success" type="button" id="searchPatientBtn">
+                                <i class="fa fa-search"></i>
+                                &nbsp;Filter
+                            </button>
+                            <!-- ADD PATIENT -->
+                            <button type="button"
+                                    class="btn btn-block btn-sm bg-gradient-warning"
+                                    data-toggle="ajax-modal"
+                                    data-target="#small_modal"
+                                    data-action="#small_content"
+                                    data-url="@Url.Action("AddPatient","Sop")">
+                                <i class="fa fa-user-plus">
+                                    &nbsp;Add Patient
+                                </i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <!-- PATIENT LIST -->
+                <div class="card card-outline">
+                    <!-- DAILY USERS HEADER -->
+                    <div class="card-header with-border">
+                        <h4>
+                            Patient List
+                        </h4>
+                    </div>
+                    <!-- DAILY USERS BODY -->
+                    <div class="card-body" id="list_patient">
+                        <div class="overlay d-flex justify-content-center align-items-center">
+                            <i class="fas fa-2x fa-sync fa-spin"></i>
+                        </div>
+                        <br />
+                        <br />
+
+                    </div>
+                    <div id="sop-patients" style="margin: auto; margin-bottom: 20px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var vessel = $('#sop-patients');
+    var c = [];
+    c.push(qFix($('#searchDetail').val()));
+    LoadList(c, vessel, '@Url.Action("PatientsJson", "Sop")');
+
+    $(function () {
+        $('#searchPatientBtn').on('click', function (event) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            var q = []
+            q.push(qFix($('#searchDetail').val()));
+            LoadList(q, vessel, '@Url.Action("PatientsJson", "Sop")');
+        });
+    })
+</script>

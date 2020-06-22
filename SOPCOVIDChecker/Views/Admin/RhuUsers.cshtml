@@ -18,7 +18,7 @@
                                 data-toggle="ajax-modal"
                                 data-target="#small_modal"
                                 data-action="#small_content"
-                                data-url="@Url.Action("Register","Account")">
+                                data-url="@Url.Action("Register","Account", new { level = "RHU" })">
                             <i class="fa fa-user"></i>
                             &nbsp;Add User
                         </button>
@@ -32,16 +32,19 @@
         </div>
     </div>
 
-    <script>
-        var vessel = $('#admin-rhu');
-        LoadList('', vessel, '@Url.Action("RhuJson","Admin")');
+<script>
+    var vessel = $('#admin-rhu');
+    var c = [];
+    c.push(qFix($('#searchDetail').val()));
+    LoadList(c, vessel, '@Url.Action("RhuJson","Admin")');
 
-        $(function () {
-            $('#searchPatientBtn').on('click', function (event) {
-                event.preventDefault();
-                event.stopImmediatePropagation();
-                var q = $('#searchDetail').val();
-                LoadList(q, vessel, '@Url.Action("RhuJson","Admin")');
-            });
-        })
-    </script>
+    $(function () {
+        $('#searchPatientBtn').on('click', function (event) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            var q = []
+            q.push(qFix($('#searchDetail').val()));
+            LoadList(q, vessel, '@Url.Action("RhuJson","Admin")');
+        });
+    })
+</script>

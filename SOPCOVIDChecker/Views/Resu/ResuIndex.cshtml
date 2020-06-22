@@ -41,13 +41,16 @@
 
 <script>
     var vessel = $('#resu-index');
-    LoadList('', vessel, '@Url.Action("ResuFormJson","Resu")');
+    var c = [];
+    c.push(qFix($('#searchDetail').val()));
+    LoadList(c, vessel, '@Url.Action("ResuFormJson","Resu")');
 
     $(function () {
         $('#searchPatientBtn').on('click', function (event) {
             event.preventDefault();
             event.stopImmediatePropagation();
-            var q = $('#searchDetail').val();
+            var q = []
+            q.push(qFix($('#searchDetail').val()));
             LoadList(q, vessel, '@Url.Action("ResuFormJson", "Resu")');
         });
     })

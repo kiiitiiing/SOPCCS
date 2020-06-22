@@ -1,19 +1,29 @@
 ﻿
 @{
     ViewData["Title"] = "Index";
+    var dateRange = ViewBag.StartDate + " - " + ViewBag.EndDate;
 }
 
     <div class="card card-success card-outline">
         <div class="card-header">
             <div class="row">
                 <div class="col-md-6">
-                    Test Results for SARS-CoV-2 Viral RNA Detection by Real Time-Polymerase Chain Reaction
-                    <br />
-                    Total Patients: <span class="total_ctr"></span>
+                    <h5>
+                        Line List
+                        <br />
+                        <small>Total Patients: <span class="total_ctr"></span></small>
+                    </h5>
                 </div>
                 <div class="col-md-6">
                     <div class="fa-pull-right form-inline ml-3">
                         <!-- INPUT -->
+                        <input class="form-control form-control-sm bg-white"
+                               id="daterange"
+                               name="daterange"
+                               readonly
+                               style="cursor:pointer;"
+                               type="text"
+                               value="@dateRange" />
                         <input class="form-control form-control-sm"
                                name="search"
                                id="searchDetail"
@@ -21,15 +31,6 @@
                                type="text" />
                         <button id="searchPatientBtn" type="button" class="btn btn-sm btn-success">
                             <i class="fa fa-search"></i>
-                        </button>
-                        <button type="button" id="add-sop"
-                                class="btn btn-sm btn-primary"
-                                data-toggle="ajax-modal"
-                                data-target="#large_modal"
-                                data-action="#large_content"
-                                data-url="@Url.Action("AddSopModal","Sop")">
-                            <i class="fa fa-user"></i>
-                            &nbsp;New patient
                         </button>
                     </div>
                 </div>
@@ -46,16 +47,29 @@
         <div id="sop-sop" style="margin: auto; margin-bottom: 20px;"></div>
     </div>
 
-    <script>
+<script>
     var vessel = $('#sop-sop');
-    LoadList('', vessel, '@Url.Action("SopFormJson","Sop")');
+    var c = [];
+    c.push(qFix($('#searchDetail').val()));
+    c.push(qFix($('#daterange').val()));
+    LoadList(c, vessel, '@Url.Action("SopFormJson","Sop")');
 
     $(function () {
         $('#searchPatientBtn').on('click', function (event) {
             event.preventDefault();
             event.stopImmediatePropagation();
-            var q = $('#searchDetail').val();
+            var q = []
+            q.push(qFix($('#searchDetail').val()));
+            q.push(qFix($('#daterange').val()));
             LoadList(q, vessel, '@Url.Action("SopFormJson","Sop")');
         });
+
+        $('input[name="daterange"]').daterangepicker({
+            format: 'DD/MM/YYYY',
+            startDate: '@ViewBag.StartDate',
+            endDate: '@ViewBag.EndDate',
+            opens: 'right'
+        });
     })
-    </script>
+
+</script>

@@ -20,6 +20,7 @@ namespace SOPCOVIDChecker.Models
         [Column("sample_id")]
         [StringLength(50)]
         public string SampleId { get; set; }
+        [Required]
         [Column("pcr_result")]
         [StringLength(255)]
         public string PcrResult { get; set; }
@@ -31,6 +32,7 @@ namespace SOPCOVIDChecker.Models
         [Column("requested_by")]
         [StringLength(100)]
         public string RequestedBy { get; set; }
+        [Required]
         [Column("requester_contact")]
         [StringLength(50)]
         public string RequesterContact { get; set; }
@@ -38,8 +40,13 @@ namespace SOPCOVIDChecker.Models
         [Column("type_specimen")]
         [StringLength(50)]
         public string TypeSpecimen { get; set; }
+        [Column("date_onset_symptoms", TypeName = "date")]
+        public DateTime DateOnsetSymptoms { get; set; }
         [Column("datetime_specimen_receipt")]
         public DateTime DatetimeSpecimenReceipt { get; set; }
+        [Required]
+        [StringLength(255)]
+        public string Swabber { get; set; }
         [Column("date_result", TypeName = "date")]
         public DateTime DateResult { get; set; }
         [Column("patient_id")]
