@@ -38,7 +38,7 @@ namespace SOPCOVIDChecker.Controllers
         public async Task<ActionResult<List<ResultLess>>> LabJson(string q)
         {
             var form = await _context.ResultForm
-                .Include(x => x.SopForm).ThenInclude(x => x.DiseaseReportingUnit).ThenInclude(x => x.Facility)
+                .Include(x => x.SopForm).ThenInclude(x => x.DiseaseReportingUnit)
                 .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.BarangayNavigation)
                 .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.MuncityNavigation)
                 .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.ProvinceNavigation)
@@ -51,7 +51,7 @@ namespace SOPCOVIDChecker.Controllers
                     SOPId = x.SopFormId,
                     PatientId = x.SopForm.PatientId,
                     PatientName = x.SopForm.Patient.GetFullName(),
-                    DRU = x.SopForm.DiseaseReportingUnit.Facility.Name,
+                    DRU = x.SopForm.DiseaseReportingUnit.Name,
                     PCRResult = x.SopForm.PcrResult,
                     SampleId = x.SopForm.SampleId,
                     SampleTaken = x.SopForm.DatetimeCollection
@@ -180,7 +180,7 @@ namespace SOPCOVIDChecker.Controllers
                 .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.BarangayNavigation)
                 .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.MuncityNavigation)
                 .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.ProvinceNavigation)
-                .Include(x => x.SopForm).ThenInclude(x => x.DiseaseReportingUnit).ThenInclude(x => x.Facility)
+                .Include(x => x.SopForm).ThenInclude(x => x.DiseaseReportingUnit)
                 .Include(x => x.PerformedByNavigation)
                 .Include(x => x.VerifiedByNavigation)
                 .Include(x => x.ApprovedByNavigation)
@@ -306,7 +306,7 @@ namespace SOPCOVIDChecker.Controllers
                           "</tr>" +
                            "<tr>" +
                             "<td>Hospital/Infirmary</td>" +
-                            "<td colspan='2' rowspan='2' class='BRight BBottom' style='color: #dc3545;'> " + model.SopForm.DiseaseReportingUnit.Facility.Name+" </td>" +// Hospital/Infirmary/referral
+                            "<td colspan='2' rowspan='2' class='BRight BBottom' style='color: #dc3545;'> " + model.SopForm.DiseaseReportingUnit.Name+" </td>" +// Hospital/Infirmary/referral
                             "<td colspan='1'><b>Admission Date</b></td>" +
                             "<td colspan='2' style='color: #dc3545;'> " + model.AdmissionDate.GetDate("dd/MM/yyyy")+" </td>" + //Admission Date
                           "</tr>" +
@@ -467,7 +467,7 @@ namespace SOPCOVIDChecker.Controllers
                 .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.BarangayNavigation)
                 .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.MuncityNavigation)
                 .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.ProvinceNavigation)
-                .Include(x => x.SopForm).ThenInclude(x => x.DiseaseReportingUnit).ThenInclude(x => x.Facility)
+                .Include(x => x.SopForm).ThenInclude(x => x.DiseaseReportingUnit)
                 .Include(x=>x.PerformedByNavigation)
                 .SingleOrDefaultAsync(x => x.Id == resultId);
 
@@ -482,7 +482,7 @@ namespace SOPCOVIDChecker.Controllers
                 Address = model.SopForm.Patient.GetAddress(),
                 Requisitioner = model.SopForm.RequestedBy,
                 SpecimenType = model.SopForm.TypeSpecimen,
-                Location = model.SopForm.DiseaseReportingUnit.Facility.Name,
+                Location = model.SopForm.DiseaseReportingUnit.Name,
                 DTSpecimeCollection = model.SopForm.DatetimeCollection,
                 DTSpecimenReceipt = model.SopForm.DatetimeSpecimenReceipt == default ? DateTime.Now.RemoveSeconds() : model.SopForm.DatetimeSpecimenReceipt.RemoveSeconds(),
                 DTReleaseResult = model.SopForm.DateResult == default ? DateTime.Now.RemoveSeconds() : model.SopForm.DateResult.RemoveSeconds(),
@@ -503,7 +503,7 @@ namespace SOPCOVIDChecker.Controllers
                 .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.BarangayNavigation)
                 .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.MuncityNavigation)
                 .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.ProvinceNavigation)
-                .Include(x => x.SopForm).ThenInclude(x => x.DiseaseReportingUnit).ThenInclude(x => x.Facility)
+                .Include(x => x.SopForm).ThenInclude(x => x.DiseaseReportingUnit)
                 .Include(x => x.CreatedByNavigation).ThenInclude(x => x.Facility)
                 .SingleOrDefaultAsync(x => x.Id == model.Id);
 

@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using SOPCOVIDChecker.Data;
 using SOPCOVIDChecker.Models;
 using SOPCOVIDChecker.Models.MobileModels;
@@ -54,34 +56,50 @@ namespace SOPCOVIDChecker.Controllers
             return null;
         }
 
-        [Route("mobileapi/syncforms/{date}")]
+        [Route("mobileapi/syncforms/")]
         [HttpGet]
-        public Task<List<Sopform>> GetSopForms(string date)
+        public Task<List<Sopform>> GetSopForms(int id, int ctr)
         {
-            return _context.Sopform.Join
-                 (
-                 _context.Patient,
-                 sopform => sopform.PatientId,
-                 patient => patient.Id, (sopform, patient) => new { sopform, patient })
-                 .Select(sopform => new Sopform
-                 {
-                     Id = sopform.sopform.Id,
-                     SampleId = sopform.sopform.SampleId,
-                     PcrResult = sopform.sopform.PcrResult,
-                     DiseaseReportingUnitId = sopform.sopform.DiseaseReportingUnitId,
-                     DatetimeCollection = sopform.sopform.DatetimeCollection,
-                     RequestedBy = sopform.sopform.RequestedBy,
-                     RequesterContact = sopform.sopform.RequesterContact,
-                     TypeSpecimen = sopform.sopform.TypeSpecimen,
-                     DatetimeSpecimenReceipt = sopform.sopform.DatetimeSpecimenReceipt,
-                     DateResult = sopform.sopform.DateResult,
-                     PatientId = sopform.sopform.PatientId,
-                     CreatedAt = sopform.sopform.CreatedAt,
-                     UpdatedAt = sopform.sopform.UpdatedAt,
-                     Patient = sopform.patient
-                 })
-                 .Where(x => x.CreatedAt > DateTime.Parse(date))
-                 .ToListAsync();
+            if(_context.Sopform.Where(x=>x.DiseaseReportingUnitId == id).Count() > ctr)
+            {
+                return _context.Sopform
+                    .Include(x => x.Patient).ThenInclude(x => x.BarangayNavigation)
+                    .Include(x => x.Patient).ThenInclude(x => x.MuncityNavigation)
+                    .Include(x => x.Patient).ThenInclude(x => x.ProvinceNavigation)
+                    .Include(x => x.ResultForm)
+                    .Include(x => x.DiseaseReportingUnit)
+                    .Where(x => x.DiseaseReportingUnitId == id)
+                    .OrderByDescending(x => x.CreatedAt)
+                    .ToListAsync();
+                /*return _context.Sopform.Join
+                     (
+                     _context.Patient,
+                     sopform => sopform.PatientId,
+                     patient => patient.Id, (sopform, patient) => new { sopform, patient })
+                     .Select(sopform => new Sopform
+                     {
+                         Id = sopform.sopform.Id,
+                         SampleId = sopform.sopform.SampleId,
+                         PcrResult = sopform.sopform.PcrResult,
+                         DiseaseReportingUnitId = sopform.sopform.DiseaseReportingUnitId,
+                         DatetimeCollection = sopform.sopform.DatetimeCollection,
+                         RequestedBy = sopform.sopform.RequestedBy,
+                         RequesterContact = sopform.sopform.RequesterContact,
+                         TypeSpecimen = sopform.sopform.TypeSpecimen,
+                         DatetimeSpecimenReceipt = sopform.sopform.DatetimeSpecimenReceipt,
+                         DateResult = sopform.sopform.DateResult,
+                         PatientId = sopform.sopform.PatientId,
+                         CreatedAt = sopform.sopform.CreatedAt,
+                         UpdatedAt = sopform.sopform.UpdatedAt,
+                         Patient = sopform.patient
+                     })
+                     .Where(x => x.DiseaseReportingUnit.FacilityId == id)
+                     .ToListAsync();*/
+            }
+            else
+            {
+                return Task.FromResult(new List<Sopform>());
+            }
         }
 
         [Route("mobileapi/submitform")]

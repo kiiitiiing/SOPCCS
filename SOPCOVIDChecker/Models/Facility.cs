@@ -9,6 +9,7 @@ namespace SOPCOVIDChecker.Models
     {
         public Facility()
         {
+            Sopform = new HashSet<Sopform>();
             Sopusers = new HashSet<Sopusers>();
         }
 
@@ -68,6 +69,8 @@ namespace SOPCOVIDChecker.Models
         [ForeignKey(nameof(Province))]
         [InverseProperty("Facility")]
         public virtual Province ProvinceNavigation { get; set; }
+        [InverseProperty("DiseaseReportingUnit")]
+        public virtual ICollection<Sopform> Sopform { get; set; }
         [InverseProperty("Facility")]
         public virtual ICollection<Sopusers> Sopusers { get; set; }
     }

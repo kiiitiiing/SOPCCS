@@ -174,7 +174,7 @@ namespace SOPCOVIDChecker.Data
                     .WithMany(p => p.Sopform)
                     .HasForeignKey(d => d.DiseaseReportingUnitId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_SOPForm_SOPUsers");
+                    .HasConstraintName("FK_SOPForm_Facility");
 
                 entity.HasOne(d => d.Patient)
                     .WithMany(p => p.Sopform)

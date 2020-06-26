@@ -26,12 +26,12 @@ namespace SOPCOVIDChecker.Controllers
         public async Task<ActionResult<List<ResultLess>>> PesuStatusJson(string q)
         {
             var sop = await _context.ResultForm
-                .Include(x => x.SopForm).ThenInclude(x => x.DiseaseReportingUnit).ThenInclude(x => x.Facility)
+                .Include(x => x.SopForm).ThenInclude(x => x.DiseaseReportingUnit)
                 .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.BarangayNavigation)
                 .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.MuncityNavigation)
                 .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.ProvinceNavigation)
                 .Include(x => x.CreatedByNavigation).ThenInclude(x => x.Facility)
-                .Where(x => x.SopForm.DiseaseReportingUnit.Facility.Province == UserProvince)
+                .Where(x => x.SopForm.DiseaseReportingUnit.Province == UserProvince)
                 .OrderByDescending(x => x.UpdatedAt)
                 .Select(x => new ResultLess
                 {
@@ -41,7 +41,7 @@ namespace SOPCOVIDChecker.Controllers
                     PatientId = x.SopForm.PatientId,
                     PatientName = x.SopForm.Patient.GetFullName(),
                     Lab = x.CreatedByNavigation.Facility.Name,
-                    DRU = x.SopForm.DiseaseReportingUnit.Facility.Name,
+                    DRU = x.SopForm.DiseaseReportingUnit.Name,
                     PCRResult = x.SopForm.PcrResult,
                     Address = x.SopForm.Patient.GetAddress(),
                     Status = x.Result()

@@ -15,6 +15,8 @@ using Microsoft.Extensions.Hosting;
 using SOPCOVIDChecker.Data;
 using DinkToPdf.Contracts;
 using DinkToPdf;
+using Newtonsoft;
+using Newtonsoft.Json;
 
 namespace SOPCOVIDChecker
 {
@@ -67,7 +69,16 @@ namespace SOPCOVIDChecker
                 options.MinimumSameSitePolicy = Microsoft.AspNetCore.Http.SameSiteMode.None;
             });
 
-            services.AddControllersWithViews();
+
+            services.AddControllersWithViews()
+                .AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+            );
+
+            /*services.AddControllersWithViews().AddCon
+                .AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+            );*/
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

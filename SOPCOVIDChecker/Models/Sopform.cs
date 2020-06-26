@@ -57,8 +57,8 @@ namespace SOPCOVIDChecker.Models
         public DateTime UpdatedAt { get; set; }
 
         [ForeignKey(nameof(DiseaseReportingUnitId))]
-        [InverseProperty(nameof(Sopusers.Sopform))]
-        public virtual Sopusers DiseaseReportingUnit { get; set; }
+        [InverseProperty(nameof(Facility.Sopform))]
+        public virtual Facility DiseaseReportingUnit { get; set; }
         [ForeignKey(nameof(PatientId))]
         [InverseProperty("Sopform")]
         public virtual Patient Patient { get; set; }

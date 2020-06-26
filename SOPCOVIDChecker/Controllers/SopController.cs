@@ -59,7 +59,7 @@ namespace SOPCOVIDChecker.Controllers
                     }
                 },
                 Gender = patient.Sex,
-                BirthDate = patient.Dob.ToString("yyyy-MM-dd")
+                BirthDate = patient.Dob.ToString("yyyy-MM-dd"),
             };
             return ckpatient;
         }
@@ -79,10 +79,10 @@ namespace SOPCOVIDChecker.Controllers
                 .Include(x => x.Patient).ThenInclude(x => x.MuncityNavigation)
                 .Include(x => x.Patient).ThenInclude(x => x.ProvinceNavigation)
                 .Include(x => x.ResultForm)
-                .Include(x => x.DiseaseReportingUnit).ThenInclude(x => x.Facility)
+                .Include(x => x.DiseaseReportingUnit)
                 .Where(x=>x.CreatedAt >= StartDate && x.CreatedAt <= EndDate)
-                .Where(x => x.DiseaseReportingUnit.FacilityId == UserFacility)
-                .Where(x => x.ResultForm.First().ApprovedBy == null)
+                .Where(x => x.DiseaseReportingUnitId == UserFacility)
+                //.Where(x => x.ResultForm.First().ApprovedBy == null)
                 .OrderByDescending(x => x.CreatedAt)
                 .Select(x => new SopLess
                 {
@@ -92,8 +92,8 @@ namespace SOPCOVIDChecker.Controllers
                     Sex = x.Patient.Sex,
                     DateOfBirth = x.Patient.Dob,
                     PCRResult = x.PcrResult,
-                    DRU = string.IsNullOrEmpty(x.DiseaseReportingUnit.Facility.Abbr) ?
-                        x.DiseaseReportingUnit.Facility.Name : x.DiseaseReportingUnit.Facility.Abbr,
+                    DRU = string.IsNullOrEmpty(x.DiseaseReportingUnit.Abbr) ?
+                        x.DiseaseReportingUnit.Name : x.DiseaseReportingUnit.Abbr,
                     Address = x.Patient.GetAddress(),
                     DateTimeCollection = x.DatetimeCollection,
                     RequestedBy = x.RequestedBy,
@@ -145,7 +145,7 @@ namespace SOPCOVIDChecker.Controllers
             model.DatetimeSpecimenReceipt = default;
             model.CreatedAt = DateTime.Now;
             model.UpdatedAt = DateTime.Now;
-            model.DiseaseReportingUnitId = UserId;
+            model.DiseaseReportingUnitId = UserFacility;
             model.ResultForm.Add(NewResultForm());
 
             if (ModelState.IsValid)
@@ -172,13 +172,13 @@ namespace SOPCOVIDChecker.Controllers
             }
 
             var sop = await _context.ResultForm
-                .Include(x => x.SopForm).ThenInclude(x => x.DiseaseReportingUnit).ThenInclude(x => x.Facility)
+                .Include(x => x.SopForm).ThenInclude(x => x.DiseaseReportingUnit)
                 .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.BarangayNavigation)
                 .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.MuncityNavigation)
                 .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.ProvinceNavigation)
                 .Include(x => x.CreatedByNavigation).ThenInclude(x => x.Facility)
                 .Where(x=>x.UpdatedAt >= StartDate && x.UpdatedAt <= EndDate)
-                .Where(x=>x.SopForm.DiseaseReportingUnit.FacilityId == UserFacility)
+                .Where(x=>x.SopForm.DiseaseReportingUnitId == UserFacility)
                 .Where(x => x.CreatedBy != null)
                 .OrderByDescending(x => x.UpdatedAt)
                 .Select(x => new ResultLess
@@ -188,7 +188,7 @@ namespace SOPCOVIDChecker.Controllers
                     SOPId = x.SopFormId,
                     PatientId = x.SopForm.PatientId,
                     PatientName = x.SopForm.Patient.GetFullName(),
-                    Lab = x.CreatedByNavigation.Facility.Abbr,
+                    Lab = x.CreatedByNavigation.Facility.Name,
                     PCRResult = x.SopForm.PcrResult,
                     Address = x.SopForm.Patient.GetAddress(),
                     Status = x.Result()

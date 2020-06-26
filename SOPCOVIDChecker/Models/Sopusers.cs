@@ -14,7 +14,6 @@ namespace SOPCOVIDChecker.Models
             ResultFormCreatedByNavigation = new HashSet<ResultForm>();
             ResultFormPerformedByNavigation = new HashSet<ResultForm>();
             ResultFormVerifiedByNavigation = new HashSet<ResultForm>();
-            Sopform = new HashSet<Sopform>();
         }
 
         [Key]
@@ -91,7 +90,5 @@ namespace SOPCOVIDChecker.Models
         public virtual ICollection<ResultForm> ResultFormPerformedByNavigation { get; set; }
         [InverseProperty(nameof(ResultForm.VerifiedByNavigation))]
         public virtual ICollection<ResultForm> ResultFormVerifiedByNavigation { get; set; }
-        [InverseProperty("DiseaseReportingUnit")]
-        public virtual ICollection<Sopform> Sopform { get; set; }
     }
 }
