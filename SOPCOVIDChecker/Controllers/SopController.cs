@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SOPCOVIDChecker.Data;
 using SOPCOVIDChecker.Models;
+using SOPCOVIDChecker.Models.CovidKayaModels;
 using SOPCOVIDChecker.Models.ResuViewModel;
 using SOPCOVIDChecker.Models.SopViewModel;
 using SOPCOVIDChecker.Services;
@@ -28,7 +29,41 @@ namespace SOPCOVIDChecker.Controllers
 
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
+        #region TESTING
+        public ActionResult<CKPatient> CovidKayaTest(int? id)
+        {
+            var patient = _context.Patient
+                .Include(x=>x.BarangayNavigation)
+                .Include(x => x.MuncityNavigation)
+                .Include(x => x.ProvinceNavigation)
+                .SingleOrDefault(x=>x.Id == id);
 
+            var ckpatient = new CKPatient
+            {
+                ResourceType = "patient",
+                Id = patient.Id.ToString(),
+                Name = new List<CKName> {
+                    new CKName
+                    {
+                        Use = "official",
+                        Family = patient.Lname,
+                        Give = {patient.Fname, patient.Mname}
+                    }
+                },
+                Telcom = new List<CKTelcom>
+                {
+                    new CKTelcom
+                    {
+                        System = "phone",
+                        Value = patient.ContactNo
+                    }
+                },
+                Gender = patient.Sex,
+                BirthDate = patient.Dob.ToString("yyyy-MM-dd")
+            };
+            return ckpatient;
+        }
+        #endregion
         #region SOP FORM LIST
         [HttpGet]
         public async Task<ActionResult<List<SopLess>>> SopFormJson(string q, string dr, string f)
