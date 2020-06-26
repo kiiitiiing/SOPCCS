@@ -13,6 +13,7 @@
     <div class="modal-body">
         <form asp-action="Register">
             <input hidden asp-for="Level" />
+            <input hidden asp-for="Province" value="2"/>
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group">
@@ -52,6 +53,31 @@
                 </div>
                 <div class="col-md-12">
                     <div class="form-group">
+                        <label>
+                            City/Municipality:
+                        </label>
+                        <select id="muncityFilters"
+                                asp-for="Muncity"
+                                asp-items="ViewBag.Muncity"
+                                title="City/Municipality"
+                                class="form-control col-sm-12"
+                                onchange="MuncityOnChange($(this).val(),'@Url.Action("FilteredBarangay","Helper", new {muncityId=""})');">
+                            <option value="">Select City/Municipaliy</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>
+                            Barangay:
+                        </label>
+                        <select class="form-control" asp-for="Barangay" asp-items="ViewBag.Barangay" id="barangays">
+                            <option value="" selected hidden>Select Barangay</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
                         <label>Username:</label>
                         <input class="form-control" asp-for="Username" />
                         <span class="text-danger text-sm" asp-validation-for="Username"></span>
@@ -67,7 +93,7 @@
                 <div class="col-md-12">
                     <div class="form-group">
                         <label>Confirm Password:</label>
-                        <input class="form-control" asp-for="ConfirmPassword" /> 
+                        <input class="form-control" asp-for="ConfirmPassword" />
                         <span class="text-danger text-sm" asp-validation-for="ConfirmPassword"></span>
                     </div>
                 </div>

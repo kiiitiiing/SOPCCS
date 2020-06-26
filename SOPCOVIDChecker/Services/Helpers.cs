@@ -29,7 +29,7 @@ namespace SOPCOVIDChecker.Services
                 return "";
         }
 
-        public static bool CheckPatient(this Patient patient)
+        /*public static bool CheckPatient(this Patient patient)
         {
             if (patient.Province != null &&
                 patient.Muncity != null &&
@@ -37,7 +37,7 @@ namespace SOPCOVIDChecker.Services
                 return true;
             else
                 return false;
-        }
+        }*/
 
 
         public static string NameToUpper(this string name)
@@ -118,7 +118,7 @@ namespace SOPCOVIDChecker.Services
             }
             else
             {
-                if (result.Interpretation.Contains("Positive"))
+                if (result.SopForm.PcrResult.Contains("Positive"))
                 {
                     status = "RELEASED";
                 }

@@ -92,7 +92,6 @@ namespace SOPCOVIDChecker.Services
             }
             else
             {
-                var facility = _context.Facility.First(x => x.Id.Equals(model.FacilityId));
                 Sopusers newUser = new Sopusers();
                 string hashedPass = _hashPassword.HashPassword(newUser, model.Password);
                 newUser.Fname = model.Firstname;
@@ -104,9 +103,9 @@ namespace SOPCOVIDChecker.Services
                 newUser.Username = model.Username;
                 newUser.Password = hashedPass;
                 newUser.UserLevel = model.Level;
-                newUser.Barangay = facility.Barangay;
-                newUser.Muncity = facility.Muncity;
-                newUser.Province = (int)facility.Province;
+                newUser.Barangay = model.Barangay;
+                newUser.Muncity = model.Muncity;
+                newUser.Province = model.Province;
                 newUser.CreatedAt = DateTime.Now;
                 newUser.UpdatedAt = DateTime.Now;
                 _context.Add(newUser);
@@ -118,7 +117,6 @@ namespace SOPCOVIDChecker.Services
         public async Task UpdateUserAsync(UpdateUserModel model)
         {
             var user = await _context.Sopusers.FindAsync(model.Id);
-            var facility = _context.Facility.First(x => x.Id.Equals(model.FacilityId));
             if(!string.IsNullOrEmpty(model.ConfirmPassword) && !string.IsNullOrEmpty(model.Password))
             {
                 string hashedPass = _hashPassword.HashPassword(user, model.Password);
@@ -131,11 +129,11 @@ namespace SOPCOVIDChecker.Services
             user.Email = model.Email;
             user.FacilityId = model.FacilityId;
             user.Username = model.Username;
-            user.Barangay = (int)facility.Barangay;
-            user.Muncity = (int)facility.Muncity;
-            user.Province = (int)facility.Province;
+            user.Barangay = model.Barangay;
+            user.Muncity = model.Muncity;
+            user.Province = model.Province;
             user.UpdatedAt = DateTime.Now;
-            _context.Add(user);
+            _context.Update(user);
             _context.SaveChanges();
         }
 

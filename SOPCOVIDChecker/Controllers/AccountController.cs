@@ -13,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using SOPCOVIDChecker.Data;
 using SOPCOVIDChecker.Models;
 using SOPCOVIDChecker.Models.AccountViewModels;
+using Microsoft.EntityFrameworkCore;
 
 namespace SOPCOVIDChecker.Controllers
 {
@@ -30,9 +31,15 @@ namespace SOPCOVIDChecker.Controllers
             _configuration = configuration;
             _context = context;
         }
-
+        public partial class ChangeLoginViewModel
+        {
+            public int Id { get; set; }
+            public string UserLastname { get; set; }
+        }
+        #region REGISTER
         public IActionResult Register(string level)
         {
+            ViewBag.Muncity = GetMuncities(UserProvince);
             ViewBag.Facilities = new SelectList(_context.Facility.ToList(), "Id", "Name");
             return PartialView();
         }
@@ -43,6 +50,14 @@ namespace SOPCOVIDChecker.Controllers
         {
             ViewBag.Facilities = new SelectList(_context.Facility.ToList(), "Id", "Name");
             var errors = ModelState.Values.SelectMany(v => v.Errors);
+            if (model.Muncity != 0)
+            {
+                ViewBag.Muncity = GetMuncities(UserProvince);
+            }
+            if (model.Barangay != 0)
+            {
+                ViewBag.Barangay = GetBarangays((int)model.Muncity, model.Province);
+            }
             if (ModelState.IsValid)
             {
                 if (await _userService.RegisterUserAsync(model, "RHU"))
@@ -55,22 +70,39 @@ namespace SOPCOVIDChecker.Controllers
             return PartialView(model);
         }
 
-        public partial class ChangeLoginViewModel
+        #endregion
+        #region EDIT USER
+        public async Task<IActionResult> EditUser(int userId)
         {
-            public int Id { get; set; }
-            public string UserLastname { get; set; }
-        }
+            var user = await SetUserModel(userId);
 
+            ViewBag.Muncity = GetMuncities(UserProvince);
+            ViewBag.Facilities = new SelectList(_context.Facility.ToList(), "Id", "Name");
+            return PartialView(user);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditUser(UpdateUserModel model)
+        {
+            var errors = ModelState.Values.SelectMany(x => x.Errors);
+            ViewBag.Muncity = GetMuncities(UserProvince);
+            if(ModelState.IsValid)
+            {
+                await _userService.UpdateUserAsync(model);
+                return PartialView(model);
+            }
+            ViewBag.Errors = errors;
+            return PartialView(model);
+        }
+        #endregion
+        #region LOGIN
         // GET
         [HttpGet]
-        public IActionResult Login(string returnUrl)
+        public IActionResult Login()
         {
             if (!User.Identity.IsAuthenticated)
             {
-                return View(new LoginModel
-                {
-                    ReturnUrl = returnUrl
-                });
+                return View();
             }
             else
             {
@@ -134,6 +166,8 @@ namespace SOPCOVIDChecker.Controllers
             ViewBag.Result = false;
             return View(model);
         }
+        #endregion
+        #region LOGOUT
         public async Task<IActionResult> Logout(string returnUrl)
         {
             ViewBag.ReturnUrl = returnUrl;
@@ -145,6 +179,19 @@ namespace SOPCOVIDChecker.Controllers
 
             return View();
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Logout()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            }
+
+            return RedirectToAction("Login", "Account");
+        }
+        #endregion
+        #region OTHER VIEWS
         public IActionResult AccessDenied(string returnUrl)
         {
             ViewBag.ReturnUrl = returnUrl;
@@ -166,20 +213,56 @@ namespace SOPCOVIDChecker.Controllers
 
             return RedirectToAction("Index", "Home");
         }
+        #endregion
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Logout()
+       /* public async Task<Sopusers> GetUserModel(AddUserModel model)
         {
-            if (User.Identity.IsAuthenticated)
-            {
-                await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            }
 
-            return RedirectToAction("Login", "Account");
+        }*/
+
+        public async Task<UpdateUserModel> SetUserModel(int userId)
+        {
+            var user = await _context.Sopusers
+                .Include(x => x.Facility)
+                .Include(x => x.BarangayNavigation)
+                .Include(x => x.MuncityNavigation)
+                .Include(x => x.ProvinceNavigation)
+                .SingleOrDefaultAsync(x => x.Id == userId);
+
+            var userModel = new UpdateUserModel
+            {
+                Id = user.Id,
+                Firstname = user.Fname,
+                Middlename = user.Mname,
+                Lastname = user.Lname,
+                ContactNumber = user.ContactNo,
+                Email = user.Email,
+                Barangay = user.Barangay,
+                Muncity = user.Muncity,
+                Province = user.Province,
+                FacilityId = user.FacilityId,
+                Username = user.Username
+            };
+
+            return userModel;
+        }
+        #region Helpers
+
+        public SelectList GetMuncities(int id)
+        {
+            return new SelectList(_context.Muncity.Where(x => x.Province == id), "Id", "Description");
         }
 
-        #region Helpers
+
+        public SelectList GetProvinces()
+        {
+            return new SelectList(_context.Province, "Id", "Description", UserProvince);
+        }
+
+        public SelectList GetBarangays(int muncityId, int provinceId)
+        {
+            return new SelectList(_context.Barangay.Where(x => x.Muncity == muncityId && x.Province == x.Province), "Id", "Description");
+        }
         private bool isUrlValid(string returnUrl)
         {
             return !string.IsNullOrWhiteSpace(returnUrl) && Uri.IsWellFormedUriString(returnUrl, UriKind.Relative);

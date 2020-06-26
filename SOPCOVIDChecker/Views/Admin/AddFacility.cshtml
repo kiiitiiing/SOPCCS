@@ -1,6 +1,6 @@
 ﻿@model FacilityModel
 
-<div class="modal-content">
+<div class="modal-content" id="add_facility">
     <div class="modal-header">
         <fieldset>
             <legend><i class="fa fa-plus"></i> Add Facility</legend>
@@ -22,26 +22,45 @@
             <!-- PROVINCE -->
             <div class="form-group">
                 <label>Province:</label>
-                <select class="form-control" id="province-filter" asp-for="Province" asp-items="ViewBag.Provinces" required>
+                <select id="provinceFilters"
+                        asp-for="Province"
+                        asp-items="ViewBag.Province"
+                        title="City/Municipality"
+                        class="form-control col-sm-12"
+                        onchange="ProvinceOnChange($(this).val(),'@Url.Action("FilteredMuncity","Helper", new {provinceId=""})');">
                     <option value="">Select Province</option>
                 </select>
                 <span class="text-danger" asp-validation-for="Province"></span>
             </div>
             <!-- MUNCITY -->
-            <div class="form-group">
-                <label>Municipality:</label>
-                <select class="form-control" id="muncity-filter" asp-for="Muncity" asp-items="ViewBag.Muncities">
-                    <option value="">Select Municipality/City</option>
-                </select>
-                <span class="text-danger" asp-validation-for="Muncity"></span>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>
+                            City/Municipality:
+                        </label>
+                        <select id="muncityFilters"
+                                asp-for="Muncity"
+                                asp-items="ViewBag.Muncity"
+                                title="City/Municipality"
+                                class="form-control col-sm-12"
+                                onchange="MuncityOnChange($(this).val(),'@Url.Action("FilteredBarangay","Helper", new {muncityId=""})');">
+                            <option value="">Select City/Municipaliy</option>
+                        </select>
+                    </div>
+                </div>
             </div>
-            <!-- BARANGAY -->
-            <div class="form-group">
-                <label>Barangay:</label>
-                <select class="form-control" id="barangay-filter" asp-for="Barangay" asp-items="ViewBag.Barangays">
-                    <option value="">Select Barangay</option>
-                </select>
-                <span class="text-danger" asp-validation-for="Barangay"></span>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>
+                            Barangay:
+                        </label>
+                        <select class="form-control" asp-for="Barangay" asp-items="ViewBag.Barangay" id="barangays">
+                            <option value="" selected hidden>Select Barangay</option>
+                        </select>
+                    </div>
+                </div>
             </div>
             <!-- ADDRESSS -->
             <div class="form-group">
@@ -87,7 +106,7 @@
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-default btn-sm" data-dismiss="modal"><i class="fa fa-times"></i> Cancel</button>
-        <button type="submit" class="btn btn-success btn-sm" data-save="modal">
+        <button type="button" class="btn btn-success btn-sm" data-save="modal">
             <i class="fa fa-check"></i>
             &nbsp;Save
         </button>

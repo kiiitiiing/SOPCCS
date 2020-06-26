@@ -289,6 +289,10 @@ html {
     color: #1E8A29 !important;
 }
 
+.card{
+    margin-bottom:50px !important;
+}
+
 
 .footer {
     position: absolute;

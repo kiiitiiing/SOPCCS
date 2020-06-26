@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "oq3YEoTSMxp9WDB7NoByJSwqbax8ZM5A92lLAjryJIJKYLgA//mKDfQZvOovz3wJowc44DwsYSQ59Eb7D3+cyA==",
+  "dgSpecHash": "5VlMHw97boE/SmJX7RLEdOyQRqnB0AUlcejp5qXHcUjTO4hioCEietVZEIOSvjRf1wxVbXPK8A9DNGjfJ8Qu4Q==",
   "success": true,
   "projectFilePath": "C:\\Users\\KitingKo\\source\\repos\\SOPCOVIDChecker\\SOPCOVIDChecker\\SOPCOVIDChecker.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\KitingKo\\.nuget\\packages\\dinktopdf\\1.0.8\\dinktopdf.1.0.8.nupkg.sha512",
     "C:\\Users\\KitingKo\\.nuget\\packages\\microsoft.aspnetcore.html.abstractions\\2.2.0\\microsoft.aspnetcore.html.abstractions.2.2.0.nupkg.sha512",
     "C:\\Users\\KitingKo\\.nuget\\packages\\microsoft.aspnetcore.razor\\2.2.0\\microsoft.aspnetcore.razor.2.2.0.nupkg.sha512",
     "C:\\Users\\KitingKo\\.nuget\\packages\\microsoft.aspnetcore.razor.language\\3.1.0\\microsoft.aspnetcore.razor.language.3.1.0.nupkg.sha512",
@@ -152,6 +153,7 @@
     "C:\\Users\\KitingKo\\.nuget\\packages\\system.threading\\4.3.0\\system.threading.4.3.0.nupkg.sha512",
     "C:\\Users\\KitingKo\\.nuget\\packages\\system.threading.tasks\\4.3.0\\system.threading.tasks.4.3.0.nupkg.sha512",
     "C:\\Users\\KitingKo\\.nuget\\packages\\system.threading.tasks.extensions\\4.5.3\\system.threading.tasks.extensions.4.5.3.nupkg.sha512",
+    "C:\\Users\\KitingKo\\.nuget\\packages\\system.threading.thread\\4.0.0\\system.threading.thread.4.0.0.nupkg.sha512",
     "C:\\Users\\KitingKo\\.nuget\\packages\\system.threading.timer\\4.3.0\\system.threading.timer.4.3.0.nupkg.sha512",
     "C:\\Users\\KitingKo\\.nuget\\packages\\system.xml.readerwriter\\4.3.0\\system.xml.readerwriter.4.3.0.nupkg.sha512",
     "C:\\Users\\KitingKo\\.nuget\\packages\\system.xml.xdocument\\4.3.0\\system.xml.xdocument.4.3.0.nupkg.sha512",

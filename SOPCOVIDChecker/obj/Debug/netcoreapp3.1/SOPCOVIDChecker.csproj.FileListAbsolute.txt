@@ -117,8 +117,6 @@ C:\Users\KitingKo\source\repos\SOPCOVIDChecker\SOPCOVIDChecker\bin\Debug\netcore
 C:\Users\KitingKo\source\repos\SOPCOVIDChecker\SOPCOVIDChecker\bin\Debug\netcoreapp3.1\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
 C:\Users\KitingKo\source\repos\SOPCOVIDChecker\SOPCOVIDChecker\obj\Debug\netcoreapp3.1\SOPCOVIDChecker.AssemblyInfoInputs.cache
 C:\Users\KitingKo\source\repos\SOPCOVIDChecker\SOPCOVIDChecker\obj\Debug\netcoreapp3.1\SOPCOVIDChecker.AssemblyInfo.cs
-C:\Users\KitingKo\source\repos\SOPCOVIDChecker\SOPCOVIDChecker\obj\Debug\netcoreapp3.1\SOPCOVIDChecker.csproj.CoreCompileInputs.cache
-C:\Users\KitingKo\source\repos\SOPCOVIDChecker\SOPCOVIDChecker\obj\Debug\netcoreapp3.1\SOPCOVIDChecker.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\KitingKo\source\repos\SOPCOVIDChecker\SOPCOVIDChecker\obj\Debug\netcoreapp3.1\SOPCOVIDChecker.RazorAssemblyInfo.cache
 C:\Users\KitingKo\source\repos\SOPCOVIDChecker\SOPCOVIDChecker\obj\Debug\netcoreapp3.1\SOPCOVIDChecker.RazorAssemblyInfo.cs
 C:\Users\KitingKo\source\repos\SOPCOVIDChecker\SOPCOVIDChecker\obj\Debug\netcoreapp3.1\SOPCOVIDChecker.TagHelpers.input.cache
@@ -180,3 +178,8 @@ C:\Users\KitingKo\source\repos\SOPCOVIDChecker\SOPCOVIDChecker\obj\Debug\netcore
 C:\Users\KitingKo\source\repos\SOPCOVIDChecker\SOPCOVIDChecker\obj\Debug\netcoreapp3.1\Razor\Views\Sop\PatientsPartial.cshtml.g.cs
 C:\Users\KitingKo\source\repos\SOPCOVIDChecker\SOPCOVIDChecker\obj\Debug\netcoreapp3.1\Razor\Views\Sop\AddPatient.cshtml.g.cs
 C:\Users\KitingKo\source\repos\SOPCOVIDChecker\SOPCOVIDChecker\obj\Debug\netcoreapp3.1\Razor\Views\Sop\EditPatient.cshtml.g.cs
+C:\Users\KitingKo\source\repos\SOPCOVIDChecker\SOPCOVIDChecker\bin\Debug\netcoreapp3.1\DinkToPdf.dll
+C:\Users\KitingKo\source\repos\SOPCOVIDChecker\SOPCOVIDChecker\obj\Debug\netcoreapp3.1\SOPCOVIDChecker.csproj.CoreCompileInputs.cache
+C:\Users\KitingKo\source\repos\SOPCOVIDChecker\SOPCOVIDChecker\obj\Debug\netcoreapp3.1\SOPCOVIDChecker.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\KitingKo\source\repos\SOPCOVIDChecker\SOPCOVIDChecker\obj\Debug\netcoreapp3.1\Razor\Views\Account\EditUser.cshtml.g.cs
+C:\Users\KitingKo\source\repos\SOPCOVIDChecker\SOPCOVIDChecker\obj\Debug\netcoreapp3.1\Razor\Views\Admin\UpdateFacility.cshtml.g.cs

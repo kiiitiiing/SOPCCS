@@ -21,6 +21,19 @@ namespace SOPCOVIDChecker.Controllers
             public int Id { get; set; }
             public string Description { get; set; }
         }
+        [HttpGet]
+        public List<SelectAddress> FilteredMuncity(int? provinceId)
+        {
+            var filteredBarangay = _context.Muncity
+                .Where(x => x.Province.Equals(provinceId))
+                .Select(y => new SelectAddress
+                {
+                    Id = y.Id,
+                    Description = y.Description
+                }).ToList();
+
+            return filteredBarangay;
+        }
 
         [HttpGet]
         public List<SelectAddress> FilteredBarangay(int? muncityId)

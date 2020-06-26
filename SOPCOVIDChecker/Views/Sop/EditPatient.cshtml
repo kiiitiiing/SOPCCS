@@ -101,7 +101,7 @@
                         <label>
                             Barangay:
                         </label>
-                        <select class="form-control" asp-for="Barangay" asp-items="ViewBag.Barangay" id="barangays" onchange="BarangayOnChange($(this).val());">
+                        <select class="form-control" asp-for="Barangay" asp-items="ViewBag.Barangay" id="barangays">
                             <option value="" selected hidden>Select Barangay</option>
                         </select>
                     </div>
@@ -123,6 +123,14 @@
                 <div class="row" style="margin-top: 20px;">
                     <div class="col-sm-12 center" style="align-content:center">
                         <span class="text-danger text-sm">Please input the required fields.</span>
+                    </div>
+                </div>
+            }
+            @if (!string.IsNullOrEmpty(ViewBag.Duplicate))
+            {
+                <div class="row" style="margin-top: 20px;">
+                    <div class="col-sm-12 center" style="align-content:center">
+                        <span class="text-danger text-sm">@ViewBag.Duplicate.</span>
                     </div>
                 </div>
             }

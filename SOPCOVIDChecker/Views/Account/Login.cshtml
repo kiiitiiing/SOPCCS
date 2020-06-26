@@ -2,7 +2,7 @@
 
 
 @{
-    ViewData["Title"] = "DOHRO7 DPADIS | Log in";
+    ViewData["Title"] = "DOHRO7 COVID CHECKER | Log in";
     var usernameValid = ViewBag.Username == "invalid" ? "is-invalid" : "";
     var passwordValid = ViewBag.Password == "invalid" ? "is-invalid" : "";
 }
@@ -60,9 +60,6 @@
 
 <script>
 
-    if ('@ViewBag.Result' != 'False') {
-        $('#notif-modal').modal('show');
-    }
     var loginBtn = $('#login');
     $(function () {
         loginBtn.on('click', function () {

@@ -10,28 +10,6 @@ namespace SOPCOVIDChecker.Models
         [Key]
         [Column("id")]
         public int Id { get; set; }
-        [Required]
-        [Column("lab_test_performed")]
-        [StringLength(255)]
-        public string LabTestPerformed { get; set; }
-        [Required]
-        [Column("test_result")]
-        [StringLength(255)]
-        public string TestResult { get; set; }
-        [Column("test_results_units")]
-        [StringLength(255)]
-        public string TestResultsUnits { get; set; }
-        [Column("biological_referrence")]
-        [StringLength(255)]
-        public string BiologicalReferrence { get; set; }
-        [Required]
-        [Column("final_result")]
-        [StringLength(255)]
-        public string FinalResult { get; set; }
-        [Required]
-        [Column("interpretation")]
-        [StringLength(255)]
-        public string Interpretation { get; set; }
         [Column("comments", TypeName = "text")]
         public string Comments { get; set; }
         [Column("performed_by")]
@@ -44,6 +22,8 @@ namespace SOPCOVIDChecker.Models
         public int SopFormId { get; set; }
         [Column("created_by")]
         public int? CreatedBy { get; set; }
+        [Column("admission_date", TypeName = "date")]
+        public DateTime? AdmissionDate { get; set; }
         [Column("created_at")]
         public DateTime CreatedAt { get; set; }
         [Column("updated_at")]

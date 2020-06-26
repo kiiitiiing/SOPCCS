@@ -16,12 +16,21 @@
                 <div class="fa-pull-right form-inline ml-3">
                     <!-- INPUT -->
                     <input class="form-control form-control-sm"
-                            name="search"
-                            id="searchDetail"
-                            placeholder="Search name"
-                            type="text" />
+                           name="search"
+                           id="searchDetail"
+                           placeholder="Search name"
+                           type="text" />
                     <button id="searchPatientBtn" type="button" class="btn btn-sm btn-success">
                         <i class="fa fa-search"></i>
+                    </button>
+                    <button type="button" id="add_facilitys"
+                            class="btn btn-sm btn-primary"
+                            data-toggle="ajax-modal"
+                            data-target="#small_modal"
+                            data-action="#small_content"
+                            data-url="@Url.Action("AddFacility","Admin")">
+                        <i class="far fa-hospital"></i>
+                        &nbsp;Add Facility
                     </button>
                 </div>
             </div>

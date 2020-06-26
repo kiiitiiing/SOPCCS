@@ -29,6 +29,12 @@ namespace SOPCOVIDChecker.Models.AccountViewModels
         [Display(Name = "username")]
         public string Username { get; set; }
         [Required]
+        public int Province { get; set; }
+        [Required]
+        public int? Muncity { get; set; }
+        [Required]
+        public int? Barangay { get; set; }
+        [Required]
         [DataType(DataType.Password)]
         [Display(Name = "password")]
         public string Password { get; set; }

@@ -13,6 +13,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SOPCOVIDChecker.Data;
+using DinkToPdf.Contracts;
+using DinkToPdf;
 
 namespace SOPCOVIDChecker
 {
@@ -29,7 +31,7 @@ namespace SOPCOVIDChecker
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton(Configuration);
-
+            services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
             services.AddDbContext<SOPCCContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("SOPCCConnection")));
 
@@ -48,7 +50,7 @@ namespace SOPCOVIDChecker
                 options.LoginPath = "/SOPCCS/Account/Login";
                 options.LogoutPath = "/SOPCCS/Account/Logout";
                 options.AccessDeniedPath = "/SOPCCS/Account/NotFound";
-                options.ExpireTimeSpan = TimeSpan.FromHours(3);
+                options.ExpireTimeSpan = TimeSpan.FromHours(5);
             });
 
             services.AddAuthorization(options =>

@@ -91,6 +91,18 @@
                             c.push(qFix($('#searchDetail').val()));
                             LoadList(c, vessel, '/SOPCCS/Sop/PatientsJson');
                         }
+                        else if (contentId == 'edit_user_modal' || contentId == 'register_modal') {
+                            Toast("Succesfull!")
+                            var vessel = $('#admin-rhu');
+                            LoadList('', vessel, '/SOPCCS/Admin/RhuJson');
+                        } 
+                        else if (contentId == 'update_facility' || contentId == 'add_facility' ) {
+                            Toast("Success!")
+                            var vessel = $('#admin-facilities');
+                            var c = [];
+                            c.push(qFix($('#searchDetail').val()));
+                            LoadList(c, vessel, '/SOPCCS/Admin/FacilitiesJson');
+                        }
                     });
                 }
                 else if (errors == '' && contentId == 'result_modal') {
@@ -135,9 +147,16 @@ function OpenModal(btn) {
             },
             timeout: 60000,
             error: function (xhr, ajaxOptions, thrownError) {
-                $('body').find('#loadings').modal('toggle');
-                alert(xhr.responseText);
-                alert(thrownError);
+                if (xhr.status === 401) {
+                    location.reload();
+                }
+                else {
+                    console.log(xhr.status)
+                    $('body').find('#loadings').modal('toggle');
+                    alert(xhr.responseText);
+                    alert(thrownError);
+                }
+
             }
         });
     });
@@ -169,11 +188,47 @@ function MuncityOnChange(id,url) {
     }
 }
 
+function ProvinceOnChange(id, url) {
+    var MuncitySelect = $('#muncityFilters');
+    if (id != '') {
+        $.when(GetMuncityFiltered(id, url)).done(function (output) {
+            MuncitySelect.empty()
+                .append($('<option>', {
+                    value: '',
+                    text: 'Select City/Municipality'
+                }));
+            jQuery.each(output, function (i, item) {
+                MuncitySelect.append($('<option>', {
+                    value: item.id,
+                    text: item.description
+                }));
+            });
+        });
+    }
+    else {
+        MuncitySelect.empty()
+            .append($('<option>', {
+                value: '',
+                text: 'Select City/Municipality'
+            }));
+    }
+}
+
 function CaclAge(date) {
     var birth = new Date(date);
     var curr = new Date();
     var diff = curr.getTime() - birth.getTime();
     document.getElementById("Patient_Age").value = Math.floor(diff / (1000 * 60 * 60 * 24 * 365.25));
+}
+
+function GetMuncityFiltered(id, url) {
+    var urls = url + '?provinceId=' + id;
+    console.log(urls);
+    return $.ajax({
+        url: urls,
+        type: 'get',
+        async: true
+    });
 }
 
 function GetBarangayFiltered(id,url) {
