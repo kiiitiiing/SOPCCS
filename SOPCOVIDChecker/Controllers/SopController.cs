@@ -47,7 +47,7 @@ namespace SOPCOVIDChecker.Controllers
                 .Include(x => x.DiseaseReportingUnit).ThenInclude(x => x.Facility)
                 .Where(x=>x.CreatedAt >= StartDate && x.CreatedAt <= EndDate)
                 .Where(x => x.DiseaseReportingUnit.FacilityId == UserFacility)
-                .Where(x => x.ResultForm.First().CreatedBy == null)
+                .Where(x => x.ResultForm.First().ApprovedBy == null)
                 .OrderByDescending(x => x.CreatedAt)
                 .Select(x => new SopLess
                 {
@@ -257,7 +257,7 @@ namespace SOPCOVIDChecker.Controllers
             {
                 if(_context.Patient.Any(x=>
                     x.Fname.ToUpper().Equals(model.Fname.ToUpper()) &&
-                    x.Mname.ToUpper().Equals(model.Mname.ToUpper()) &&
+                    (x.Mname??"").ToUpper().Equals((model.Mname??"").ToUpper()) &&
                     x.Lname.ToUpper().Equals(model.Lname.ToUpper()) &&
                     x.Sex == model.Sex &&
                     x.Dob == model.Dob))
@@ -305,9 +305,22 @@ namespace SOPCOVIDChecker.Controllers
             var errors = ModelState.Values.SelectMany(v => v.Errors);
             if (ModelState.IsValid)
             {
-                _context.Update(model);
-                await _context.SaveChangesAsync();
-                return PartialView(model);
+                if (_context.Patient.Where(x=>x.Id != model.Id).Any(x =>
+                     x.Fname.ToUpper().Equals(model.Fname.ToUpper()) &&
+                     (x.Mname ?? "").ToUpper().Equals((model.Mname ?? "").ToUpper()) &&
+                     x.Lname.ToUpper().Equals(model.Lname.ToUpper()) &&
+                     x.Sex == model.Sex &&
+                     x.Dob == model.Dob))
+                {
+                    ViewBag.Duplicate = "Patient already exists";
+                    return PartialView(model);
+                }
+                else
+                {
+                    _context.Update(model);
+                    await _context.SaveChangesAsync();
+                    return PartialView(model);
+                }
             }
             ViewBag.Errors = errors;
             if (model.Muncity != 0)
@@ -327,10 +340,6 @@ namespace SOPCOVIDChecker.Controllers
         {
             var form = new ResultForm
             {
-                LabTestPerformed = "",
-                TestResult = "",
-                FinalResult = "",
-                Interpretation = "",
                 PerformedBy = null,
                 VerifiedBy = null,
                 ApprovedBy = null,

@@ -13,19 +13,16 @@ namespace SOPCOVIDChecker.Models.AdminViewModel
         [Required]
         [Display(Name = "name")]
         public string Name { get; set; }
-        [Required]
         [Display(Name = "abbrevation")]
         public string Abbrevation { get; set; }
         [Required]
         [Display(Name = "province")]
-        public int? Province { get; set; }
+        public int Province { get; set; }
         [Required]
         [Display(Name = "city/municipality")]
         public int? Muncity { get; set; }
-        [Required]
         [Display(Name = "barangay")]
         public int? Barangay { get; set; }
-        [Required]
         [Display(Name = "address")]
         public string Address { get; set; }
         [Required]

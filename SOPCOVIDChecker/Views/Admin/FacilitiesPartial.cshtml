@@ -18,11 +18,11 @@
                 <tr>
                     <td style="white-space: nowrap;">
                         <a class="facilityId text-primary text-bold"
-                           style="cursor:pointer;"
+                           style="cursor:pointer; font-size: 16px !important;"
                            data-toggle="ajax-modal"
-                           data-id="@item.Id"
-                           data-target="#update-facility-modal"
-                           data-url="@Url.Action("UpdateFacility", "Admin", new { id = item.Id })">
+                           data-target="#small_modal"
+                           data-action="#small_content"
+                           data-url="@Url.Action("UpdateFacility","Admin", new { id = item.Id })">
                             @item.Facility
                         </a>
                         <br />
@@ -57,3 +57,33 @@
         </tbody>
     </table>
 </div>
+
+<script>
+    $(function () {
+        //EDIT PATIENT
+        $('a[data-toggle="ajax-modal"]').click(function (event) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            var url = $(this).data('url');
+            var target = $(this).data('target');
+            var action = $(this).data('action');
+            var content = $(action);
+            $.when($(target).modal('show')).done(function () {
+            $.ajax({
+                url: url,
+                tpye: 'get',
+                async: true,
+                success: function (data) {
+                    content.html(data);
+                },
+                timeout: 60000,
+                error: function (xhr, ajaxOptions, thrownError) {
+                    $('body').find('#loadings').modal('toggle');
+                    alert(xhr.responseText);
+                    alert(thrownError);
+                    }
+                });
+            });
+        });
+    });
+</script>

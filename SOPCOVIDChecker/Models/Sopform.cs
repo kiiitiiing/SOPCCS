@@ -47,7 +47,7 @@ namespace SOPCOVIDChecker.Models
         [Required]
         [StringLength(255)]
         public string Swabber { get; set; }
-        [Column("date_result", TypeName = "date")]
+        [Column("date_result")]
         public DateTime DateResult { get; set; }
         [Column("patient_id")]
         public int PatientId { get; set; }

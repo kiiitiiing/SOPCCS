@@ -45,8 +45,6 @@ namespace SOPCOVIDChecker.Data
 
             modelBuilder.Entity<Facility>(entity =>
             {
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
                 entity.Property(e => e.Abbr).IsUnicode(false);
 
                 entity.Property(e => e.Address).IsUnicode(false);
@@ -131,18 +129,6 @@ namespace SOPCOVIDChecker.Data
 
             modelBuilder.Entity<ResultForm>(entity =>
             {
-                entity.Property(e => e.BiologicalReferrence).IsUnicode(false);
-
-                entity.Property(e => e.FinalResult).IsUnicode(false);
-
-                entity.Property(e => e.Interpretation).IsUnicode(false);
-
-                entity.Property(e => e.LabTestPerformed).IsUnicode(false);
-
-                entity.Property(e => e.TestResult).IsUnicode(false);
-
-                entity.Property(e => e.TestResultsUnits).IsUnicode(false);
-
                 entity.HasOne(d => d.ApprovedByNavigation)
                     .WithMany(p => p.ResultFormApprovedByNavigation)
                     .HasForeignKey(d => d.ApprovedBy)

@@ -23,7 +23,7 @@
                                data-toggle="ajax-modal"
                                data-target="#small_modal"
                                data-action="#small_content"
-                               data-url="@Url.Action("UpdateUser","Admin", new { userId = item.Id })">
+                               data-url="@Url.Action("EditUser","Account", new { userId = item.Id })">
                                 @item.Name
                             </a>
                         </td>
@@ -48,3 +48,33 @@ else
         </span>
     </div>
 }
+
+<script>
+    $(function () {
+        //EDIT PATIENT
+        $('a[data-toggle="ajax-modal"]').click(function (event) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            var url = $(this).data('url');
+            var target = $(this).data('target');
+            var action = $(this).data('action');
+            var content = $(action);
+            $.when($(target).modal('show')).done(function () {
+            $.ajax({
+                url: url,
+                tpye: 'get',
+                async: true,
+                success: function (data) {
+                    content.html(data);
+                },
+                timeout: 60000,
+                error: function (xhr, ajaxOptions, thrownError) {
+                    $('body').find('#loadings').modal('toggle');
+                    alert(xhr.responseText);
+                    alert(thrownError);
+                    }
+                });
+            });
+        });
+    });
+</script>

@@ -12,7 +12,6 @@ namespace SOPCOVIDChecker.Models.AccountViewModels
         [Required]
         [Display(Name = "first name")]
         public string Firstname { get; set; }
-        [Required]
         [Display(Name = "middle name")]
         public string Middlename { get; set; }
         [Required]
@@ -21,15 +20,17 @@ namespace SOPCOVIDChecker.Models.AccountViewModels
         [Required]
         [Display(Name = "facility")]
         public int FacilityId { get; set; }
+        public int? Barangay { get; set; }
+        [Required]
+        public int? Muncity { get; set; }
+        [Required]
+        public int Province { get; set; }
         [Required]
         [Display(Name = "contact number")]
         public string ContactNumber { get; set; }
         [DataType(DataType.EmailAddress)]
         [Display(Name = "email")]
         public string Email { get; set; }
-        [Required]
-        [Display(Name = "designation")]
-        public string Designation { get; set; }
         [Required]
         [Display(Name = "username")]
         public string Username { get; set; }

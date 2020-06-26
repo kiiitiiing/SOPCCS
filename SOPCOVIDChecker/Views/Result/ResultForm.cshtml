@@ -1,4 +1,4 @@
-﻿@model ResultForm
+﻿@model ResultFormModel
 
 <style>
     .text-dangers {
@@ -19,15 +19,13 @@
     <div class="modal-body">
         <form asp-action="ResultForm">
             <input hidden asp-for="Id" />
-            <input hidden asp-for="CreatedBy" />
-            <input hidden asp-for="CreatedAt" />
-            <input hidden asp-for="UpdatedAt" />
             <input hidden asp-for="SopFormId" />
+
             <table class="table table-bordered">
                 <tbody>
                     <tr>
                         <td colspan="17">
-                            <label>Name of Patient: </label><span class="text-dangers">@Model.SopForm.Patient.GetFullName().ToUpper()</span>
+                            <label>Name of Patient: </label><span class="text-dangers">@Model.Name.ToUpper()</span>
                         </td>
                     </tr>
                     <tr>
@@ -35,19 +33,19 @@
                             <label>Age:</label>
                         </td>
                         <td colspan="2">
-                            <span class="text-dangers">@Model.SopForm.Patient.Dob.ComputeAge()</span>
+                            <span class="text-dangers">@Model.Age</span>
                         </td>
                         <td>
                             <label>Sex:</label>
                         </td>
                         <td colspan="4">
-                            <span class="text-dangers">@Model.SopForm.Patient.Sex</span>
+                            <span class="text-dangers">@Model.Sex</span>
                         </td>
                         <td colspan="3">
                             <label>Date of Birth: </label>
                         </td>
                         <td colspan="6">
-                            <span class="text-dangers">@Model.SopForm.Patient.Dob.ToString("dd/MM/yyyy")</span>
+                            <span class="text-dangers">@Model.DoB.ToString("dd/MM/yyyy")</span>
                         </td>
                     </tr>
                     <tr>
@@ -61,13 +59,13 @@
                             <span class="text-dangers"></span><br />
                             <span class="text-dangers"></span><br />
                             <span class="text-dangers"></span><br />
-                            <span class="text-dangers">@Model.SopForm.DiseaseReportingUnit.Facility.Name</span>
+                            <span class="text-dangers">@Model.Location</span>
                         </td>
                         <td colspan="3" rowspan="2">
                             <label>Sample ID:</label>
                         </td>
                         <td colspan="6" rowspan="2">
-                            <input class="form-control" asp-for="SopForm.SampleId" />
+                            <input class="form-control" asp-for="SampleID" />
                         </td>
                     </tr>
                     <tr>
@@ -87,13 +85,13 @@
                             <label>Requisitioner:</label>
                         </td>
                         <td colspan="5">
-                            <span class="text-dangers">@Model.SopForm.RequestedBy</span>
+                            <span class="text-dangers">@Model.Requisitioner</span>
                         </td>
                         <td rowspan="2">
                             <label>Address:</label>
                         </td>
                         <td colspan="8" rowspan="2" style="white-space: nowrap;">
-                            <span class="text-dangers">@Model.SopForm.Patient.GetAddress()</span>
+                            <span class="text-dangers">@Model.Address</span>
                         </td>
                     </tr>
                     <tr>
@@ -101,7 +99,7 @@
                             <label>Specimen Type:</label>
                         </td>
                         <td colspan="5">
-                            <span class="text-dangers">@Model.SopForm.TypeSpecimen</span>
+                            <span class="text-dangers">@Model.SpecimenType</span>
                         </td>
                     </tr>
                     <tr>
@@ -109,13 +107,13 @@
                             <label>Date & Time of Specimen Collection:</label>
                         </td>
                         <td colspan="3">
-                            <span class="text-dangers">@Model.SopForm.DatetimeCollection.GetDate("dd/MM/yyyy hh:mm tt")</span>
+                            <span class="text-dangers">@Model.DTSpecimeCollection.GetDate("dd/MM/yyyy hh:mm tt")</span>
                         </td>
                         <td colspan="6">
                             <label>Date & Time of Specimen Receipt:</label>
                         </td>
                         <td colspan="3">
-                            <input class="form-control" asp-for="SopForm.DatetimeSpecimenReceipt" value=""/>
+                            <input class="form-control" asp-for="DTSpecimenReceipt" />
                         </td>
                     </tr>
                     <tr>
@@ -125,7 +123,7 @@
                             <label>Date & Time of Release of Result:</label>
                         </td>
                         <td colspan="10" rowspan="2">
-                            <input class="form-control" asp-for="SopForm.DateResult" value=""/>
+                            <input class="form-control" asp-for="DTReleaseResult" />
                         </td>
                     </tr>
                     <tr>
@@ -140,10 +138,10 @@
                     <tr>
                         <td colspan="17">
                             <label>LABORATORY TEST PERFORMED:</label><br />
-                                                                     <pre>
+                            <span>
                                 SARS-CoV-2 (causative agent of COVID-19) virus
                                 detection by Real-Time Polymerase Chain Reaction
-                            </pre>
+                            </span>
                         </td>
                     </tr>
                     <tr>
@@ -179,11 +177,37 @@
                     </tr>
                     <tr>
                         <td colspan="8">
+                            FINAL RESULT
                         </td>
                         <td colspan="9">
-                            <textarea class="form-control" asp-for="Interpretation" id="interpret" rows="2" style="height: 100% !important; width: 100% !important; font-size: 10px; box-sizing: border-box;" readonly>
-                                @Model.Interpretation
-                            </textarea>
+                            INTERPRETATION
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="8">
+                            SARS-CoV-2 (causative agent of COVID-19) viral RNA detected
+                        </td>
+                        <td colspan="9">
+                            "Positive
+                            for SARS-CoV-2 (causative agent of COVID-19)"
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="8">
+                            SARS-CoV-2 (causative agent of COVID-19) viral RNA not detected
+                        </td>
+                        <td colspan="9">
+                            "Negative
+                            for SARS-CoV-2 (causative agent of COVID-19)"
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="8">
+                            Invalid due to specimen quality
+                        </td>
+                        <td colspan="9">
+                            "Negative for test internal control
+                            (most likely due to poor specimen quality)"
                         </td>
                     </tr>
                     <tr></tr>
@@ -204,19 +228,19 @@
             <div class="row" style="margin-top:15px;">
                 <div class="col-md-4">
                     <label>Performed:</label><br />
-                    <select class="form-control" asp-for="PerformedBy" asp-items="ViewBag.Perform" required>
+                    <select class="form-control" asp-for="Performed" asp-items="ViewBag.Perform" required>
                         <option value="" selected hidden>Select MedTech</option>
                     </select>
                 </div>
                 <div class="col-md-4">
                     <label>Verified:</label><br />
-                    <select class="form-control" asp-for="VerifiedBy" asp-items="ViewBag.Verify" required>
+                    <select class="form-control" asp-for="Verified" asp-items="ViewBag.Verify" required>
                         <option value="" selected hidden>Select Supervisor</option>
                     </select>
                 </div>
                 <div class="col-md-4">
                     <label>Approved:</label><br />
-                    <select class="form-control" asp-for="ApprovedBy" asp-items="ViewBag.Approve" required>
+                    <select class="form-control" asp-for="Approved" asp-items="ViewBag.Approve" required>
                         <option value="" selected hidden>Select Chief</option>
                     </select>
                 </div>
@@ -238,9 +262,9 @@
         <button class="btn btn-sm btn-success fa-pull-right" data-action="large_modal" data-save="modal">
             Submit
         </button>
-        <button class="btn btn-sm btn-primary fa-pull-right" type="button" onclick="alert('PRINT!');">
+        <a class="btn btn-sm btn-primary fa-pull-right" asp-action="ResultPdf" asp-route-resultId="@Model.Id" target="_blank">
             Print
-        </button>
+        </a>
     </div>
 </div>
 

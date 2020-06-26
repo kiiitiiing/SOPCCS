@@ -28,13 +28,46 @@ namespace SOPCOVIDChecker.Controllers
         {
             return View();
         }
+
+        public async Task<ActionResult<ChartModel>> GetChartvalues()
+        {
+            var dateNow = DateTime.Now;
+            var startDate = new DateTime(dateNow.Year, dateNow.Month, 1);
+            var endDate = startDate.AddMonths(1).AddSeconds(-1);
+            var lastDay = endDate.Day;
+            var days = new List<string>();
+            var positive = new List<int>();
+            var negative = new List<int>();
+            var invalid = new List<int>();
+            var processing = new List<int>();
+            var sop = _context.Sopform
+                .Where(x => x.UpdatedAt >= startDate && x.UpdatedAt <= endDate);
+            for (int c = 1; c <= lastDay; c++)
+            {
+                days.Add(c.ToString());
+                positive.Add( await sop.Where(x => x.UpdatedAt.Day == c && x.PcrResult.Contains("detected")).CountAsync());
+                negative.Add(await sop.Where(x => x.UpdatedAt.Day == c && x.PcrResult.Contains("not")).CountAsync());
+                invalid.Add(await sop.Where(x => x.UpdatedAt.Day == c && x.PcrResult.Contains("Invalid")).CountAsync());
+                processing.Add(await sop.Where(x => x.UpdatedAt.Day == c && x.PcrResult.Contains("none")).CountAsync());
+            }
+            var chart = new ChartModel
+            {
+                Day = days,
+                Positive = positive,
+                Negative = negative,
+                Invalid = invalid,
+                Processing = processing
+            };
+
+            return chart;
+        }
         #endregion
         #region ADD FACILITY
         // GET: ADD FACILITY    
         public IActionResult AddFacility()
         {
             var provinces = _context.Province;
-            ViewBag.Provinces = new SelectList(provinces, "Id", "Description");
+            ViewBag.Province = new SelectList(provinces, "Id", "Description");
             ViewBag.HospitalLevels = new SelectList(ListContainer.HospitalLevel, "Key", "Value");
             ViewBag.HospitalTypes = new SelectList(ListContainer.HospitalType, "Key", "Value");
             return PartialView();
@@ -93,9 +126,9 @@ namespace SOPCOVIDChecker.Controllers
             var muncity = _context.Muncity.Where(x => x.Province.Equals(facility.Province));
             var barangay = _context.Barangay.Where(x => x.Muncity.Equals(facility.Muncity));
 
-            ViewBag.Provinces = new SelectList(province, "Id", "Description", facility.Province);
-            ViewBag.Muncities = new SelectList(muncity, "Id", "Description", facility.Muncity);
-            ViewBag.Barangays = new SelectList(barangay, "Id", "Description", facility.Barangay);
+            ViewBag.Province = new SelectList(province, "Id", "Description", facility.Province);
+            ViewBag.Muncity = new SelectList(muncity, "Id", "Description", facility.Muncity);
+            ViewBag.Barangay = new SelectList(barangay, "Id", "Description", facility.Barangay);
             ViewBag.Levels = new SelectList(ListContainer.HospitalLevel, "Key", "Value", facility.Level);
             ViewBag.Types = new SelectList(ListContainer.HospitalType, "Key", "Value", facility.Type);
 
@@ -128,11 +161,11 @@ namespace SOPCOVIDChecker.Controllers
             var muncity = _context.Muncity.Where(x => x.Province.Equals(model.Province));
             var barangay = _context.Barangay.Where(x => x.Muncity.Equals(model.Barangay));
 
-            ViewBag.Provinces = new SelectList(province, "Id", "Description", model.Province);
-            ViewBag.Muncities = new SelectList(muncity, "Id", "Description", model.Muncity);
-            ViewBag.Barangays = new SelectList(barangay, "Id", "Description", model.Barangay);
-            ViewBag.Levels = new SelectList(ListContainer.HospitalLevel, "Key", "Value", model.Level);
-            ViewBag.Types = new SelectList(ListContainer.HospitalType, "Key", "Value", model.Type);
+            ViewBag.Province = new SelectList(province, "Id", "Description");
+            ViewBag.Muncity = new SelectList(muncity, "Id", "Description");
+            ViewBag.Barangay = new SelectList(barangay, "Id", "Description");
+            ViewBag.Levels = new SelectList(ListContainer.HospitalLevel, "Key", "Value");
+            ViewBag.Types = new SelectList(ListContainer.HospitalType, "Key", "Value");
 
             return PartialView(model);
         }
@@ -311,9 +344,9 @@ namespace SOPCOVIDChecker.Controllers
             var facility = await _context.Facility.FindAsync(model.Id);
             facility.Name = model.Name;
             facility.Abbr = model.Abbrevation;
-            facility.Province = (int)model.Province;
-            facility.Muncity = (int)model.Muncity;
-            facility.Barangay = (int)model.Barangay;
+            facility.Province = model.Province;
+            facility.Muncity = model.Muncity;
+            facility.Barangay = model.Barangay;
             facility.Address = model.Address;
             facility.ContactNo = model.Contact;
             facility.Email = model.Email;

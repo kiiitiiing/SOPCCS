@@ -37,7 +37,7 @@ namespace SOPCOVIDChecker.Controllers
                 .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.MuncityNavigation)
                 .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.ProvinceNavigation)
                 .Include(x => x.CreatedByNavigation).ThenInclude(x => x.Facility)
-                .Where(x => x.CreatedBy == null)
+                .Where(x => x.ApprovedBy == null)
                 .OrderByDescending(x => x.CreatedAt)
                 .Select(x=> new ResultLess
                 {
@@ -100,8 +100,6 @@ namespace SOPCOVIDChecker.Controllers
             return PartialView(model);
         }
         #endregion
-
-
         #region RESULT
         public async Task<ActionResult<List<ResultLess>>> ResuStatusJson(string q, string dr, string f)
         {

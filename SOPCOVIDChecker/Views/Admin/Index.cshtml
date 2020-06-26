@@ -2,14 +2,127 @@
 @{
     ViewData["Title"] = "Index";
 }
-
-<div class="row">
-    <div class="card">
-        <div class="card-header">
-            
-        </div>
-        <div class="card-body">
-
+<div class="card card-success card-outline">
+    <div class="card-header">
+        <h4>
+            Records on month @DateTime.Now.ToString("MMMM")
+        </h4>
+    </div>
+    <div class="card-body">
+        <div class="card card-info">
+            <div class="card-body">
+                <div class="chart">
+                    <canvas id="lineChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                </div>
+            </div>
+            <!-- /.card-body -->
         </div>
     </div>
 </div>
+
+<script>
+    $(function () {
+        $.when(GetChartValues()).done(function (output) {
+            var areaChartData = {
+                labels: output.day,
+                datasets: [
+                    {
+                        label: 'Positive',
+                        backgroundColor: 'rgba(51, 204, 51,0.9)',
+                        borderColor: 'rgba(51, 204, 51,0.8)',
+                        pointRadius: false,
+                        pointColor: '#3b8bba',
+                        pointStrokeColor: 'rgba(51, 204, 51,1)',
+                        pointHighlightFill: '#fff',
+                        pointHighlightStroke: 'rgba(51, 204, 51,1)',
+                        data: output.positive
+                    },
+                    {
+                        label: 'Negative',
+                        backgroundColor: 'rgba(255, 51, 51, 1)',
+                        borderColor: 'rgba(255, 51, 51, 1)',
+                        pointRadius: false,
+                        pointColor: 'rgba(255, 51, 51, 1)',
+                        pointStrokeColor: '#c1c7d1',
+                        pointHighlightFill: '#fff',
+                        pointHighlightStroke: 'rgba(255, 50, 50,1)',
+                        data: output.negative
+                    },
+                    {
+                        label: 'Invalid',
+                        backgroundColor: 'rgba(84, 89, 84,0.9)',
+                        borderColor: 'rgba(84, 89, 84,0.8)',
+                        pointRadius: false,
+                        pointColor: '#3b8bba',
+                        pointStrokeColor: 'rgba(84, 89, 84,1)',
+                        pointHighlightFill: '#fff',
+                        pointHighlightStroke: 'rgba(84, 89, 84,1)',
+                        data: output.invalid
+                    },
+                    {
+                        label: 'Processing',
+                        backgroundColor: 'rgba(190, 204, 0, 1)',
+                        borderColor: 'rgba(190, 204, 0, 1)',
+                        pointRadius: false,
+                        pointColor: 'rgba(190, 204, 0, 1)',
+                        pointStrokeColor: '#c1c7d1',
+                        pointHighlightFill: '#fff',
+                        pointHighlightStroke: 'rgba(190, 204, 0,1)',
+                        data: output.processing
+                    },
+                ]
+            }
+
+            var areaChartOptions = {
+                maintainAspectRatio: false,
+                responsive: true,
+                legend: {
+                    display: true
+                },
+                tooltips: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                hover: {
+                    mode: 'nearest',
+                    intersect: true,
+                },
+                scales: {
+                    xAxes: [{
+                        gridLines: {
+                            display: false,
+                            labelString: '@DateTime.Now.ToString("MMMM")'
+                        }
+                    }],
+                    yAxes: [{
+                        gridLines: {
+                            display: true,
+                        }
+                    }]
+                }
+            }
+
+            var lineChartCanvas = $('#lineChart').get(0).getContext('2d')
+            var lineChartOptions = jQuery.extend(true, {}, areaChartOptions)
+            var lineChartData = jQuery.extend(true, {}, areaChartData)
+            lineChartData.datasets[0].fill = false;
+            lineChartData.datasets[1].fill = false;
+            lineChartOptions.datasetFill = false
+
+            var lineChart = new Chart(lineChartCanvas, {
+                type: 'line',
+                data: lineChartData,
+                options: lineChartOptions
+            })
+        });
+    })
+
+    function GetChartValues() {
+        return $.ajax({
+            url: '@Url.Action("GetChartvalues","Admin")',
+            type: 'GET',
+            async: true
+        });
+    }
+
+</script>

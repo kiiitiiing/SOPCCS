@@ -58,7 +58,7 @@
                                 data-toggle="ajax-modal"
                                 data-target="#small_modal"
                                 data-action="#small_content"
-                                data-url="@Url.Action("AddSopModal","Sop")">
+                                data-url="@Url.Action("AddSopModal","Sop", new { patientId = patient.Id })">
                             <i class="far fa-file-alt"></i>
                             &nbsp;FORM
                         </a>
