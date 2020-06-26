@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using SOPCOVIDChecker.Data;
 using SOPCOVIDChecker.Models;
 using SOPCOVIDChecker.Models.MobileModels;
@@ -54,9 +56,9 @@ namespace SOPCOVIDChecker.Controllers
             return null;
         }
 
-        [Route("mobileapi/syncforms/{date}")]
+        [Route("mobileapi/syncforms/")]
         [HttpGet]
-        public Task<List<Sopform>> GetSopForms(string date)
+        public Task<List<Sopform>> GetSopForms(string date, int id)
         {
             return _context.Sopform.Join
                  (
@@ -80,7 +82,7 @@ namespace SOPCOVIDChecker.Controllers
                      UpdatedAt = sopform.sopform.UpdatedAt,
                      Patient = sopform.patient
                  })
-                 .Where(x => x.CreatedAt > DateTime.Parse(date))
+                 .Where(x => x.CreatedAt > DateTime.Parse(date) && x.DiseaseReportingUnitId == id)
                  .ToListAsync();
         }
 
