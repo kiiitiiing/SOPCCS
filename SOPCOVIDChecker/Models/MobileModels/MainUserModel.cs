@@ -12,6 +12,7 @@ namespace SOPCOVIDChecker.Models.MobileModels
         public string Lastname { get; set; }
         public string UserLevel { get; set; }
         public string Facility { get; set; }
+        public int FacilityId { get; set; }
         public int DiseaseReportingUnitId { get; set; }
     }
 }

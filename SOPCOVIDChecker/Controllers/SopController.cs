@@ -30,6 +30,10 @@ namespace SOPCOVIDChecker.Controllers
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         #region TESTING
+        /*public ActionResult<Sopform> TestSop()
+        {
+            
+        }*/
         public ActionResult<CKPatient> CovidKayaTest(int? id)
         {
             var patient = _context.Patient

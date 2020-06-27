@@ -40,6 +40,21 @@ namespace SOPCOVIDChecker.Services
         }*/
 
 
+        public static ResultForm NewResultForm()
+        {
+            var form = new ResultForm
+            {
+                PerformedBy = null,
+                VerifiedBy = null,
+                ApprovedBy = null,
+                CreatedBy = 10,
+                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now
+            };
+
+            return form;
+        }
+
         public static string NameToUpper(this string name)
         {
             if (!string.IsNullOrEmpty(name))
