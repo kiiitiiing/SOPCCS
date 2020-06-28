@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -29,6 +30,22 @@ namespace SOPCOVIDChecker.Controllers
 
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
+        #region DOWNLOAD
+        public async Task<IActionResult> DownloadApp()
+        {
+            var path = Path.Combine(
+                     Directory.GetCurrentDirectory(),
+                     "wwwroot", "assets","dist","apk", "com.companyname.sopcc.apk");
+
+            var memory = new MemoryStream();
+            using (var stream = new FileStream(path, FileMode.Open))
+            {
+                await stream.CopyToAsync(memory);
+            }
+            memory.Position = 0;
+            return File(memory, "APPLICATION/octet-stream", Path.GetFileName(path));
+        }
+        #endregion
         #region TESTING
         /*public ActionResult<Sopform> TestSop()
         {

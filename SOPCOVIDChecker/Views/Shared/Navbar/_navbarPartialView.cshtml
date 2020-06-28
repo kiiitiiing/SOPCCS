@@ -20,6 +20,12 @@
                 &nbsp;Results
             </a>
         </li>
+        <li class="nav-item ">
+            <a class="nav-link" asp-area="" asp-controller="Sop" asp-action="DownloadApp">
+                <i class="fas fa-download"></i>
+                &nbsp;Download App
+            </a>
+        </li>
     }
 
     @if (User.FindFirstValue(ClaimTypes.Role) == "PESU")

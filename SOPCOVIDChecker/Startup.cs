@@ -17,6 +17,8 @@ using DinkToPdf.Contracts;
 using DinkToPdf;
 using Newtonsoft;
 using Newtonsoft.Json;
+using Microsoft.Extensions.FileProviders;
+using System.IO;
 
 namespace SOPCOVIDChecker
 {
@@ -34,6 +36,9 @@ namespace SOPCOVIDChecker
         {
             services.AddSingleton(Configuration);
             services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
+            services.AddSingleton<IFileProvider>(
+            new PhysicalFileProvider(
+                Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")));
             services.AddDbContext<SOPCCContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("SOPCCConnection")));
 
@@ -95,6 +100,7 @@ namespace SOPCOVIDChecker
                 app.UseHsts();
             }
             app.UseCors();
+            app.UseAuthorization();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseAuthentication();

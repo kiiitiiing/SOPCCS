@@ -172,7 +172,7 @@ namespace SOPCOVIDChecker.Controllers
             return PartialView(model);
         }
         #endregion
-        #region
+        #region PDF
         public async Task<IActionResult> ResultPdf(int resultId)
         {
             var result = await _context.ResultForm
