@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Security.Claims;
@@ -91,8 +92,8 @@ namespace SOPCOVIDChecker.Controllers
         {
             if(!string.IsNullOrEmpty(dr))
             {
-                StartDate = DateTime.Parse(dr.Substring(0, dr.IndexOf(" ") + 1).Trim());
-                EndDate = DateTime.Parse(dr.Substring(dr.LastIndexOf(" ")).Trim()).AddDays(1).AddSeconds(-1);
+                StartDate = DateTime.ParseExact(dr.Substring(0, dr.IndexOf(" ") + 1).Trim(),@"dd-MM-yyyy", CultureInfo.InvariantCulture);
+                EndDate = DateTime.ParseExact(dr.Substring(dr.LastIndexOf(" ")).Trim(), @"dd-MM-yyyy", CultureInfo.InvariantCulture).AddDays(1).AddSeconds(-1);
             }
 
             var sop = await _context.Sopform
@@ -188,8 +189,8 @@ namespace SOPCOVIDChecker.Controllers
 
             if (!string.IsNullOrEmpty(dr))
             {
-                StartDate = DateTime.Parse(dr.Substring(0, dr.IndexOf(" ") + 1).Trim());
-                EndDate = DateTime.Parse(dr.Substring(dr.LastIndexOf(" ")).Trim()).AddDays(1).AddSeconds(-1);
+                StartDate = DateTime.ParseExact(dr.Substring(0, dr.IndexOf(" ") + 1).Trim(), @"dd-MM-yyyy", CultureInfo.InvariantCulture);
+                EndDate = DateTime.ParseExact(dr.Substring(dr.LastIndexOf(" ")).Trim(), @"dd-MM-yyyy", CultureInfo.InvariantCulture).AddDays(1).AddSeconds(-1);
             }
 
             var sop = await _context.ResultForm
