@@ -24,5 +24,6 @@ namespace SOPCOVIDChecker.Models.SopViewModel
         public DateTime DateResult { get; set; }
         public DateTime DateOnset { get; set; }
         public string Swabber { get; set; }
+        public string ContactNo { get; set; }
     }
 }

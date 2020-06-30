@@ -130,7 +130,8 @@ namespace SOPCOVIDChecker.Controllers
                     DateTimeReceipt = x.DatetimeSpecimenReceipt,
                     DateResult = x.DateResult,
                     DateOnset = (DateTime)x.DateOnsetSymptoms,
-                    Swabber = x.Swabber
+                    Swabber = x.Swabber,
+                    ContactNo = x.Patient.ContactNo
                 })
                 .ToListAsync();
 
@@ -434,16 +435,17 @@ namespace SOPCOVIDChecker.Controllers
                     worksheet.Cell(1, 3).Value = "AGE";
                     worksheet.Cell(1, 4).Value = "SEX";
                     worksheet.Cell(1, 5).Value = "DATE OF BIRTH";
-                    worksheet.Cell(1, 6).Value = "CURRENT ADDRESS";
-                    worksheet.Cell(1, 7).Value = "PERMANENT ADDRESS";
-                    worksheet.Cell(1, 8).Value = "DISEASE REPORTING UNIT";
-                    worksheet.Cell(1, 9).Value = "PCR RESULT";
-                    worksheet.Cell(1, 10).Value = "DATE & TIME OF COLLECTION";
-                    worksheet.Cell(1, 11).Value = "REQUESTED BY";
-                    worksheet.Cell(1, 12).Value = "CONTACT NUMBER";
-                    worksheet.Cell(1, 13).Value = "TYPE OF SPECIMEN & COLLECTION MEDIUM";
-                    worksheet.Cell(1, 14).Value = "DATE & TIME OF SPECIMEN RECEIPT";
-                    worksheet.Cell(1, 15).Value = "DATE OF RESULT RELEASE";
+                    worksheet.Cell(1, 6).Value = "CONTACT NUMBER";
+                    worksheet.Cell(1, 7).Value = "CURRENT ADDRESS";
+                    worksheet.Cell(1, 8).Value = "PERMANENT ADDRESS";
+                    worksheet.Cell(1, 9).Value = "DISEASE REPORTING UNIT";
+                    worksheet.Cell(1, 10).Value = "PCR RESULT";
+                    worksheet.Cell(1, 11).Value = "DATE & TIME OF COLLECTION";
+                    worksheet.Cell(1, 12).Value = "REQUESTED BY";
+                    worksheet.Cell(1, 13).Value = "CONTACT NUMBER";
+                    worksheet.Cell(1, 14).Value = "TYPE OF SPECIMEN & COLLECTION MEDIUM";
+                    worksheet.Cell(1, 15).Value = "DATE & TIME OF SPECIMEN RECEIPT";
+                    worksheet.Cell(1, 16).Value = "DATE OF RESULT RELEASE";
                     for (int index = 1; index <= sop.Count; index++)
                     {
                         worksheet.Cell(index + 1, 1).Value =  sop[index - 1].SampleId;
@@ -451,16 +453,19 @@ namespace SOPCOVIDChecker.Controllers
                         worksheet.Cell(index + 1, 3).Value = sop[index - 1].Patient.Dob.ComputeAge();
                         worksheet.Cell(index + 1, 4).Value = sop[index - 1].Patient.Sex;
                         worksheet.Cell(index + 1, 5).Value = sop[index - 1].Patient.Dob.ToString("dd-MMM-yyyy");
-                        worksheet.Cell(index + 1, 6).Value = sop[index - 1].Patient.GetAddress();
-                        worksheet.Cell(index + 1, 7).Value = sop[index - 1].Patient.GetPermanentAddress();
-                        worksheet.Cell(index + 1, 8).Value = sop[index - 1].DiseaseReportingUnit.Name;
-                        worksheet.Cell(index + 1, 9).Value = sop[index - 1].PcrResult == "none"? "PROCESSING" : sop[index - 1].PcrResult;
-                        worksheet.Cell(index + 1, 10).Value = sop[index - 1].DatetimeCollection.GetDate("dd-MMM-yyyy hh:mm tt");
-                        worksheet.Cell(index + 1, 11).Value = sop[index - 1].RequestedBy;
-                        worksheet.Cell(index + 1, 12).Value = sop[index - 1].RequesterContact;
-                        worksheet.Cell(index + 1, 13).Value = sop[index - 1].TypeSpecimen;
-                        worksheet.Cell(index + 1, 14).Value = sop[index - 1].DatetimeSpecimenReceipt == default? "PROCESSING" : sop[index - 1].DatetimeSpecimenReceipt.GetDate("dd-MMM-yyyy hh:mm tt");
-                        worksheet.Cell(index + 1, 15).Value = sop[index - 1].DateResult == default ? "PROCESSING" : sop[index - 1].DateResult.GetDate("dd-MMM-yyyy hh:mm tt");
+                        worksheet.Cell(index + 1, 6).SetDataType(XLDataType.Text);
+                        worksheet.Cell(index + 1, 6).Value = sop[index - 1].Patient.ContactNo;
+                        worksheet.Cell(index + 1, 7).Value = sop[index - 1].Patient.GetAddress();
+                        worksheet.Cell(index + 1, 8).Value = sop[index - 1].Patient.GetPermanentAddress();
+                        worksheet.Cell(index + 1, 9).Value = sop[index - 1].DiseaseReportingUnit.Name;
+                        worksheet.Cell(index + 1, 10).Value = sop[index - 1].PcrResult == "none"? "PROCESSING" : sop[index - 1].PcrResult;
+                        worksheet.Cell(index + 1, 11).Value = sop[index - 1].DatetimeCollection.GetDate("dd-MMM-yyyy hh:mm tt");
+                        worksheet.Cell(index + 1, 12).Value = sop[index - 1].RequestedBy;
+                        worksheet.Cell(index + 1, 13).SetDataType(XLDataType.Text);
+                        worksheet.Cell(index + 1, 13).Value = sop[index - 1].RequesterContact;
+                        worksheet.Cell(index + 1, 14).Value = sop[index - 1].TypeSpecimen;
+                        worksheet.Cell(index + 1, 15).Value = sop[index - 1].DatetimeSpecimenReceipt == default? "PROCESSING" : sop[index - 1].DatetimeSpecimenReceipt.GetDate("dd-MMM-yyyy hh:mm tt");
+                        worksheet.Cell(index + 1, 16).Value = sop[index - 1].DateResult == default ? "PROCESSING" : sop[index - 1].DateResult.GetDate("dd-MMM-yyyy hh:mm tt");
                     }
                     foreach(var item in worksheet.ColumnsUsed())
                     {

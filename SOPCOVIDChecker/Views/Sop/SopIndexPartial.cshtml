@@ -18,13 +18,16 @@
                     DATE OF BIRTH
                 </th>
                 <th class="text-center text-sm">
-                    DISEASE-REPORTING UNIT
+                    CONTACT NUMBER
                 </th>
                 <th class="text-center text-sm">
                     CURRENT ADDRESS
                 </th>
                 <th class="text-center text-sm">
                     PERMANENT ADDRESS
+                </th>
+                <th class="text-center text-sm">
+                    DISEASE-REPORTING UNIT
                 </th>
                 <th class="text-center text-sm">
                     DATE ONSET SYMPTOMS
@@ -63,13 +66,16 @@
                     @sop.DateOfBirth.GetDate("dd-MMM-yy")
                 </td>
                 <td class="text-center text-sm">
-                    @sop.DRU
+                    @sop.ContactNo
                 </td>
                 <td class="text-center text-sm">
                     @sop.CAddress
                 </td>
                 <td class="text-center text-sm">
                     @sop.PAddress
+                </td>
+                <td class="text-center text-sm">
+                    @sop.DRU
                 </td>
                 <td class="text-center text-sm">
                     @sop.DateOnset.GetDate("dd-MMM-yy")
