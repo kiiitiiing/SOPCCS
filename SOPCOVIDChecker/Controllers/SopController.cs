@@ -5,6 +5,8 @@ using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using ClosedXML.Excel;
+using DocumentFormat.OpenXml.Office.CustomUI;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -405,6 +407,86 @@ namespace SOPCOVIDChecker.Controllers
             }
             return PartialView(model);
         }
+        #endregion
+        #region EXCEL ALL
+        public async Task<IActionResult> ExportAll()
+        {
+            var sop = await _context.Sopform
+                   .Include(x => x.Patient).ThenInclude(x => x.CurrentBarangayNavigation)
+                   .Include(x => x.Patient).ThenInclude(x => x.CurrentMuncityNavigation)
+                   .Include(x => x.Patient).ThenInclude(x => x.CurrentProvinceNavigation)
+                   .Include(x => x.Patient).ThenInclude(x => x.PermanentBarangayNavigation)
+                   .Include(x => x.Patient).ThenInclude(x => x.PermanentMuncityNavigation)
+                   .Include(x => x.Patient).ThenInclude(x => x.PermanentProvinceNavigation)
+                   .Include(x => x.ResultForm)
+                   .Include(x => x.DiseaseReportingUnit)
+                   .Where(x => x.DiseaseReportingUnitId == UserFacility)
+                   .ToListAsync();
+            string contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            string fileName = "allpatients.xlsx";
+            try
+            {
+                using(var workbook = new XLWorkbook())
+                {
+                    IXLWorksheet worksheet = workbook.Worksheets.Add("Authors");
+                    worksheet.Cell(1, 1).Value = "SAMPLE ID";
+                    worksheet.Cell(1, 2).Value = "PATIENT NAME";
+                    worksheet.Cell(1, 3).Value = "AGE";
+                    worksheet.Cell(1, 4).Value = "SEX";
+                    worksheet.Cell(1, 5).Value = "DATE OF BIRTH";
+                    worksheet.Cell(1, 6).Value = "CURRENT ADDRESS";
+                    worksheet.Cell(1, 7).Value = "PERMANENT ADDRESS";
+                    worksheet.Cell(1, 8).Value = "DISEASE REPORTING UNIT";
+                    worksheet.Cell(1, 9).Value = "PCR RESULT";
+                    worksheet.Cell(1, 10).Value = "DATE & TIME OF COLLECTION";
+                    worksheet.Cell(1, 11).Value = "REQUESTED BY";
+                    worksheet.Cell(1, 12).Value = "CONTACT NUMBER";
+                    worksheet.Cell(1, 13).Value = "TYPE OF SPECIMEN & COLLECTION MEDIUM";
+                    worksheet.Cell(1, 14).Value = "DATE & TIME OF SPECIMEN RECEIPT";
+                    worksheet.Cell(1, 15).Value = "DATE OF RESULT RELEASE";
+                    for (int index = 1; index <= sop.Count; index++)
+                    {
+                        worksheet.Cell(index + 1, 1).Value =  sop[index - 1].SampleId;
+                        worksheet.Cell(index + 1, 2).Value = sop[index - 1].Patient.GetFullName();
+                        worksheet.Cell(index + 1, 3).Value = sop[index - 1].Patient.Dob.ComputeAge();
+                        worksheet.Cell(index + 1, 4).Value = sop[index - 1].Patient.Sex;
+                        worksheet.Cell(index + 1, 5).Value = sop[index - 1].Patient.Dob.ToString("dd-MMM-yyyy");
+                        worksheet.Cell(index + 1, 6).Value = sop[index - 1].Patient.GetAddress();
+                        worksheet.Cell(index + 1, 7).Value = sop[index - 1].Patient.GetPermanentAddress();
+                        worksheet.Cell(index + 1, 8).Value = sop[index - 1].DiseaseReportingUnit.Name;
+                        worksheet.Cell(index + 1, 9).Value = sop[index - 1].PcrResult == "none"? "PROCESSING" : sop[index - 1].PcrResult;
+                        worksheet.Cell(index + 1, 10).Value = sop[index - 1].DatetimeCollection.GetDate("dd-MMM-yyyy hh:mm tt");
+                        worksheet.Cell(index + 1, 11).Value = sop[index - 1].RequestedBy;
+                        worksheet.Cell(index + 1, 12).Value = sop[index - 1].RequesterContact;
+                        worksheet.Cell(index + 1, 13).Value = sop[index - 1].TypeSpecimen;
+                        worksheet.Cell(index + 1, 14).Value = sop[index - 1].DatetimeSpecimenReceipt == default? "PROCESSING" : sop[index - 1].DatetimeSpecimenReceipt.GetDate("dd-MMM-yyyy hh:mm tt");
+                        worksheet.Cell(index + 1, 15).Value = sop[index - 1].DateResult == default ? "PROCESSING" : sop[index - 1].DateResult.GetDate("dd-MMM-yyyy hh:mm tt");
+                    }
+                    foreach(var item in worksheet.ColumnsUsed())
+                    {
+                        item.AdjustToContents();
+                    }
+                    using (var stream = new MemoryStream())
+                    {
+                        workbook.SaveAs(stream);
+                        var content = stream.ToArray();
+                        return File(content, contentType, fileName);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return NotFound();
+            }
+        }
+        /*public IActionResult Released()
+        {
+
+        }
+        public IActionResult Processing()
+        {
+
+        }*/
         #endregion
         #region HELPERS
 

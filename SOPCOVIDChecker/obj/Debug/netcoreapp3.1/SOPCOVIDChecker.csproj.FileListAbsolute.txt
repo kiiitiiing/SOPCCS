@@ -310,8 +310,6 @@ C:\Users\KitingKo\Desktop\DATA BACKUP\PISTING YAWA\SOPCCS\SOPCOVIDChecker\bin\De
 C:\Users\KitingKo\Desktop\DATA BACKUP\PISTING YAWA\SOPCCS\SOPCOVIDChecker\obj\Debug\netcoreapp3.1\SOPCOVIDChecker.csprojAssemblyReference.cache
 C:\Users\KitingKo\Desktop\DATA BACKUP\PISTING YAWA\SOPCCS\SOPCOVIDChecker\obj\Debug\netcoreapp3.1\SOPCOVIDChecker.AssemblyInfoInputs.cache
 C:\Users\KitingKo\Desktop\DATA BACKUP\PISTING YAWA\SOPCCS\SOPCOVIDChecker\obj\Debug\netcoreapp3.1\SOPCOVIDChecker.AssemblyInfo.cs
-C:\Users\KitingKo\Desktop\DATA BACKUP\PISTING YAWA\SOPCCS\SOPCOVIDChecker\obj\Debug\netcoreapp3.1\SOPCOVIDChecker.csproj.CoreCompileInputs.cache
-C:\Users\KitingKo\Desktop\DATA BACKUP\PISTING YAWA\SOPCCS\SOPCOVIDChecker\obj\Debug\netcoreapp3.1\SOPCOVIDChecker.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\KitingKo\Desktop\DATA BACKUP\PISTING YAWA\SOPCCS\SOPCOVIDChecker\obj\Debug\netcoreapp3.1\SOPCOVIDChecker.RazorAssemblyInfo.cache
 C:\Users\KitingKo\Desktop\DATA BACKUP\PISTING YAWA\SOPCCS\SOPCOVIDChecker\obj\Debug\netcoreapp3.1\SOPCOVIDChecker.RazorAssemblyInfo.cs
 C:\Users\KitingKo\Desktop\DATA BACKUP\PISTING YAWA\SOPCCS\SOPCOVIDChecker\obj\Debug\netcoreapp3.1\SOPCOVIDChecker.TagHelpers.input.cache
@@ -375,3 +373,9 @@ C:\Users\KitingKo\Desktop\DATA BACKUP\PISTING YAWA\SOPCCS\SOPCOVIDChecker\obj\De
 C:\Users\KitingKo\Desktop\DATA BACKUP\PISTING YAWA\SOPCCS\SOPCOVIDChecker\obj\Debug\netcoreapp3.1\SOPCOVIDChecker.pdb
 C:\Users\KitingKo\Desktop\DATA BACKUP\PISTING YAWA\SOPCCS\SOPCOVIDChecker\obj\Debug\netcoreapp3.1\SOPCOVIDChecker.genruntimeconfig.cache
 C:\Users\KitingKo\Desktop\DATA BACKUP\PISTING YAWA\SOPCCS\SOPCOVIDChecker\obj\Debug\netcoreapp3.1\Razor\Views\Result\ViewResultForm.cshtml.g.cs
+C:\Users\KitingKo\Desktop\DATA BACKUP\PISTING YAWA\SOPCCS\SOPCOVIDChecker\obj\Debug\netcoreapp3.1\SOPCOVIDChecker.csproj.CoreCompileInputs.cache
+C:\Users\KitingKo\Desktop\DATA BACKUP\PISTING YAWA\SOPCCS\SOPCOVIDChecker\obj\Debug\netcoreapp3.1\SOPCOVIDChecker.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\KitingKo\Desktop\DATA BACKUP\PISTING YAWA\SOPCCS\SOPCOVIDChecker\bin\Debug\netcoreapp3.1\ClosedXML.dll
+C:\Users\KitingKo\Desktop\DATA BACKUP\PISTING YAWA\SOPCCS\SOPCOVIDChecker\bin\Debug\netcoreapp3.1\DocumentFormat.OpenXml.dll
+C:\Users\KitingKo\Desktop\DATA BACKUP\PISTING YAWA\SOPCCS\SOPCOVIDChecker\bin\Debug\netcoreapp3.1\ExcelNumberFormat.dll
+C:\Users\KitingKo\Desktop\DATA BACKUP\PISTING YAWA\SOPCCS\SOPCOVIDChecker\bin\Debug\netcoreapp3.1\System.IO.Packaging.dll

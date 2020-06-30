@@ -254,6 +254,14 @@
                     </select>
                 </div>
             </div>
+            @if (!string.IsNullOrEmpty(ViewBag.SameId))
+            {
+                <div class="row" style="margin-top: 20px;">
+                    <div class="col-sm-12 center" style="align-content:center">
+                        <span class="text-danger text-sm">@ViewBag.SameId</span>
+                    </div>
+                </div>
+            }
             @if (ViewBag.Errors != null)
             {
                 <div class="row" style="margin-top: 20px;">

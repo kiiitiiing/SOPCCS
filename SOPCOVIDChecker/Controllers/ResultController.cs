@@ -113,8 +113,15 @@ namespace SOPCOVIDChecker.Controllers
 
             if (ModelState.IsValid)
             {
-                _context.Update(await GetResultForm(model));
-                await _context.SaveChangesAsync();
+                if(_context.Sopform.Any(x=>x.SampleId == model.SampleID))
+                {
+                    ViewBag.SameId = "Sample ID already exists.";
+                }
+                else
+                {
+                    _context.Update(await GetResultForm(model));
+                    await _context.SaveChangesAsync();
+                }
 
                 
                 return PartialView(sop);

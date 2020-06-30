@@ -20,11 +20,38 @@
                 &nbsp;Results
             </a>
         </li>
-        <li class="nav-item ">
-            <a class="nav-link" asp-area="" asp-controller="Sop" asp-action="DownloadApp">
+        <li class="nav-item dropdown">
+            <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                 <i class="fas fa-download"></i>
-                &nbsp;Download App
+                &nbsp;Download
             </a>
+
+            <ul class="dropdown-menu border-0 shadow">
+                <li>
+                    <a class="dropdown-item" asp-controller="Sop" asp-action="ExportAll">
+                        <i class="fa fa-user-injured"></i>
+                        &nbsp;All Patiemt
+                    </a>
+                </li>@*
+                <li>
+                    <a class="dropdown-item" asp-controller="Sop" asp-action="Released">
+                        <i class="fas fa-ambulance"></i>
+                        &nbsp;Released
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item" asp-controller="Sop" asp-action="Processing">
+                        <i class="fas fa-ambulance"></i>
+                        &nbsp;Processing
+                    </a>
+                </li>*@
+                <li>
+                    <a class="dropdown-item" asp-area="" asp-controller="Sop" asp-action="DownloadApp">
+                        <i class="fas fa-download"></i>
+                        &nbsp;Download App
+                    </a>
+                </li>
+            </ul>
         </li>
     }
 
