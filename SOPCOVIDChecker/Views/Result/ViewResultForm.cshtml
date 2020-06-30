@@ -1,0 +1,257 @@
+﻿@model ResultFormModel
+@{ 
+    var admissionDate = Model.AdmissionDate == null ? "N/A" : ((DateTime)Model.AdmissionDate).ToString("MM/dd/yyyy");
+}
+
+<style>
+    .text-dangers {
+        color: #dc3545 !important;
+    }
+</style>
+
+<div class="modal-content" id="result_modal">
+    <div class="modal-header">
+        <h4>
+            <i class="far fa-file-alt"></i>
+            &nbsp;Result Form
+        </h4>
+        <button type="button" class="close" data-dismiss="modal">
+            <span aria-hidden="true">×</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form asp-action="ResultForm">
+            <input hidden asp-for="Id" />
+            <input hidden asp-for="SopFormId" />
+
+            <table class="table table-bordered">
+                <tbody>
+                    <tr>
+                        <td colspan="17">
+                            <label>Name of Patient: </label><span class="text-dangers">@Model.Name.ToUpper()</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Age:</label>
+                        </td>
+                        <td colspan="2">
+                            <span class="text-dangers">@Model.Age</span>
+                        </td>
+                        <td>
+                            <label>Sex:</label>
+                        </td>
+                        <td colspan="4">
+                            <span class="text-dangers">@Model.Sex</span>
+                        </td>
+                        <td colspan="3">
+                            <label>Date of Birth: </label>
+                        </td>
+                        <td colspan="6">
+                            <span class="text-dangers">@Model.DoB.ToString("dd/MM/yyyy")</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" rowspan="4">
+                            <label>Patient Location:</label><br />
+                            <label>RHU/CHO</label><br />
+                            <label>Hospital/Infirmary</label><br />
+                            <label>Referral:</label>
+                        </td>
+                        <td colspan="5" rowspan="4">
+                            <span class="text-dangers"></span><br />
+                            <span class="text-dangers"></span><br />
+                            <span class="text-dangers"></span><br />
+                            <span class="text-dangers">@Model.Location</span>
+                        </td>
+                        <td colspan="3" rowspan="2">
+                            <label>Sample ID:</label>
+                        </td>
+                        <td colspan="6" rowspan="2">
+                            <span class="text-dangers">@Model.SampleID</span>
+                        </td>
+                    </tr>
+                    <tr>
+                    </tr>
+                    <tr>
+                        <td colspan="3" rowspan="2">
+                            <label>Admission Date:</label>
+                        </td>
+                        <td colspan="6" rowspan="2">
+                            <span class="text-dangers">@admissionDate</span>
+                        </td>
+                    </tr>
+                    <tr>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            <label>Requisitioner:</label>
+                        </td>
+                        <td colspan="5">
+                            <span class="text-dangers">@Model.Requisitioner</span>
+                        </td>
+                        <td rowspan="2">
+                            <label>Address:</label>
+                        </td>
+                        <td colspan="8" rowspan="2" style="white-space: nowrap;">
+                            <span class="text-dangers">@Model.Address</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            <label>Specimen Type:</label>
+                        </td>
+                        <td colspan="5">
+                            <span class="text-dangers">@Model.SpecimenType</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="5">
+                            <label>Date & Time of Specimen Collection:</label>
+                        </td>
+                        <td colspan="3">
+                            <span class="text-dangers">@Model.DTSpecimeCollection.GetDate("dd/MM/yyyy hh:mm tt")</span>
+                        </td>
+                        <td colspan="6">
+                            <label>Date & Time of Specimen Receipt:</label>
+                        </td>
+                        <td colspan="3">
+                            <span class="text-dangers">@Model.DTSpecimenReceipt.GetDate("dd/MM/yyyy hh:mm tt")</span>
+                        </td>
+                    </tr>
+                    <tr></tr>
+                    <tr>
+                        <td colspan="7" rowspan="2">
+                            <label>Date & Time Sample arrived:</label>
+                        </td>
+                        <td colspan="10" rowspan="2">
+                            <span class="text-dangers">@Model.SampleArrived.GetDate("dd/MM/yyyy hh:mm tt")</span>
+                        </td>
+                    </tr>
+                    <tr>
+                    </tr>
+                    <tr>
+                        <td colspan="7" rowspan="2">
+                            <label>Date & Time of Release of Result:</label>
+                        </td>
+                        <td colspan="10" rowspan="2">
+                            <span class="text-dangers">@Model.DTReleaseResult.GetDate("dd/MM/yyyy hh:mm tt")</span>
+                        </td>
+                    </tr>
+                    <tr>
+                    </tr>
+                    <tr>
+                        <td colspan="17" class="text-center">
+                            <label>LABORATORY TEST RESULT</label>
+                        </td>
+                    </tr>
+                    <tr>
+                    </tr>
+                    <tr>
+                        <td colspan="17">
+                            <label>LABORATORY TEST PERFORMED:</label><br />
+                            <span>
+                                SARS-CoV-2 (causative agent of COVID-19) virus
+                                detection by Real-Time Polymerase Chain Reaction
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="17"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" rowspan="2">
+                            <label>TEST RESULT:</label>
+                        </td>
+                        <td colspan="14" rowspan="2">
+                            <span class="text-dangers">@Model.TestResult</span>
+                        </td>
+                    </tr>
+                    <tr>
+                    <tr></tr>
+                    <tr>
+                        <td colspan="17" class="text-center">
+                            <label>INTERPRETATION OF RESULTS WHEN APPROPRIATE</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="8">
+                            FINAL RESULT
+                        </td>
+                        <td colspan="9">
+                            INTERPRETATION
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="8">
+                            SARS-CoV-2 (causative agent of COVID-19) viral RNA detected
+                        </td>
+                        <td colspan="9">
+                            "Positive
+                            for SARS-CoV-2 (causative agent of COVID-19)"
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="8">
+                            SARS-CoV-2 (causative agent of COVID-19) viral RNA not detected
+                        </td>
+                        <td colspan="9">
+                            "Negative
+                            for SARS-CoV-2 (causative agent of COVID-19)"
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="8">
+                            Invalid due to specimen quality
+                        </td>
+                        <td colspan="9">
+                            "Negative for test internal control
+                            (most likely due to poor specimen quality)"
+                        </td>
+                    </tr>
+                    <tr></tr>
+                    <tr>
+                        <td colspan="17" class="text-center">
+                            <label style="font-style:italic">This laboratory result should be interpreted together with the available clinical and epidemiological information.</label>
+                        </td>
+                    </tr>
+                    <tr></tr>
+                    <tr>
+                        <td colspan="17" style=" padding-left: 20px; padding-right: 20px;">
+                            <label>Comments:</label><br />
+                            <textarea class="form-control" rows="3" asp-for="Comments"></textarea>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="row" style="margin-top:15px;">
+                <div class="col-md-4">
+                    <label>Performed:</label><br />
+                    <span class="text-dangers">@Model.PerformedBy</span>
+                </div>
+                <div class="col-md-4">
+                    <label>Verified:</label><br />
+                    <span class="text-dangers">@Model.VerifiedBy</span>
+                </div>
+                <div class="col-md-4">
+                    <label>Approved:</label><br />
+                    <span class="text-dangers">@Model.ApprovedBy</span>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer" style="display: inline-block !important;">
+        <button class="btn btn-sm btn-danger fa-pull-left" type="button" data-dismiss="modal">
+            Cancel
+        </button>
+        <a class="btn btn-sm btn-primary fa-pull-right" asp-action="ResultPdf" asp-route-resultId="@Model.Id" target="_blank">
+            Print
+        </a>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.select2').select2()
+    })  
+</script>

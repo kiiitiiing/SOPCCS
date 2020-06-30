@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\KitingKo\\source\\repos\\SOPCOVIDChecker\\SOPCOVIDChecker\\SOPCOVIDChecker.csproj": {}
+    "C:\\Users\\KitingKo\\Desktop\\DATA BACKUP\\PISTING YAWA\\SOPCCS\\SOPCOVIDChecker\\SOPCOVIDChecker.csproj": {}
   },
   "projects": {
-    "C:\\Users\\KitingKo\\source\\repos\\SOPCOVIDChecker\\SOPCOVIDChecker\\SOPCOVIDChecker.csproj": {
+    "C:\\Users\\KitingKo\\Desktop\\DATA BACKUP\\PISTING YAWA\\SOPCCS\\SOPCOVIDChecker\\SOPCOVIDChecker.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\KitingKo\\source\\repos\\SOPCOVIDChecker\\SOPCOVIDChecker\\SOPCOVIDChecker.csproj",
+        "projectUniqueName": "C:\\Users\\KitingKo\\Desktop\\DATA BACKUP\\PISTING YAWA\\SOPCCS\\SOPCOVIDChecker\\SOPCOVIDChecker.csproj",
         "projectName": "SOPCOVIDChecker",
-        "projectPath": "C:\\Users\\KitingKo\\source\\repos\\SOPCOVIDChecker\\SOPCOVIDChecker\\SOPCOVIDChecker.csproj",
+        "projectPath": "C:\\Users\\KitingKo\\Desktop\\DATA BACKUP\\PISTING YAWA\\SOPCCS\\SOPCOVIDChecker\\SOPCOVIDChecker.csproj",
         "packagesPath": "C:\\Users\\KitingKo\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\KitingKo\\source\\repos\\SOPCOVIDChecker\\SOPCOVIDChecker\\obj\\",
+        "outputPath": "C:\\Users\\KitingKo\\Desktop\\DATA BACKUP\\PISTING YAWA\\SOPCCS\\SOPCOVIDChecker\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\KitingKo\\AppData\\Roaming\\NuGet\\NuGet.Config",

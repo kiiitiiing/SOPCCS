@@ -10,7 +10,8 @@ namespace SOPCOVIDChecker.Models
         public Muncity()
         {
             Facility = new HashSet<Facility>();
-            Patient = new HashSet<Patient>();
+            PatientCurrentMuncityNavigation = new HashSet<Patient>();
+            PatientPermanentMuncityNavigation = new HashSet<Patient>();
             Sopusers = new HashSet<Sopusers>();
         }
 
@@ -30,8 +31,10 @@ namespace SOPCOVIDChecker.Models
 
         [InverseProperty("MuncityNavigation")]
         public virtual ICollection<Facility> Facility { get; set; }
-        [InverseProperty("MuncityNavigation")]
-        public virtual ICollection<Patient> Patient { get; set; }
+        [InverseProperty(nameof(Patient.CurrentMuncityNavigation))]
+        public virtual ICollection<Patient> PatientCurrentMuncityNavigation { get; set; }
+        [InverseProperty(nameof(Patient.PermanentMuncityNavigation))]
+        public virtual ICollection<Patient> PatientPermanentMuncityNavigation { get; set; }
         [InverseProperty("MuncityNavigation")]
         public virtual ICollection<Sopusers> Sopusers { get; set; }
     }

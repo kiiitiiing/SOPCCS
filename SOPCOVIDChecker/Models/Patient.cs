@@ -36,30 +36,60 @@ namespace SOPCOVIDChecker.Models
         [Column("contact_no")]
         [StringLength(50)]
         public string ContactNo { get; set; }
-        [Column("barangay")]
-        public int Barangay { get; set; }
-        [Column("muncity")]
-        public int Muncity { get; set; }
-        [Column("province")]
-        public int Province { get; set; }
+        [Column("current_barangay")]
+        public int CurrentBarangay { get; set; }
+        [Column("current_muncity")]
+        public int CurrentMuncity { get; set; }
+        [Column("current_province")]
+        public int CurrentProvince { get; set; }
+        [Column("current_purok")]
+        [StringLength(100)]
+        public string CurrentPurok { get; set; }
+        [Column("current_sitio")]
+        [StringLength(100)]
+        public string CurrentSitio { get; set; }
         [Required]
-        [Column("address")]
+        [Column("current_address")]
         [StringLength(255)]
-        public string Address { get; set; }
+        public string CurrentAddress { get; set; }
+        [Column("permanent_barangay")]
+        public int? PermanentBarangay { get; set; }
+        [Column("permanent_muncity")]
+        public int? PermanentMuncity { get; set; }
+        [Column("permanent_province")]
+        public int? PermanentProvince { get; set; }
+        [Column("permanent_purok")]
+        [StringLength(100)]
+        public string PermanentPurok { get; set; }
+        [Column("permanent_sitio")]
+        [StringLength(100)]
+        public string PermanentSitio { get; set; }
+        [Column("permanent_address")]
+        [StringLength(255)]
+        public string PermanentAddress { get; set; }
         [Column("created_at")]
         public DateTime CreatedAt { get; set; }
         [Column("updated_at")]
         public DateTime UpdatedAt { get; set; }
 
-        [ForeignKey(nameof(Barangay))]
-        [InverseProperty("Patient")]
-        public virtual Barangay BarangayNavigation { get; set; }
-        [ForeignKey(nameof(Muncity))]
-        [InverseProperty("Patient")]
-        public virtual Muncity MuncityNavigation { get; set; }
-        [ForeignKey(nameof(Province))]
-        [InverseProperty("Patient")]
-        public virtual Province ProvinceNavigation { get; set; }
+        [ForeignKey(nameof(CurrentBarangay))]
+        [InverseProperty(nameof(Barangay.PatientCurrentBarangayNavigation))]
+        public virtual Barangay CurrentBarangayNavigation { get; set; }
+        [ForeignKey(nameof(CurrentMuncity))]
+        [InverseProperty(nameof(Muncity.PatientCurrentMuncityNavigation))]
+        public virtual Muncity CurrentMuncityNavigation { get; set; }
+        [ForeignKey(nameof(CurrentProvince))]
+        [InverseProperty(nameof(Province.PatientCurrentProvinceNavigation))]
+        public virtual Province CurrentProvinceNavigation { get; set; }
+        [ForeignKey(nameof(PermanentBarangay))]
+        [InverseProperty(nameof(Barangay.PatientPermanentBarangayNavigation))]
+        public virtual Barangay PermanentBarangayNavigation { get; set; }
+        [ForeignKey(nameof(PermanentMuncity))]
+        [InverseProperty(nameof(Muncity.PatientPermanentMuncityNavigation))]
+        public virtual Muncity PermanentMuncityNavigation { get; set; }
+        [ForeignKey(nameof(PermanentProvince))]
+        [InverseProperty(nameof(Province.PatientPermanentProvinceNavigation))]
+        public virtual Province PermanentProvinceNavigation { get; set; }
         [InverseProperty("Patient")]
         public virtual ICollection<Sopform> Sopform { get; set; }
     }

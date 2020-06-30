@@ -1,4 +1,4 @@
-﻿@model Patient
+﻿@model AddPatientModel
 
 <div class="modal-content" id="add_patient_modal">
     <div class="modal-header">
@@ -12,8 +12,9 @@
     </div>
     <div class="modal-body">
         <form asp-action="AddPatient">
+            <!-- INFO -->
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-4">
                     <div class="form-group">
                         <label>
                             First name:
@@ -21,9 +22,7 @@
                         <input class="form-control" asp-for="Fname" />
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-4">
                     <div class="form-group">
                         <label>
                             Middle name:
@@ -31,9 +30,7 @@
                         <input class="form-control" asp-for="Mname" />
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-4">
                     <div class="form-group">
                         <label>
                             Last name:
@@ -43,7 +40,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-4">
                     <div class="form-group">
                         <label>
                             Date of Birth:
@@ -51,9 +48,7 @@
                         <input type="date" class="form-control" asp-for="Dob" />
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-4">
                     <div class="form-group">
                         <label>
                             Sex:
@@ -64,9 +59,7 @@
                         </select>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-4">
                     <div class="form-group">
                         <label>
                             Contact Number:
@@ -76,43 +69,147 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-12">
-                    <div class="form-group">
-                        <label>
-                            City/Municipality:
-                        </label>
-                        <select id="muncityFilters"
-                                asp-for="Muncity"
-                                asp-items="ViewBag.Muncity"
-                                title="City/Municipality"
-                                class="form-control col-sm-12"
-                                onchange="MuncityOnChange($(this).val(),'@Url.Action("FilteredBarangay","Helper", new {muncityId=""})');">
-                            <option value="">Select City/Municipaliy</option>
-                        </select>
-                    </div>
+                <div class="col-md-6" id="patient_address">
+                    <!-- CURRENT ADDRESS -->
+                    <fieldset style="border-color:black; width: 100%; border:double; padding:10px">
+                        <legend style="font-size:small;text-align:center">Current Address</legend>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>
+                                        City/Municipality:
+                                    </label>
+                                    <select id="muncityFilters"
+                                            asp-for="CurrentMuncity"
+                                            asp-items="ViewBag.Muncity"
+                                            title="City/Municipality"
+                                            class="form-control col-sm-12"
+                                            onchange="MuncityOnChange($(this).val(),'@Url.Action("FilteredBarangay","Helper", new {muncityId=""})');">
+                                        <option value="">Select City/Municipaliy</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>
+                                        Barangay:
+                                    </label>
+                                    <select class="form-control" asp-for="CurrentBarangay" asp-items="ViewBag.Barangay" id="barangays">
+                                        <option value="" selected hidden>Select Barangay</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>
+                                        Purok:
+                                    </label>
+                                    <input class="form-control" asp-for="CurrentPurok" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>
+                                        Sitio:
+                                    </label>
+                                    <input class="form-control" asp-for="CurrentSitio" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>
+                                        Address:
+                                    </label>
+                                    <textarea class="form-control" asp-for="CurrentAddress" placeholder="Subdivision/Village/Street"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="form-group">
-                        <label>
-                            Barangay:
-                        </label>
-                        <select class="form-control" asp-for="Barangay" asp-items="ViewBag.Barangay" id="barangays" >
-                            <option value="" selected hidden>Select Barangay</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="form-group">
-                        <label>
-                            Address:
-                        </label>
-                        <textarea class="form-control" asp-for="Address" rows="2" placeholder="Sitio/Purok/Subdivision/Village/Street">
+                <!-- ADDRESS -->
+                <div class="col-md-6" id="patient_address">
+                    <!-- PERMANENET ADDRESS -->
+                    <fieldset style="border-color:black; width: 100%; border:double; padding:10px">
+                        <legend style="font-size:small;text-align:center">
+                            Permanent Address
+                        </legend>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <input type="checkbox" id="sameAddress" asp-for="Disabled" onchange="SameAddressToggle($('#permanent_address'));" />
+                                <label for="notavailable">Same as current address</label>
+                            </div>
+                        </div>
+                        <div id="permanent_address">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>
+                                            City/Municipality:
+                                        </label>
+                                        <select id="pmuncityFilters"
+                                                asp-for="PermanentMuncity"
+                                                asp-items="ViewBag.Muncity"
+                                                title="City/Municipality"
+                                                class="form-control col-sm-12"
+                                                onchange="PMuncityOnChange($(this).val(),'@Url.Action("FilteredBarangay","Helper", new {muncityId=""})');">
+                                            <option value="">Select City/Municipaliy</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>
+                                            Barangay:
+                                        </label>
+                                        <select class="form-control" asp-for="PermanentBaragnay" asp-items="ViewBag.Barangay" id="pbarangays">
+                                            <option value="" selected hidden>Select Barangay</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>
+                                            Purok:
+                                        </label>
+                                        <input class="form-control" asp-for="PermanentPurok" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>
+                                            Sitio:
+                                        </label>
+                                        <input class="form-control" asp-for="PermanentSitio" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>
+                                            Address:
+                                        </label>
+                                        <textarea class="form-control" asp-for="PermanentAddress" placeholder="Sitio/Purok/Subdivision/Village/Street">
                         </textarea>
-                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
                 </div>
             </div>
             @if (ViewBag.Errors != null)
@@ -122,14 +219,14 @@
                         <span class="text-danger text-sm">Please input the required fields.</span>
                     </div>
                 </div>
-            @if (!string.IsNullOrEmpty(ViewBag.Duplicate))
-            {
-                <div class="row" style="margin-top: 20px;">
-                    <div class="col-sm-12 center" style="align-content:center">
-                        <span class="text-danger text-sm">@ViewBag.Duplicate.</span>
+                @if (!string.IsNullOrEmpty(ViewBag.Duplicate))
+                {
+                    <div class="row" style="margin-top: 20px;">
+                        <div class="col-sm-12 center" style="align-content:center">
+                            <span class="text-danger text-sm">@ViewBag.Duplicate.</span>
+                        </div>
                     </div>
-                </div>
-            }
+                }
             }
             @if (!string.IsNullOrEmpty(ViewBag.Duplicate))
             {

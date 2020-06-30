@@ -24,6 +24,8 @@ namespace SOPCOVIDChecker.Models
         public int? CreatedBy { get; set; }
         [Column("admission_date", TypeName = "date")]
         public DateTime? AdmissionDate { get; set; }
+        [Column("date_time_sample_arrived")]
+        public DateTime DateTimeSampleArrived { get; set; }
         [Column("created_at")]
         public DateTime CreatedAt { get; set; }
         [Column("updated_at")]

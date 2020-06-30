@@ -88,9 +88,9 @@ namespace SOPCOVIDChecker.Controllers
             if(_context.Sopform.Where(x=>x.DiseaseReportingUnitId == id).Count() > ctr)
             {
                 return _context.Sopform
-                    .Include(x => x.Patient).ThenInclude(x => x.BarangayNavigation)
-                    .Include(x => x.Patient).ThenInclude(x => x.MuncityNavigation)
-                    .Include(x => x.Patient).ThenInclude(x => x.ProvinceNavigation)
+                    .Include(x => x.Patient).ThenInclude(x => x.CurrentBarangayNavigation)
+                    .Include(x => x.Patient).ThenInclude(x => x.CurrentMuncityNavigation)
+                    .Include(x => x.Patient).ThenInclude(x => x.CurrentProvinceNavigation)
                     .Where(x => x.DiseaseReportingUnitId == id)
                     .OrderByDescending(x => x.CreatedAt)
                     .ToListAsync();

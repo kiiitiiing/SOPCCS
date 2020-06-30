@@ -20,9 +20,12 @@ namespace SOPCOVIDChecker.Models.ResultViewModel
         public string SpecimenType { get; set; }
         public string Address { get; set; }
         public DateTime DTSpecimeCollection { get; set; }
+        public string PerformedBy { get; set; }
+        public string VerifiedBy { get; set; }
+        public string ApprovedBy { get; set; }
         [Required]
         public string SampleID { get; set; }
-        public DateTime AdmissionDate { get; set; }
+        public DateTime? AdmissionDate { get; set; }
         [Required]
         public DateTime DTSpecimenReceipt { get; set; }
         [Required]
@@ -36,5 +39,7 @@ namespace SOPCOVIDChecker.Models.ResultViewModel
         public int? Verified { get; set; }
         [Required]
         public int? Approved { get; set; }
+        [Required]
+        public DateTime? SampleArrived { get; set; }
     }
 }

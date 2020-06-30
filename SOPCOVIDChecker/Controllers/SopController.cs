@@ -55,9 +55,9 @@ namespace SOPCOVIDChecker.Controllers
         public ActionResult<CKPatient> CovidKayaTest(int? id)
         {
             var patient = _context.Patient
-                .Include(x=>x.BarangayNavigation)
-                .Include(x => x.MuncityNavigation)
-                .Include(x => x.ProvinceNavigation)
+                .Include(x=>x.CurrentBarangayNavigation)
+                .Include(x => x.CurrentMuncityNavigation)
+                .Include(x => x.CurrentProvinceNavigation)
                 .SingleOrDefault(x=>x.Id == id);
 
             var ckpatient = new CKPatient
@@ -92,14 +92,17 @@ namespace SOPCOVIDChecker.Controllers
         {
             if(!string.IsNullOrEmpty(dr))
             {
-                StartDate = DateTime.ParseExact(dr.Substring(0, dr.IndexOf(" ") + 1).Trim(),@"dd-MM-yyyy", CultureInfo.InvariantCulture);
-                EndDate = DateTime.ParseExact(dr.Substring(dr.LastIndexOf(" ")).Trim(), @"dd-MM-yyyy", CultureInfo.InvariantCulture).AddDays(1).AddSeconds(-1);
+                StartDate = DateTime.ParseExact(dr.Substring(0, dr.IndexOf(" ") + 1).Trim(), "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                EndDate = DateTime.ParseExact(dr.Substring(dr.LastIndexOf(" ")).Trim(), "dd/MM/yyyy", CultureInfo.InvariantCulture).AddDays(1).AddSeconds(-1);
             }
 
             var sop = await _context.Sopform
-                .Include(x => x.Patient).ThenInclude(x => x.BarangayNavigation)
-                .Include(x => x.Patient).ThenInclude(x => x.MuncityNavigation)
-                .Include(x => x.Patient).ThenInclude(x => x.ProvinceNavigation)
+                .Include(x => x.Patient).ThenInclude(x => x.CurrentBarangayNavigation)
+                .Include(x => x.Patient).ThenInclude(x => x.CurrentMuncityNavigation)
+                .Include(x => x.Patient).ThenInclude(x => x.CurrentProvinceNavigation)
+                .Include(x => x.Patient).ThenInclude(x => x.PermanentBarangayNavigation)
+                .Include(x => x.Patient).ThenInclude(x => x.PermanentMuncityNavigation)
+                .Include(x => x.Patient).ThenInclude(x => x.PermanentProvinceNavigation)
                 .Include(x => x.ResultForm)
                 .Include(x => x.DiseaseReportingUnit)
                 .Where(x=>x.CreatedAt >= StartDate && x.CreatedAt <= EndDate)
@@ -116,14 +119,15 @@ namespace SOPCOVIDChecker.Controllers
                     PCRResult = x.PcrResult,
                     DRU = string.IsNullOrEmpty(x.DiseaseReportingUnit.Abbr) ?
                         x.DiseaseReportingUnit.Name : x.DiseaseReportingUnit.Abbr,
-                    Address = x.Patient.GetAddress(),
+                    CAddress = x.Patient.GetAddress(),
+                    PAddress = x.Patient.GetPermanentAddress(),
                     DateTimeCollection = x.DatetimeCollection,
                     RequestedBy = x.RequestedBy,
                     RequesterContact = x.RequesterContact,
                     SpecimenCollection = x.TypeSpecimen,
                     DateTimeReceipt = x.DatetimeSpecimenReceipt,
                     DateResult = x.DateResult,
-                    DateOnset = x.DateOnsetSymptoms,
+                    DateOnset = (DateTime)x.DateOnsetSymptoms,
                     Swabber = x.Swabber
                 })
                 .ToListAsync();
@@ -155,24 +159,30 @@ namespace SOPCOVIDChecker.Controllers
         #region ADD SOP FORM
         public IActionResult AddSopModal(int patientId)
         {
-            return PartialView();
+            var model = new AddSopModel
+            {
+                PatientId = patientId,
+                Disabled = false,
+                DateOnsetSymptoms = null
+            };
+            return PartialView(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddSopModal(Sopform model)
+        public async Task<IActionResult> AddSopModal(AddSopModel model)
         {
             var errors = ModelState.Values.SelectMany(x => x.Errors);
-            model.DateResult = default;
-            model.DatetimeSpecimenReceipt = default;
-            model.CreatedAt = DateTime.Now;
-            model.UpdatedAt = DateTime.Now;
-            model.DiseaseReportingUnitId = UserFacility;
-            model.ResultForm.Add(NewResultForm());
+
+            if(model.Disabled)
+            {
+                ModelState.Remove("DateOnsetSymptoms");
+            }
 
             if (ModelState.IsValid)
             {
-                _context.Add(model);
+                var form = await SetSopform(model);
+                _context.Add(form);
                 await _context.SaveChangesAsync();
 
                 return PartialView(model);
@@ -189,15 +199,15 @@ namespace SOPCOVIDChecker.Controllers
 
             if (!string.IsNullOrEmpty(dr))
             {
-                StartDate = DateTime.ParseExact(dr.Substring(0, dr.IndexOf(" ") + 1).Trim(), @"dd-MM-yyyy", CultureInfo.InvariantCulture);
-                EndDate = DateTime.ParseExact(dr.Substring(dr.LastIndexOf(" ")).Trim(), @"dd-MM-yyyy", CultureInfo.InvariantCulture).AddDays(1).AddSeconds(-1);
+                StartDate = DateTime.ParseExact(dr.Substring(0, dr.IndexOf(" ") + 1).Trim(), "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                EndDate = DateTime.ParseExact(dr.Substring(dr.LastIndexOf(" ")).Trim(), "dd/MM/yyyy", CultureInfo.InvariantCulture).AddDays(1).AddSeconds(-1);
             }
 
             var sop = await _context.ResultForm
                 .Include(x => x.SopForm).ThenInclude(x => x.DiseaseReportingUnit)
-                .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.BarangayNavigation)
-                .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.MuncityNavigation)
-                .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.ProvinceNavigation)
+                .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.CurrentBarangayNavigation)
+                .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.CurrentMuncityNavigation)
+                .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.CurrentProvinceNavigation)
                 .Include(x => x.CreatedByNavigation).ThenInclude(x => x.Facility)
                 .Where(x=>x.UpdatedAt >= StartDate && x.UpdatedAt <= EndDate)
                 .Where(x=>x.SopForm.DiseaseReportingUnitId == UserFacility)
@@ -251,9 +261,9 @@ namespace SOPCOVIDChecker.Controllers
         public async Task<ActionResult<List<ListPatientModel>>> PatientsJson(string q, string dr, string f)
         {
             var patients = await _context.Patient
-                .Include(x => x.BarangayNavigation)
-                .Include(x => x.MuncityNavigation)
-                .Include(x => x.ProvinceNavigation)
+                .Include(x => x.CurrentBarangayNavigation)
+                .Include(x => x.CurrentMuncityNavigation)
+                .Include(x => x.CurrentProvinceNavigation)
                 .OrderByDescending(x => x.CreatedAt)
                 .Select(x => new ListPatientModel
                 {
@@ -263,9 +273,9 @@ namespace SOPCOVIDChecker.Controllers
                     Age = x.Dob.ComputeAge(),
                     Sex = x.Sex,
                     Address = x.GetAddress(),
-                    BarangayId = x.Barangay,
-                    MuncutyId = x.Muncity,
-                    ProvinceId = x.Province
+                    BarangayId = x.CurrentBarangay,
+                    MuncutyId = x.CurrentMuncity,
+                    ProvinceId = x.CurrentProvince
                 })
                 .ToListAsync();
 
@@ -296,19 +306,23 @@ namespace SOPCOVIDChecker.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddPatient(Patient model)
+        public async Task<IActionResult> AddPatient(AddPatientModel model)
         {
-            model.Province = 2;
-            model.CreatedAt = DateTime.Now;
-            model.UpdatedAt = DateTime.Now;
             var errors = ModelState.Values.SelectMany(v => v.Errors);
-            if (model.Muncity != 0)
+            if (model.CurrentMuncity != 0)
             {
                 ViewBag.Muncity = GetMuncities(UserProvince);
             }
-            if (model.Barangay != 0)
+            if (model.CurrentBarangay != 0)
             {
-                ViewBag.Barangay = GetBarangays(model.Muncity, model.Province);
+                ViewBag.Barangay = GetBarangays(model.CurrentMuncity, model.CurrentProvince);
+            }
+            if(model.Disabled)
+            {
+                ModelState.Remove("PermanentBaragnay");
+                ModelState.Remove("PermanentMuncity");
+                ModelState.Remove("PermanentProvince");
+                ModelState.Remove("PermanentAddress");
             }
             if (ModelState.IsValid)
             {
@@ -324,7 +338,8 @@ namespace SOPCOVIDChecker.Controllers
                 }
                 else
                 {
-                    await _context.AddAsync(model);
+                    var patient = await SetPatient(model);
+                    await _context.AddAsync(patient);
                     await _context.SaveChangesAsync();
                     return PartialView(model);
 
@@ -339,17 +354,17 @@ namespace SOPCOVIDChecker.Controllers
         public async Task<IActionResult> EditPatient(int patientId)
         {
             var patient = await _context.Patient
-                .Include(x => x.BarangayNavigation)
-                .Include(x => x.MuncityNavigation)
-                .Include(x => x.ProvinceNavigation)
+                .Include(x => x.CurrentBarangayNavigation)
+                .Include(x => x.CurrentMuncityNavigation)
+                .Include(x => x.CurrentProvinceNavigation)
                 .FirstOrDefaultAsync(x => x.Id == patientId);
-            if (patient.Muncity != 0)
+            if (patient.CurrentMuncity != 0)
             {
-                ViewBag.Muncity = GetMuncities(patient.Province);
+                ViewBag.Muncity = GetMuncities(patient.CurrentProvince);
             }
-            if (patient.Barangay != 0)
+            if (patient.CurrentBarangay != 0)
             {
-                ViewBag.Barangay = GetBarangays(patient.Muncity, patient.Province);
+                ViewBag.Barangay = GetBarangays(patient.CurrentMuncity, patient.CurrentProvince);
             }
             return PartialView(patient);
         }
@@ -380,18 +395,73 @@ namespace SOPCOVIDChecker.Controllers
                 }
             }
             ViewBag.Errors = errors;
-            if (model.Muncity != 0)
+            if (model.CurrentMuncity != 0)
             {
                 ViewBag.Muncity = GetMuncities(UserProvince);
             }
-            if (model.Barangay != 0)
+            if (model.CurrentBarangay != 0)
             {
-                ViewBag.Barangay = GetBarangays(model.Muncity, model.Province);
+                ViewBag.Barangay = GetBarangays(model.CurrentMuncity, model.CurrentProvince);
             }
             return PartialView(model);
         }
         #endregion
         #region HELPERS
+
+        public Task<Patient> SetPatient(AddPatientModel model)
+        {
+            var patient = new Patient
+            {
+                Fname = model.Fname,
+                Mname = model.Mname,
+                Lname = model.Lname,
+                Sex = model.Sex,
+                Dob = model.Dob,
+                ContactNo = model.ContactNo,
+                CurrentBarangay = model.CurrentBarangay,
+                CurrentMuncity = model.CurrentMuncity,
+                CurrentProvince = 2,
+                CurrentPurok = model.CurrentPurok,
+                CurrentSitio = model.CurrentSitio,
+                CurrentAddress = model.CurrentAddress,
+                PermanentBarangay = model.Disabled ? model.CurrentBarangay : model.PermanentBaragnay,
+                PermanentMuncity = model.Disabled ? model.CurrentMuncity : model.PermanentMuncity,
+                PermanentProvince = model.Disabled ? model.CurrentProvince : 2,
+                PermanentAddress = model.Disabled ? model.CurrentAddress : model.PermanentAddress,
+                PermanentPurok = model.Disabled ? model.CurrentPurok : model.PermanentPurok,
+                PermanentSitio = model.Disabled ? model.CurrentSitio : model.PermanentSitio,
+                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now
+            };
+
+            return Task.FromResult(patient);
+        }
+
+        public Task<Sopform> SetSopform(AddSopModel model)
+        {
+            var rf = new List<ResultForm>();
+            rf.Add(NewResultForm());
+            var form = new Sopform
+            {
+                PatientId = model.PatientId,
+                PcrResult = "none",
+                SampleId = "none",
+                DateResult = default,
+                DatetimeSpecimenReceipt = default,
+                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now,
+                DiseaseReportingUnitId = UserFacility,
+                DateOnsetSymptoms = model.DateOnsetSymptoms?? default,
+                DatetimeCollection = model.DTCollection?? default,
+                RequestedBy = model.RequestedBy,
+                RequesterContact = model.RequitionerContactNo,
+                Swabber = model.Swabber,
+                TypeSpecimen = model.SpecimenType,
+                ResultForm = rf
+            };
+
+            return Task.FromResult(form);
+        }
 
         public ResultForm NewResultForm()
         {
@@ -401,6 +471,7 @@ namespace SOPCOVIDChecker.Controllers
                 VerifiedBy = null,
                 ApprovedBy = null,
                 CreatedBy = 10,
+                DateTimeSampleArrived = default,
                 CreatedAt = DateTime.Now,
                 UpdatedAt = DateTime.Now
             };

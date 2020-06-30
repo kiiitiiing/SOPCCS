@@ -65,12 +65,12 @@
                 var newBody = $('.modal-body', output);
                 var errors = newBody.find('span.text-danger').text();
                 console.log(errors);
-                if (errors == '' && contentId != 'result_modal') {
+                if (errors == '') {
                     console.log('wtf')
                     $.when(modals.find('.modal.show').modal('hide')).done(function () {
                         LoadingModal('#' + contentId);
                         if (contentId == 'new_sop') {
-                            Toast("Added new patient")
+                            Toast("Submitted to LAB")
                             var vessel = $('#sop-sop');
                             Window.href = '/SOPCCS/Sop/SopIndex';
                         }
@@ -83,8 +83,8 @@
                             Toast("Added new staff!")
                             var vessel = $('#result-staff');
                             LoadList('', vessel, '/SOPCCS/Result/LabUsersJson');
-                        }  
-                        else if (contentId == 'add_patient_modal' || contentId == 'edit_patient_modal' ) {
+                        }
+                        else if (contentId == 'add_patient_modal' || contentId == 'edit_patient_modal') {
                             Toast("Succes!")
                             var vessel = $('#sop-patients');
                             var c = [];
@@ -95,21 +95,30 @@
                             Toast("Succesfull!")
                             var vessel = $('#admin-rhu');
                             LoadList('', vessel, '/SOPCCS/Admin/RhuJson');
-                        } 
-                        else if (contentId == 'update_facility' || contentId == 'add_facility' ) {
+                        }
+                        else if (contentId == 'update_facility' || contentId == 'add_facility') {
                             Toast("Success!")
                             var vessel = $('#admin-facilities');
                             var c = [];
                             c.push(qFix($('#searchDetail').val()));
                             LoadList(c, vessel, '/SOPCCS/Admin/FacilitiesJson');
                         }
+                        else if (contentId == 'result_modal') {
+                            var vessel = $('#lab-index');
+                            var c = [];
+                            c.push(qFix($('#searchDetail').val()));
+                            LoadList(c, vessel, '/SOPCCS/Result/LabJson');
+                            Toast("Form Complete!")
+                        }
                     });
                 }
-                else if (errors == '' && contentId == 'result_modal') {
-                    Toast("Form Complete!")
-                }
-                else
+                else {
                     content.find('.modal-body').replaceWith(newBody);
+                    var disabled = content.find('#notavailable');
+                    if (disabled.is(':checked') == true) {
+                        content.find('#dateOnset').attr('disabled', true);
+                    }
+                }
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 alert(xhr.responseText);
@@ -130,6 +139,10 @@
         LoadingModal('#' + contentId);
     });
 });
+
+function SameAddressToggle(field) {
+    field.toggle();
+}
 
 function OpenModal(btn) {
     var url = btn.data('url');
@@ -188,6 +201,32 @@ function MuncityOnChange(id,url) {
     }
 }
 
+function PMuncityOnChange(id, url) {
+    var barangaysSelect = $('#pbarangays');
+    if (id != '') {
+        $.when(GetBarangayFiltered(id, url)).done(function (output) {
+            barangaysSelect.empty()
+                .append($('<option>', {
+                    value: '',
+                    text: 'Select Barangay'
+                }));
+            jQuery.each(output, function (i, item) {
+                barangaysSelect.append($('<option>', {
+                    value: item.id,
+                    text: item.description
+                }));
+            });
+        });
+    }
+    else {
+        barangaysSelect.empty()
+            .append($('<option>', {
+                value: '',
+                text: 'Select Barangay'
+            }));
+    }
+}
+
 function ProvinceOnChange(id, url) {
     var MuncitySelect = $('#muncityFilters');
     if (id != '') {
@@ -211,6 +250,24 @@ function ProvinceOnChange(id, url) {
                 value: '',
                 text: 'Select City/Municipality'
             }));
+    }
+}
+
+function SetDisabled(input, attr) {
+    console.log('wtf ' + attr);
+    input.attr(attr);
+}
+
+function CheckboxOnChange() {
+    var inputOnset = $('#dateOnset');
+    if (inputOnset.attr('disabled') == 'disabled') {
+        inputOnset.removeAttr('disabled');
+        inputOnset.attr("data-val-required", true);
+    }
+    else {
+        inputOnset.val('');
+        inputOnset.attr('disabled', true);
+        inputOnset.removeAttr("data-val-required");
     }
 }
 

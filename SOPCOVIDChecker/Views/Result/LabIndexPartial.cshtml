@@ -44,17 +44,34 @@
                     <td class="text-center text-sm">
                         @sop.SampleTaken.GetDate("dd-MMM-yy")
                     </td>
-                    <td class="text-center text-sm">
-                        <button type="button" id="sendToLab"
-                                class="btn btn-sm btn-warning"
-                                data-toggle="ajax-modal"
-                                data-target="#large_modal"
-                                data-action="#large_content"
-                                data-url="@Url.Action("ResultForm","Result", new { resultId = sop.ResultFormId })"
-                                onclick="OpenModal($(this));">
-                            &nbsp;VERIFY
-                        </button>
-                    </td>
+                    @if (sop.Approved)
+                    {
+                        <td class="text-center text-sm">
+                            <button type="button" id="sendToLab"
+                                    class="btn btn-sm btn-success"
+                                    data-toggle="ajax-modal"
+                                    data-target="#large_modal"
+                                    data-action="#large_content"
+                                    data-url="@Url.Action("ViewResultForm","Result", new { resultId = sop.ResultFormId })"
+                                    onclick="OpenModal($(this));">
+                                &nbsp;VIEW
+                            </button>
+                        </td>
+                    }
+                    else
+                    {
+                        <td class="text-center text-sm">
+                            <button type="button" id="sendToLab"
+                                    class="btn btn-sm btn-warning"
+                                    data-toggle="ajax-modal"
+                                    data-target="#large_modal"
+                                    data-action="#large_content"
+                                    data-url="@Url.Action("ResultForm","Result", new { resultId = sop.ResultFormId })"
+                                    onclick="OpenModal($(this));">
+                                &nbsp;VERIFY
+                            </button>
+                        </td>
+                    }
                 </tr>
             }
         </tbody>

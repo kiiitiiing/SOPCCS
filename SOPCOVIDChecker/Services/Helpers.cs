@@ -221,12 +221,29 @@ namespace SOPCOVIDChecker.Services
 
         public static string GetAddress(this Patient patient)
         {
-            string barangay = patient.BarangayNavigation == null ? "" : patient.BarangayNavigation.Description + ", ";
-            string muncity = patient.MuncityNavigation == null ? "" : patient.MuncityNavigation.Description + ", ";
-            string province = patient.ProvinceNavigation == null ? "" : patient.ProvinceNavigation.Description;
+            string barangay = patient.CurrentBarangayNavigation == null ? "" : patient.CurrentBarangayNavigation.Description + ", ";
+            string muncity = patient.CurrentMuncityNavigation == null ? "" : patient.CurrentMuncityNavigation.Description + ", ";
+            string province = patient.CurrentProvinceNavigation == null ? "" : patient.CurrentProvinceNavigation.Description;
+            string address = string.IsNullOrEmpty(patient.CurrentAddress) ? "" : patient.CurrentAddress + ", ";
+            string purok = string.IsNullOrEmpty(patient.CurrentPurok) ? "" : patient.CurrentPurok + ", ";
+            string sitio = string.IsNullOrEmpty(patient.CurrentSitio) ? "" : patient.CurrentSitio + ", ";
 
-            return barangay + muncity + province;
+            return address + sitio + purok + barangay + muncity + province;
         }
+
+        public static string GetPermanentAddress(this Patient patient)
+        {
+            string barangay = patient.PermanentBarangayNavigation == null ? "" : patient.PermanentBarangayNavigation.Description + ", ";
+            string muncity = patient.PermanentMuncityNavigation == null ? "" : patient.PermanentMuncityNavigation.Description + ", ";
+            string province = patient.PermanentProvinceNavigation == null ? "" : patient.PermanentProvinceNavigation.Description;
+            string address = string.IsNullOrEmpty(patient.PermanentAddress) ? "" : patient.PermanentAddress + ", ";
+            string purok = string.IsNullOrEmpty(patient.PermanentPurok) ? "" : patient.PermanentPurok + ", ";
+            string sitio = string.IsNullOrEmpty(patient.PermanentSitio) ? "" : patient.PermanentSitio + ", ";
+
+            return address + sitio + purok + barangay + muncity + province;
+        }
+
+
         public static string GetAddress(this Sopusers patient)
         {
             string barangay = patient.BarangayNavigation == null ? "" : patient.BarangayNavigation.Description + ", ";

@@ -14,7 +14,8 @@ namespace SOPCOVIDChecker.Models.SopViewModel
         public DateTime DateOfBirth { get; set; }
         public string PCRResult { get; set; }
         public string DRU { get; set; }
-        public string Address { get; set; }
+        public string CAddress { get; set; }
+        public string PAddress { get; set; }
         public DateTime DateTimeCollection { get; set; }
         public string RequestedBy { get; set; }
         public string RequesterContact { get; set; }

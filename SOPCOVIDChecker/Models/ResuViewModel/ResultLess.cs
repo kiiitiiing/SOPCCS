@@ -18,5 +18,6 @@ namespace SOPCOVIDChecker.Models.ResuViewModel
         public string Status { get; set; }
         public string Address { get; set; }
         public string Lab { get; set; }
+        public bool Approved { get; set; }
     }
 }

@@ -75,7 +75,7 @@
                             <label>Admission Date:</label>
                         </td>
                         <td colspan="6" rowspan="2">
-                            <span class="text-dangers">N/A</span>
+                            <input class="form-control" type="date" asp-for="AdmissionDate" />
                         </td>
                     </tr>
                     <tr>
@@ -114,6 +114,15 @@
                         </td>
                         <td colspan="3">
                             <input class="form-control" asp-for="DTSpecimenReceipt" />
+                        </td>
+                    </tr>
+                    <tr></tr>
+                    <tr>
+                        <td colspan="7" rowspan="2">
+                            <label>Date & Time Sample arrived:</label>
+                        </td>
+                        <td colspan="10" rowspan="2">
+                            <input class="form-control" asp-for="SampleArrived" />
                         </td>
                     </tr>
                     <tr>
@@ -262,9 +271,6 @@
         <button class="btn btn-sm btn-success fa-pull-right" data-action="large_modal" data-save="modal">
             Submit
         </button>
-        <a class="btn btn-sm btn-primary fa-pull-right" asp-action="ResultPdf" asp-route-resultId="@Model.Id" target="_blank">
-            Print
-        </a>
     </div>
 </div>
 

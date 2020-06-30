@@ -27,9 +27,9 @@ namespace SOPCOVIDChecker.Controllers
         {
             var sop = await _context.ResultForm
                 .Include(x => x.SopForm).ThenInclude(x => x.DiseaseReportingUnit)
-                .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.BarangayNavigation)
-                .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.MuncityNavigation)
-                .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.ProvinceNavigation)
+                .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.CurrentBarangayNavigation)
+                .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.CurrentMuncityNavigation)
+                .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.CurrentProvinceNavigation)
                 .Include(x => x.CreatedByNavigation).ThenInclude(x => x.Facility)
                 .Where(x => x.SopForm.DiseaseReportingUnit.Province == UserProvince)
                 .OrderByDescending(x => x.UpdatedAt)

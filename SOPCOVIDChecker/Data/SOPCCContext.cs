@@ -89,9 +89,13 @@ namespace SOPCOVIDChecker.Data
 
             modelBuilder.Entity<Patient>(entity =>
             {
-                entity.Property(e => e.Address).IsUnicode(false);
-
                 entity.Property(e => e.ContactNo).IsUnicode(false);
+
+                entity.Property(e => e.CurrentAddress).IsUnicode(false);
+
+                entity.Property(e => e.CurrentPurok).IsUnicode(false);
+
+                entity.Property(e => e.CurrentSitio).IsUnicode(false);
 
                 entity.Property(e => e.Fname).IsUnicode(false);
 
@@ -99,27 +103,48 @@ namespace SOPCOVIDChecker.Data
 
                 entity.Property(e => e.Mname).IsUnicode(false);
 
+                entity.Property(e => e.PermanentAddress).IsUnicode(false);
+
+                entity.Property(e => e.PermanentPurok).IsUnicode(false);
+
+                entity.Property(e => e.PermanentSitio).IsUnicode(false);
+
                 entity.Property(e => e.Sex)
                     .IsUnicode(false)
                     .IsFixedLength();
 
-                entity.HasOne(d => d.BarangayNavigation)
-                    .WithMany(p => p.Patient)
-                    .HasForeignKey(d => d.Barangay)
+                entity.HasOne(d => d.CurrentBarangayNavigation)
+                    .WithMany(p => p.PatientCurrentBarangayNavigation)
+                    .HasForeignKey(d => d.CurrentBarangay)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Patient_Barangay");
 
-                entity.HasOne(d => d.MuncityNavigation)
-                    .WithMany(p => p.Patient)
-                    .HasForeignKey(d => d.Muncity)
+                entity.HasOne(d => d.CurrentMuncityNavigation)
+                    .WithMany(p => p.PatientCurrentMuncityNavigation)
+                    .HasForeignKey(d => d.CurrentMuncity)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Patient_Muncity");
 
-                entity.HasOne(d => d.ProvinceNavigation)
-                    .WithMany(p => p.Patient)
-                    .HasForeignKey(d => d.Province)
+                entity.HasOne(d => d.CurrentProvinceNavigation)
+                    .WithMany(p => p.PatientCurrentProvinceNavigation)
+                    .HasForeignKey(d => d.CurrentProvince)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Patient_Province");
+
+                entity.HasOne(d => d.PermanentBarangayNavigation)
+                    .WithMany(p => p.PatientPermanentBarangayNavigation)
+                    .HasForeignKey(d => d.PermanentBarangay)
+                    .HasConstraintName("FK_Patient_Permanent_Barangay");
+
+                entity.HasOne(d => d.PermanentMuncityNavigation)
+                    .WithMany(p => p.PatientPermanentMuncityNavigation)
+                    .HasForeignKey(d => d.PermanentMuncity)
+                    .HasConstraintName("FK_Patient_Permanent_Muncity");
+
+                entity.HasOne(d => d.PermanentProvinceNavigation)
+                    .WithMany(p => p.PatientPermanentProvinceNavigation)
+                    .HasForeignKey(d => d.PermanentProvince)
+                    .HasConstraintName("FK_Patient_Permanent_Province");
             });
 
             modelBuilder.Entity<Province>(entity =>

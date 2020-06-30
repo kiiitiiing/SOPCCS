@@ -14,7 +14,7 @@
         <form asp-action="EditPatient">
             <input hidden asp-for="Id" />
             <input hidden asp-for="CreatedAt" />
-            <input hidden asp-for="Province" />
+            <input hidden asp-for="CurrentProvince" />
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group">
@@ -78,46 +78,94 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="form-group">
-                        <label>
-                            City/Municipality:
-                        </label>
-                        <select id="muncityFilters"
-                                asp-for="Muncity"
-                                asp-items="ViewBag.Muncity"
-                                title="City/Municipality"
-                                class="form-control col-sm-12"
-                                onchange="MuncityOnChange($(this).val(),'@Url.Action("FilteredBarangay","Helper", new {muncityId=""})');">
-                            <option value="">Select City/Municipaliy</option>
-                        </select>
+            <!-- CURRENT ADDRESS -->
+            <fieldset style="border-color:black; width: 100%; border:double; padding:10px">
+                <legend style="font-size:small;text-align:center">Current Address</legend>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>
+                                City/Municipality:
+                            </label>
+                            <select id="muncityFilters"
+                                    asp-for="CurrentMuncity"
+                                    asp-items="ViewBag.Muncity"
+                                    title="City/Municipality"
+                                    class="form-control col-sm-12"
+                                    onchange="MuncityOnChange($(this).val(),'@Url.Action("FilteredBarangay","Helper", new {muncityId=""})');">
+                                <option value="">Select City/Municipaliy</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="form-group">
-                        <label>
-                            Barangay:
-                        </label>
-                        <select class="form-control" asp-for="Barangay" asp-items="ViewBag.Barangay" id="barangays">
-                            <option value="" selected hidden>Select Barangay</option>
-                        </select>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>
+                                Barangay:
+                            </label>
+                            <select class="form-control" asp-for="CurrentBarangay" asp-items="ViewBag.Barangay" id="barangays">
+                                <option value="" selected hidden>Select Barangay</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="form-group">
-                        <label>
-                            Address:
-                        </label>
-                        <textarea class="form-control" asp-for="Address" placeholder="Sitio/Purok/Subdivision/Village/Street">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>
+                                Address:
+                            </label>
+                            <textarea class="form-control" asp-for="CurrentAddress" placeholder="Sitio/Purok/Subdivision/Village/Street">
                         </textarea>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </fieldset>
+            <!-- PERMANENET ADDRESS -->
+            <fieldset style="border-color:black; width: 100%; border:double; padding:10px">
+                <legend style="font-size:small;text-align:center">Permanent Address</legend>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>
+                                City/Municipality:
+                            </label>
+                            <select id="pmuncityFilters"
+                                    asp-for="CurrentMuncity"
+                                    asp-items="ViewBag.Muncity"
+                                    title="City/Municipality"
+                                    class="form-control col-sm-12"
+                                    onchange="PMuncityOnChange($(this).val(),'@Url.Action("FilteredBarangay","Helper", new {muncityId=""})');">
+                                <option value="">Select City/Municipaliy</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>
+                                Barangay:
+                            </label>
+                            <select class="form-control" asp-for="CurrentBarangay" asp-items="ViewBag.Barangay" id="pbarangays">
+                                <option value="" selected hidden>Select Barangay</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>
+                                Address:
+                            </label>
+                            <textarea class="form-control" asp-for="CurrentAddress" placeholder="Sitio/Purok/Subdivision/Village/Street">
+                        </textarea>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
             @if (ViewBag.Errors != null)
             {
                 <div class="row" style="margin-top: 20px;">

@@ -1,4 +1,7 @@
-﻿@model Sopform
+﻿@model AddSopModel
+@{
+    var disabled = Model.Disabled ? "disabled" : "";
+}
 
 <div class="modal-content" id="new_sop">
     <div class="modal-header">
@@ -12,8 +15,6 @@
     </div>
     <div class="modal-body">
         <form asp-action="AddSopModal">
-            <input hidden asp-for="PcrResult" value="none" />
-            <input hidden asp-for="SampleId" value="none" />
             <input hidden asp-for="PatientId" />
             <div class="row">
                 <div class="col-sm-12">
@@ -22,11 +23,19 @@
                 </div>
                 <div class="col-sm-12">
                     <label>Contact number:</label>
-                    <input type="text" class="form-control" asp-for="RequesterContact" />
+                    <input type="text" class="form-control" asp-for="RequitionerContactNo" />
                 </div>
-                <div class="col-sm-12">
+            </div>
+            <div class="row">
+                <div class="col-sm-9">
                     <label>Date Onset of Symptoms:</label>
-                    <input type="date" class="form-control" asp-for="DateOnsetSymptoms" />
+                    <input type="date" class="form-control" asp-for="DateOnsetSymptoms" id="dateOnset" onload="SetDisabled($(this),'@disabled');"/>
+                </div>
+                <div class="col-sm-3">
+                    <div style="margin-top:30px;">
+                        <input type="checkbox" id="notavailable" asp-for="Disabled" onchange="CheckboxOnChange();" />
+                        <label for="notavailable">N/A</label>
+                    </div>
                 </div>
             </div>
             <div class="row">
@@ -36,11 +45,11 @@
                 </div>
                 <div class="col-sm-12">
                     <label>Date & Time of Collection:</label>
-                    <input type="datetime-local" class="form-control" asp-for="DatetimeCollection" />
+                    <input type="datetime-local" class="form-control" asp-for="DTCollection" />
                 </div>
                 <div class="col-sm-12">
                     <label>Type of Specimen &amp; Collection Medium:</label>
-                    <select type="text" class="form-control" asp-for="TypeSpecimen">
+                    <select type="text" class="form-control" asp-for="SpecimenType">
                         <option value="" selected hidden>Select Type</option>
                         <option value="NPS IN UTM">NPS IN UTM</option>
                         <option value="OPS IN UTM">OPS IN UTM</option>
@@ -71,6 +80,7 @@
 
 <script>
     $(function () {
-        $('.select2').select2()
+        console.log($('#dateOnset'));
+        $('.select2').select2();
     })
 </script>

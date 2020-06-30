@@ -39,9 +39,9 @@ namespace SOPCOVIDChecker.Controllers
         {
             var form = await _context.ResultForm
                 .Include(x => x.SopForm).ThenInclude(x => x.DiseaseReportingUnit)
-                .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.BarangayNavigation)
-                .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.MuncityNavigation)
-                .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.ProvinceNavigation)
+                .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.CurrentBarangayNavigation)
+                .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.CurrentMuncityNavigation)
+                .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.CurrentProvinceNavigation)
                 .Include(x => x.CreatedByNavigation).ThenInclude(x => x.Facility)
                 .Where(x => x.CreatedBy != null)
                 .OrderByDescending(x => x.UpdatedAt)
@@ -54,7 +54,8 @@ namespace SOPCOVIDChecker.Controllers
                     DRU = x.SopForm.DiseaseReportingUnit.Name,
                     PCRResult = x.SopForm.PcrResult,
                     SampleId = x.SopForm.SampleId,
-                    SampleTaken = x.SopForm.DatetimeCollection
+                    SampleTaken = x.SopForm.DatetimeCollection,
+                    Approved = x.ApprovedBy != null
                 })
                 .ToListAsync();
 
@@ -74,7 +75,18 @@ namespace SOPCOVIDChecker.Controllers
             return PartialView(model);
         }
         #endregion
+        #region VIEW RESULT FORM
+        public async Task<IActionResult> ViewResultForm(int resultId)
+        {
+            var sop = await SetResultForm(resultId);
 
+            ViewBag.Perform = await GetStaff("perform");
+            ViewBag.Verify = await GetStaff("verify");
+            ViewBag.Approve = await GetStaff("approve");
+
+            return PartialView(sop);
+        }
+        #endregion
         #region RESULT FORM
         public async  Task<IActionResult> ResultForm(int resultId)
         {
@@ -177,9 +189,9 @@ namespace SOPCOVIDChecker.Controllers
         {
             var result = await _context.ResultForm
                 .Include(x => x.SopForm).ThenInclude(x => x.Patient)
-                .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.BarangayNavigation)
-                .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.MuncityNavigation)
-                .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.ProvinceNavigation)
+                .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.CurrentBarangayNavigation)
+                .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.CurrentMuncityNavigation)
+                .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.CurrentProvinceNavigation)
                 .Include(x => x.SopForm).ThenInclude(x => x.DiseaseReportingUnit)
                 .Include(x => x.PerformedByNavigation)
                 .Include(x => x.VerifiedByNavigation)
@@ -220,6 +232,7 @@ namespace SOPCOVIDChecker.Controllers
         {
             var pdf = new StringBuilder();
             var sex = model.SopForm.Patient.Sex[0].ToString().ToUpper();
+            var admissionDate = model.AdmissionDate == null ? "N/A" : ((DateTime)model.AdmissionDate).ToString("MM/dd/yyyy");
             #region opening Html & divRow
             var openingHtml = "<html>" +
                                 "<head>" +
@@ -286,7 +299,7 @@ namespace SOPCOVIDChecker.Controllers
                           "</tr>" +
                            "<tr>" +
                                 "<td class='BBottom' rowspan='2'><b>Age: </b>  &nbsp; &nbsp;<span style='color: #dc3545;'>" + model.SopForm.Patient.Dob.ComputeAge() + "</span></td>" + //age
-                                "<td colspan='2' rowspan='2'class='BBottom BRight'> &nbsp; &nbsp; &nbsp; &nbsp;<b>Sex: </b>&nbsp; &nbsp;" + sex + "</td>" +//Sex
+                                "<td colspan='2' rowspan='2'class='BBottom BRight'> &nbsp; &nbsp; &nbsp; &nbsp;<b>Sex: </b>&nbsp; &nbsp;<span style='color: #dc3545;'>" + sex + "</span></td>" +//Sex
                                 "<td><b> Date of Birth: </b></td>" +
                                 "<td colspan='2' style='color: #dc3545;'>" + model.SopForm.Patient.Dob.GetDate("dd/MM/yyyy") + "</td>" + //Date of Birth
                           "</tr>" +
@@ -308,7 +321,7 @@ namespace SOPCOVIDChecker.Controllers
                             "<td>Hospital/Infirmary</td>" +
                             "<td colspan='2' rowspan='2' class='BRight BBottom' style='color: #dc3545;'> " + model.SopForm.DiseaseReportingUnit.Name+" </td>" +// Hospital/Infirmary/referral
                             "<td colspan='1'><b>Admission Date</b></td>" +
-                            "<td colspan='2' style='color: #dc3545;'> " + model.AdmissionDate.GetDate("dd/MM/yyyy")+" </td>" + //Admission Date
+                            "<td colspan='2' style='color: #dc3545;'> " + admissionDate + " </td>" + //Admission Date
                           "</tr>" +
                            "<tr>" +
                             "<td class='BBottom'>Referral:</td>" +
@@ -464,11 +477,13 @@ namespace SOPCOVIDChecker.Controllers
         public async Task<ResultFormModel> SetResultForm(int resultId)
         {
             var model = await _context.ResultForm
-                .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.BarangayNavigation)
-                .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.MuncityNavigation)
-                .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.ProvinceNavigation)
+                .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.CurrentBarangayNavigation)
+                .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.CurrentMuncityNavigation)
+                .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.CurrentProvinceNavigation)
                 .Include(x => x.SopForm).ThenInclude(x => x.DiseaseReportingUnit)
                 .Include(x=>x.PerformedByNavigation)
+                .Include(x=>x.VerifiedByNavigation)
+                .Include(x => x.ApprovedByNavigation)
                 .SingleOrDefaultAsync(x => x.Id == resultId);
 
             var rfm = new ResultFormModel
@@ -483,6 +498,8 @@ namespace SOPCOVIDChecker.Controllers
                 Requisitioner = model.SopForm.RequestedBy,
                 SpecimenType = model.SopForm.TypeSpecimen,
                 Location = model.SopForm.DiseaseReportingUnit.Name,
+                AdmissionDate = model.AdmissionDate,
+                SampleArrived = model.DateTimeSampleArrived == default ? null : (DateTime?)model.DateTimeSampleArrived,
                 DTSpecimeCollection = model.SopForm.DatetimeCollection,
                 DTSpecimenReceipt = model.SopForm.DatetimeSpecimenReceipt == default ? DateTime.Now.RemoveSeconds() : model.SopForm.DatetimeSpecimenReceipt.RemoveSeconds(),
                 DTReleaseResult = model.SopForm.DateResult == default ? DateTime.Now.RemoveSeconds() : model.SopForm.DateResult.RemoveSeconds(),
@@ -491,7 +508,10 @@ namespace SOPCOVIDChecker.Controllers
                 Performed = model.PerformedBy,
                 Verified = model.VerifiedBy,
                 Approved = model.ApprovedBy,
-                Comments = model.Comments
+                Comments = model.Comments,
+                PerformedBy = model.PerformedByNavigation == null ? "" : model.PerformedByNavigation.GetFullName(),
+                VerifiedBy = model.VerifiedByNavigation == null ? "" : model.VerifiedByNavigation.GetFullName(),
+                ApprovedBy = model.ApprovedByNavigation == null ? "" : model.ApprovedByNavigation.GetFullName()
             };
 
             return rfm;
@@ -500,9 +520,9 @@ namespace SOPCOVIDChecker.Controllers
         public async Task<ResultForm> GetResultForm(ResultFormModel model)
         {
             var resultForm = await _context.ResultForm
-                .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.BarangayNavigation)
-                .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.MuncityNavigation)
-                .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.ProvinceNavigation)
+                .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.CurrentBarangayNavigation)
+                .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.CurrentMuncityNavigation)
+                .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.CurrentProvinceNavigation)
                 .Include(x => x.SopForm).ThenInclude(x => x.DiseaseReportingUnit)
                 .Include(x => x.CreatedByNavigation).ThenInclude(x => x.Facility)
                 .SingleOrDefaultAsync(x => x.Id == model.Id);
@@ -518,6 +538,7 @@ namespace SOPCOVIDChecker.Controllers
             resultForm.ApprovedBy = model.Approved;
             resultForm.UpdatedAt = DateTime.Now;
             resultForm.SopForm.UpdatedAt = DateTime.Now;
+            resultForm.DateTimeSampleArrived = (DateTime)model.SampleArrived;
 
             return resultForm;
         }

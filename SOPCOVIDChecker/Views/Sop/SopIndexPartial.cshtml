@@ -21,7 +21,10 @@
                     DISEASE-REPORTING UNIT
                 </th>
                 <th class="text-center text-sm">
-                    ADDRESS
+                    CURRENT ADDRESS
+                </th>
+                <th class="text-center text-sm">
+                    PERMANENT ADDRESS
                 </th>
                 <th class="text-center text-sm">
                     DATE ONSET SYMPTOMS
@@ -46,47 +49,50 @@
         <tbody>
             @foreach (var sop in Model)
             {
-                <tr>
-                    <td class="text-center text-sm">
-                        @sop.PatientName
-                    </td>
-                    <td class="text-center text-sm">
-                        @sop.Age
-                    </td>
-                    <td class="text-center text-sm">
-                        @sop.Sex
-                    </td>
-                    <td class="text-center text-sm">
-                        @sop.DateOfBirth.GetDate("dd-MMM-yy")
-                    </td>
-                    <td class="text-center text-sm">
-                        @sop.DRU
-                    </td>
-                    <td class="text-center text-sm">
-                        @sop.Address
-                    </td>
-                    <td class="text-center text-sm">
-                        @sop.DateOnset.GetDate("dd-MMM-yy")
-                    </td>
-                    <td class="text-center text-sm">
-                        @sop.DateTimeCollection.GetDate("dd-MMM-yy")
-                    </td>
-                    <td class="text-center text-sm">
-                        @sop.DateTimeCollection.GetDate("h:mm tt")
-                    </td>
-                    <td class="text-center text-sm">
-                        @sop.Swabber
-                    </td>
-                    <td class="text-center text-sm">
-                        @sop.RequestedBy
-                    </td>
-                    <td class="text-center text-sm">
-                        @sop.RequesterContact
-                    </td>
-                    <td class="text-center text-sm">
-                        @sop.SpecimenCollection
-                    </td>
-                </tr>
+            <tr>
+                <td class="text-center text-sm">
+                    @sop.PatientName
+                </td>
+                <td class="text-center text-sm">
+                    @sop.Age
+                </td>
+                <td class="text-center text-sm">
+                    @sop.Sex
+                </td>
+                <td class="text-center text-sm">
+                    @sop.DateOfBirth.GetDate("dd-MMM-yy")
+                </td>
+                <td class="text-center text-sm">
+                    @sop.DRU
+                </td>
+                <td class="text-center text-sm">
+                    @sop.CAddress
+                </td>
+                <td class="text-center text-sm">
+                    @sop.PAddress
+                </td>
+                <td class="text-center text-sm">
+                    @sop.DateOnset.GetDate("dd-MMM-yy")
+                </td>
+                <td class="text-center text-sm">
+                    @sop.DateTimeCollection.GetDate("dd-MMM-yy")
+                </td>
+                <td class="text-center text-sm">
+                    @sop.DateTimeCollection.GetDate("h:mm tt")
+                </td>
+                <td class="text-center text-sm">
+                    @sop.Swabber
+                </td>
+                <td class="text-center text-sm">
+                    @sop.RequestedBy
+                </td>
+                <td class="text-center text-sm">
+                    @sop.RequesterContact
+                </td>
+                <td class="text-center text-sm">
+                    @sop.SpecimenCollection
+                </td>
+            </tr>
             }
         </tbody>
     </table>
