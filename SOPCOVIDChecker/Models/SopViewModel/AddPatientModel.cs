@@ -48,12 +48,12 @@ namespace SOPCOVIDChecker.Models.SopViewModel
         public string CurrentAddress { get; set; }
         [Required]
         [Column("permanent_baragnay")]
-        public int? PermanentBaragnay { get; set; }
+        public int PermanentBaragnay { get; set; }
         [Required]
         [Column("permanent_muncity")]
-        public int? PermanentMuncity { get; set; }
+        public int PermanentMuncity { get; set; }
         [Column("permanent_province")]
-        public int? PermanentProvince { get; set; }
+        public int PermanentProvince { get; set; }
         [Column("permanent_purok")]
         [StringLength(100)]
         public string PermanentPurok { get; set; }

@@ -53,17 +53,18 @@ namespace SOPCOVIDChecker.Models
         [StringLength(255)]
         public string CurrentAddress { get; set; }
         [Column("permanent_barangay")]
-        public int? PermanentBarangay { get; set; }
+        public int PermanentBarangay { get; set; }
         [Column("permanent_muncity")]
-        public int? PermanentMuncity { get; set; }
+        public int PermanentMuncity { get; set; }
         [Column("permanent_province")]
-        public int? PermanentProvince { get; set; }
+        public int PermanentProvince { get; set; }
         [Column("permanent_purok")]
         [StringLength(100)]
         public string PermanentPurok { get; set; }
         [Column("permanent_sitio")]
         [StringLength(100)]
         public string PermanentSitio { get; set; }
+        [Required]
         [Column("permanent_address")]
         [StringLength(255)]
         public string PermanentAddress { get; set; }

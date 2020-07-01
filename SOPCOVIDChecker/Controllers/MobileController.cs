@@ -94,30 +94,6 @@ namespace SOPCOVIDChecker.Controllers
                     .Where(x => x.DiseaseReportingUnitId == id)
                     .OrderByDescending(x => x.CreatedAt)
                     .ToListAsync();
-                /*return _context.Sopform.Join
-                     (
-                     _context.Patient,
-                     sopform => sopform.PatientId,
-                     patient => patient.Id, (sopform, patient) => new { sopform, patient })
-                     .Select(sopform => new Sopform
-                     {
-                         Id = sopform.sopform.Id,
-                         SampleId = sopform.sopform.SampleId,
-                         PcrResult = sopform.sopform.PcrResult,
-                         DiseaseReportingUnitId = sopform.sopform.DiseaseReportingUnitId,
-                         DatetimeCollection = sopform.sopform.DatetimeCollection,
-                         RequestedBy = sopform.sopform.RequestedBy,
-                         RequesterContact = sopform.sopform.RequesterContact,
-                         TypeSpecimen = sopform.sopform.TypeSpecimen,
-                         DatetimeSpecimenReceipt = sopform.sopform.DatetimeSpecimenReceipt,
-                         DateResult = sopform.sopform.DateResult,
-                         PatientId = sopform.sopform.PatientId,
-                         CreatedAt = sopform.sopform.CreatedAt,
-                         UpdatedAt = sopform.sopform.UpdatedAt,
-                         Patient = sopform.patient
-                     })
-                     .Where(x => x.DiseaseReportingUnit.FacilityId == id)
-                     .ToListAsync();*/
             }
             else
             {

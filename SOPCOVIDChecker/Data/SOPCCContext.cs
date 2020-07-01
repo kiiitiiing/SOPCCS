@@ -134,16 +134,19 @@ namespace SOPCOVIDChecker.Data
                 entity.HasOne(d => d.PermanentBarangayNavigation)
                     .WithMany(p => p.PatientPermanentBarangayNavigation)
                     .HasForeignKey(d => d.PermanentBarangay)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Patient_Permanent_Barangay");
 
                 entity.HasOne(d => d.PermanentMuncityNavigation)
                     .WithMany(p => p.PatientPermanentMuncityNavigation)
                     .HasForeignKey(d => d.PermanentMuncity)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Patient_Permanent_Muncity");
 
                 entity.HasOne(d => d.PermanentProvinceNavigation)
                     .WithMany(p => p.PatientPermanentProvinceNavigation)
                     .HasForeignKey(d => d.PermanentProvince)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Patient_Permanent_Province");
             });
 

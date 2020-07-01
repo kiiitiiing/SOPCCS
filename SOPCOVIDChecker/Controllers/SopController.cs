@@ -129,7 +129,7 @@ namespace SOPCOVIDChecker.Controllers
                     SpecimenCollection = x.TypeSpecimen,
                     DateTimeReceipt = x.DatetimeSpecimenReceipt,
                     DateResult = x.DateResult,
-                    DateOnset = (DateTime)x.DateOnsetSymptoms,
+                    DateOnset = x.DateOnsetSymptoms,
                     Swabber = x.Swabber,
                     ContactNo = x.Patient.ContactNo
                 })
@@ -513,7 +513,7 @@ namespace SOPCOVIDChecker.Controllers
                 CurrentAddress = model.CurrentAddress,
                 PermanentBarangay = model.Disabled ? model.CurrentBarangay : model.PermanentBaragnay,
                 PermanentMuncity = model.Disabled ? model.CurrentMuncity : model.PermanentMuncity,
-                PermanentProvince = model.Disabled ? model.CurrentProvince : 2,
+                PermanentProvince = 2,
                 PermanentAddress = model.Disabled ? model.CurrentAddress : model.PermanentAddress,
                 PermanentPurok = model.Disabled ? model.CurrentPurok : model.PermanentPurok,
                 PermanentSitio = model.Disabled ? model.CurrentSitio : model.PermanentSitio,
