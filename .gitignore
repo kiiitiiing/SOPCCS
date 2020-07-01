@@ -1,4 +1,4 @@
 .vs/
-SOPCOVIDChecker/Controllers/MobileController.cs
-SOPCOVIDChecker/Models/MobileModels/
+#SOPCOVIDChecker/Controllers/MobileController.cs
+#SOPCOVIDChecker/Models/MobileModels/
 SOPCOVIDChecker/appsettings.json
