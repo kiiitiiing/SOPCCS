@@ -20,8 +20,9 @@ namespace SOPCOVIDChecker.Models.SopViewModel
         [Column("lname")]
         [StringLength(70)]
         public string Lname { get; set; }
+        [Required]
         [Column("dob", TypeName = "date")]
-        public DateTime Dob { get; set; }
+        public DateTime? Dob { get; set; }
         [Required]
         [Column("sex")]
         [StringLength(255)]

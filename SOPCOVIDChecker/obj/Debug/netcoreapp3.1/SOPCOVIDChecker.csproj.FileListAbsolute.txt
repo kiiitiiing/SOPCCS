@@ -379,3 +379,4 @@ C:\Users\KitingKo\Desktop\DATA BACKUP\PISTING YAWA\SOPCCS\SOPCOVIDChecker\bin\De
 C:\Users\KitingKo\Desktop\DATA BACKUP\PISTING YAWA\SOPCCS\SOPCOVIDChecker\bin\Debug\netcoreapp3.1\DocumentFormat.OpenXml.dll
 C:\Users\KitingKo\Desktop\DATA BACKUP\PISTING YAWA\SOPCCS\SOPCOVIDChecker\bin\Debug\netcoreapp3.1\ExcelNumberFormat.dll
 C:\Users\KitingKo\Desktop\DATA BACKUP\PISTING YAWA\SOPCCS\SOPCOVIDChecker\bin\Debug\netcoreapp3.1\System.IO.Packaging.dll
+C:\Users\KitingKo\Desktop\DATA BACKUP\PISTING YAWA\SOPCCS\SOPCOVIDChecker\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_ScriptsPartial.cshtml.g.cs

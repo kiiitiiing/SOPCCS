@@ -1,4 +1,8 @@
 ﻿@model AddPatientModel
+@{
+    var disabled = Model.Disabled ? "true" : "";
+}
+
 
 <div class="modal-content" id="add_patient_modal">
     <div class="modal-header">
@@ -143,7 +147,7 @@
                         </legend>
                         <div class="row">
                             <div class="col-md-12">
-                                <input type="checkbox" id="sameAddress" asp-for="Disabled" onchange="SameAddressToggle($('#permanent_address'));" />
+                                <input type="checkbox" id="sameAddress" asp-for="Disabled" onchange="SameAddressToggle($('#permanent_address'));" onload="DisabledAddress($('#permanent_address'),'@disabled');"/>
                                 <label for="notavailable">Same as current address</label>
                             </div>
                         </div>

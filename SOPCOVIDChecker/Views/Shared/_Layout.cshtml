@@ -43,6 +43,8 @@
     <script type="text/javascript" src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
 </head>
 <body>
+
+    @await Html.PartialAsync("~/Views/Shared/_ScriptsPartial.cshtml")
     <header>
         @if (User.Identity.IsAuthenticated)
         {

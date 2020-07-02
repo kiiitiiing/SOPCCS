@@ -38,7 +38,7 @@ namespace SOPCOVIDChecker.Controllers
         {
             var path = Path.Combine(
                      Directory.GetCurrentDirectory(),
-                     "wwwroot", "assets","dist","apk", "com.companyname.sopcc.apk");
+                     "wwwroot", "assets","dist","apk", "com.companyname.sopcc-armeabi-v7a.apk");
 
             var memory = new MemoryStream();
             using (var stream = new FileStream(path, FileMode.Open))
@@ -304,7 +304,11 @@ namespace SOPCOVIDChecker.Controllers
         public IActionResult AddPatient()
         {
             ViewBag.Muncity = GetMuncities(UserProvince);
-            return PartialView();
+            var model = new AddPatientModel
+            {
+                Disabled = false
+            };
+            return PartialView(model);
         }
 
         [HttpPost]
@@ -348,6 +352,7 @@ namespace SOPCOVIDChecker.Controllers
 
                 }
             }
+
             ViewBag.Errors = errors;
             return PartialView(model);
         }
@@ -503,7 +508,7 @@ namespace SOPCOVIDChecker.Controllers
                 Mname = model.Mname,
                 Lname = model.Lname,
                 Sex = model.Sex,
-                Dob = model.Dob,
+                Dob = (DateTime)model.Dob,
                 ContactNo = model.ContactNo,
                 CurrentBarangay = model.CurrentBarangay,
                 CurrentMuncity = model.CurrentMuncity,

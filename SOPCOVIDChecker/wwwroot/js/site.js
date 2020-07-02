@@ -1,4 +1,4 @@
-﻿$(function () {
+﻿/*$(function () {
     $('button[data-toggle="ajax-modal"]').click(function (event) {
         var url = $(this).data('url');
         var target = $(this).data('target');
@@ -480,4 +480,4 @@ function CallPartialView(data, controller, action) {
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify(data)
     });
-}
+}*/
