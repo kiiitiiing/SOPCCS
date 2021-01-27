@@ -1,89 +1,68 @@
-﻿@model List<FacilitiesModel>
+﻿@model PaginatedList<FacilitiesModel>
 
-<div class="table-responsive">
-    <table class="table table-striped table-hover" style=" font-size: 14px;">
-        <thead>
-            <tr class="bg-black">
-                <th>Facility</th>
-                <th>Contact</th>
-                <th>Email</th>
-                <th>Chief Hospital</th>
-                <th>Level</th>
-                <th>Type</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td style="white-space: nowrap;">
-                        <a class="facilityId text-primary text-bold"
-                           style="cursor:pointer; font-size: 16px !important;"
-                           data-toggle="ajax-modal"
-                           data-target="#small_modal"
-                           data-action="#small_content"
-                           data-url="@Url.Action("UpdateFacility","Admin", new { id = item.Id })">
-                            @item.Facility
-                        </a>
-                        <br />
-                        <small class="text-success">(@item.Address)</small>
-                    </td>
-                    <td>
-                        <small>
-                            @item.Contact
-                        </small>
-                    </td>
-                    <td>
-                        <small>
-                            @item.Email
-                        </small>
-                    </td>
-                    <td>
-                        <small>
-                            @item.Chief
-                        </small>
-                    </td>
-                    <td>
-                        @if (item.Level != "0")
-                        {
-                            <span class="badge bg-green">@item.Level</span>
-                        }
-                    </td>
-                    <td>
-                        <span class="badge bg-green">@item.Type</span>
-                    </td>
+@if (Model.Count() > 0)
+{
+    <div class="table-responsive">
+        <table class="table table-striped table-hover" style=" font-size: 14px;">
+            <thead>
+                <tr class="bg-black">
+                    <th>Facility</th>
+                    <th>Contact</th>
+                    <th>Email</th>
+                    <th>Chief Hospital</th>
+                    <th>Level</th>
+                    <th>Type</th>
                 </tr>
-            }
-        </tbody>
-    </table>
-</div>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td style="white-space: nowrap;">
+                            <a class="facilityId text-primary text-bold"
+                               style="cursor:pointer; font-size: 16px !important;"
+                               onclick="showInPopup('@Url.Action("UpdateFacility", "Admin", new { id = item.Id })', 'def')">
+                               @item.Facility
+                            </a>
+                            <br />
+                            <small class="text-success">(@item.Address)</small>
+                        </td>
+                        <td>
+                            <small>
+                                @item.Contact
+                            </small>
+                        </td>
+                        <td>
+                            <small>
+                                @item.Email
+                            </small>
+                        </td>
+                        <td>
+                            <small>
+                                @item.Chief
+                            </small>
+                        </td>
+                        <td>
+                            @if (item.Level != "0")
+                            {
+                                <span class="badge bg-green">@item.Level</span>
+                            }
+                        </td>
+                        <td>
+                            <span class="badge bg-green">@item.Type</span>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <div class="alert alert-warning">
+        <span>
+            <i class="fa fa-exclamation-triangle"></i> No Users found!
+        </span>
+    </div>
+}
 
-<script>
-    $(function () {
-        //EDIT PATIENT
-        $('a[data-toggle="ajax-modal"]').click(function (event) {
-            event.preventDefault();
-            event.stopImmediatePropagation();
-            var url = $(this).data('url');
-            var target = $(this).data('target');
-            var action = $(this).data('action');
-            var content = $(action);
-            $.when($(target).modal('show')).done(function () {
-            $.ajax({
-                url: url,
-                tpye: 'get',
-                async: true,
-                success: function (data) {
-                    content.html(data);
-                },
-                timeout: 60000,
-                error: function (xhr, ajaxOptions, thrownError) {
-                    $('body').find('#loadings').modal('toggle');
-                    alert(xhr.responseText);
-                    alert(thrownError);
-                    }
-                });
-            });
-        });
-    });
-</script>

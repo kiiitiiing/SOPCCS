@@ -1,4 +1,5 @@
-﻿using SOPCOVIDChecker.Models;
+﻿using Microsoft.AspNetCore.Mvc;
+using SOPCOVIDChecker.Models;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -12,7 +13,47 @@ namespace SOPCOVIDChecker.Services
         private static string FullName;
         public static string FixName(this string input)
         {
-            return System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(input.ToLower());
+            return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(input.ToLower());
+        }
+
+        public static string Action(this ControllerContext context)
+        {
+            return context.RouteData.Values["action"].ToString();
+        }
+
+        public static List<KeyValuePair<string,string>> SpecimenTypes
+        {
+            get
+            {
+                return new List<KeyValuePair<string, string>>
+                {
+                    new KeyValuePair<string, string>("NPS","ETA "),
+                    new KeyValuePair<string, string>("OPS","OPS"),
+                    new KeyValuePair<string, string>("OPS & NPS","OPS & NPS"),
+                    new KeyValuePair<string, string>("SERUM ","SERUM"),
+                    new KeyValuePair<string, string>("ETA ","ETA "),
+                    new KeyValuePair<string, string>("TA ","TA "),
+                    new KeyValuePair<string, string>("SPUTUM ","SPUTUM "),
+                    new KeyValuePair<string, string>("STOOL ","STOOL "),
+                    new KeyValuePair<string, string>("BLOOD ","BLOOD "),
+                    new KeyValuePair<string, string>("ENVIRONMENTAL SAMPLE","ENVIRONMENTAL SAMPLE"),
+                    new KeyValuePair<string, string>("NGT ","NGT "),
+                    new KeyValuePair<string, string>("ETA SWAB IN VTM/UTM","ETA SWAB IN VTM/UTM"),
+                    new KeyValuePair<string, string>("OTHER","OTHER"),
+                };
+            }
+        }
+
+        public static List<KeyValuePair<string, string>> Filters
+        {
+            get
+            {
+                return new List<KeyValuePair<string, string>>
+                {
+                    new KeyValuePair<string, string>("PROCESSING","Processing"),
+                    new KeyValuePair<string, string>("RELEASED","Released")
+                };
+            }
         }
 
         public static string FirstToUpper(this string text)
@@ -120,7 +161,7 @@ namespace SOPCOVIDChecker.Services
             return Convert.ToInt32(DateTime.Now.Subtract(date).TotalMinutes);
         }
 
-        public static string Result(this ResultForm result)
+        public static Task<string> Result(this ResultForm result)
         {
             var status = "";
             if(result.CreatedBy == null)
@@ -143,7 +184,7 @@ namespace SOPCOVIDChecker.Services
                 }
             }
 
-            return status;
+            return Task.FromResult(status);
         }
         public static string GetDate(this DateTime date, string format)
         {

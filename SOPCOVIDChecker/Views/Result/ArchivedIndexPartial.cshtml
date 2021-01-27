@@ -1,0 +1,125 @@
+﻿@model PaginatedList<ResultLess>
+
+
+
+@if (Model.Count() != 0)
+{
+    <table class="table table-hover table-bordered table-striped" style="white-space: nowrap!important ">
+        <thead class="bg-gray">
+            <tr>
+                <th class="text-center text-sm">
+                    SAMPLE ID
+                </th>
+                <th class="text-center text-sm">
+                    PATIENT NAME
+                </th>
+                <th class="text-center text-sm">
+                    DRU
+                </th>
+                <th class="text-center text-sm">
+                    PCR RESULT
+                </th>
+                <th class="text-center text-sm">
+                    SAMPLE TAKEN
+                </th>
+                <th class="text-center text-sm">
+                    ACTION
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var sop in Model)
+            {
+                <tr>
+                    <td class="text-center text-sm">
+                        <label>@sop.SampleId</label>
+                    </td>
+                    <td class="text-center text-sm">
+                        @sop.PatientName
+                    </td>
+                    <td class="text-center text-sm">
+                        @sop.DRU
+                    </td>
+                    <td class="text-center text-sm">
+                        @sop.PCRResult
+                    </td>
+                    <td class="text-center text-sm">
+                        @sop.SampleTaken.GetDate("dd-MMM-yy")
+                    </td>
+                    @if (sop.Approved && sop.SampleReceipt != default)
+                    {
+                        <td class="text-center text-sm">
+                            <button type="button" id="verify"
+                                    class="btn btn-sm btn-success"
+                                    data-toggle="ajax-modal"
+                                    data-target="#large_modal"
+                                    data-action="#large_content"
+                                    data-url="@Url.Action("ViewResultForm","Result", new { resultId = sop.ResultFormId })"
+                                    style="width: 100%;"
+                                    onclick="OpenModal($(this));">
+                                &nbsp;VIEW
+                            </button>
+                        </td>
+                    }
+                    else if (!sop.Approved && sop.SampleReceipt == default)
+                    {
+                        <td class="text-center text-sm">
+                            <button type="button" id="Arrived"
+                                    class="btn btn-sm btn-primary"
+                                    data-toggle="ajax-modal"
+                                    data-target="#small_modal"
+                                    data-action="#small_content"
+                                    data-url="@Url.Action("Arrived","Result", new { id = sop.SOPId })"
+                                    style="width: 100%;"
+                                    onclick="OpenModal($(this));">
+                                &nbsp;ARRIVED
+                            </button>
+                        </td>
+                    }
+                    else
+                    {
+                        <td class="text-center text-sm">
+                            <button type="button" id="view"
+                                    class="btn btn-sm btn-warning"
+                                    data-toggle="ajax-modal"
+                                    data-target="#large_modal"
+                                    data-action="#large_content"
+                                    data-url="@Url.Action("ResultForm","Result", new { resultId = sop.ResultFormId })"
+                                    style="width: 100%;"
+                                    onclick="OpenModal($(this));">
+                                &nbsp;VERIFY
+                            </button>
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-warning">
+        <span>
+            <i class="fa fa-exclamation-triangle"></i> No Sample found!
+        </span>
+    </div>
+}
+
+
+@await Html.PartialAsync("~/Views/Shared/_PageList.cshtml", new PageListModel
+{
+    Action = "ArchivedIndex",
+    HasNextPage = Model.HasNextPage,
+    HasPreviousPage = Model.HasPreviousPage,
+    PageIndex = Model._pageIndex,
+    TotalPages = Model._totalPages,
+    Parameters = new Dictionary<string, string>
+    {
+        { "page", Model._pageIndex.ToString() },
+        { "q", ViewBag.Search }
+    }
+})
+
+<script>
+    $('#ctr').html('@Model._itemCount');
+</script>

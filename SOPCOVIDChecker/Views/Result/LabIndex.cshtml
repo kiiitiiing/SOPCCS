@@ -1,4 +1,5 @@
 ﻿
+
 @{
     ViewData["Title"] = "LABORATORY";
 }
@@ -9,49 +10,28 @@
             <div class="col-md-6">
                 <h4>
                     SAMPLES FOR CONFIRMATION<br />
-                    <small>Total: <span class="total_ctr"></span></small>
                 </h4>
+                <small class="badge bg-gradient-warning">Total: <span class="ctr"></span></small>
             </div>
             <div class="col-md-6">
-                <div class="fa-pull-right form-inline ml-3">
+                <form class="fa-pull-right form-inline ml-3" asp-controller="Result" asp-action="LabIndexPartial" method="get" onsubmit="return partialViewGet(this, '#result_labindex');">
                     <!-- INPUT -->
                     <input class="form-control form-control-sm"
-                           name="search"
-                           id="searchDetail"
+                           id="q"
+                           name="q"
                            placeholder="Search name"
                            type="text" />
-                    <button id="searchPatientBtn" type="button" class="btn btn-sm btn-success">
+                    <button id="searchPatientBtn" type="submit" class="btn btn-sm btn-success">
                         <i class="fa fa-search"></i>
                     </button>
-                </div>
+                </form>
             </div>
         </div>
     </div>
-    <div class="card-body" id="list_lab_conf" style="overflow:auto !important;">
-        <div class="overlay d-flex justify-content-center align-items-center">
-            <i class="fas fa-2x fa-sync fa-spin"></i>
-        </div>
-        <br />
-        <br />
-
+    <div class="card-body" id="result_labindex" style="overflow:auto !important;">
     </div>
-    <div id="lab-index" style="margin: auto; margin-bottom: 20px;"></div>
 </div>
 
-
 <script>
-    var vessel = $('#lab-index');
-    var c = [];
-    c.push(qFix($('#searchDetail').val()));
-    LoadList(c, vessel, '@Url.Action("LabJson", "Result")');
-
-    $(function () {
-        $('#searchPatientBtn').on('click', function (event) {
-            event.preventDefault();
-            event.stopImmediatePropagation();
-            var q = []
-            q.push(qFix($('#searchDetail').val()));
-            LoadList(q, vessel, '@Url.Action("LabJson", "Result")');
-        });
-    })
+    LoadPartialView('#result_labindex', '@Url.Action("LabIndexPartial","Result")');
 </script>

@@ -19,5 +19,6 @@ namespace SOPCOVIDChecker.Models.ResuViewModel
         public string Address { get; set; }
         public string Lab { get; set; }
         public bool Approved { get; set; }
+        public DateTime SampleReceipt { get; set; }
     }
 }

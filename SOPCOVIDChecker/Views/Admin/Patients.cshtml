@@ -1,0 +1,35 @@
+﻿@{
+    ViewData["Title"] = "Patients";
+}
+
+
+<div class="card card-success card-outline">
+    <div class="card-header">
+        <div class="row">
+            <div class="col-md-6">
+                <h4>
+                    PATIENTS<br />
+                    <small>Total: <span class="total_ctr"></span></small>
+                </h4>
+            </div>
+            <div class="col-md-6">
+                <form class="fa-pull-right form-inline ml-3" asp-controller="Admin" asp-action="PatientsPartial" method="get" onsubmit="return partialViewGet(this, '#admin_facilities');">
+                    <div class="input-group input-group-sm">
+                        <input class="form-control form-control-navbar" id="q" name="q" placeholder="Search">
+                        <div class="input-group-append">
+                            <button class="btn btn-success" type="submit" title="Search User">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="card-body" id="admin_patients">
+    </div>
+</div>
+
+<script type="text/javascript">
+    LoadPartialView('#admin_patients', '@Url.Action("PatientsPartial","Admin")');
+</script>

@@ -14,6 +14,8 @@ using SOPCOVIDChecker.Data;
 using SOPCOVIDChecker.Models;
 using SOPCOVIDChecker.Models.AccountViewModels;
 using Microsoft.EntityFrameworkCore;
+using SOPCOVIDChecker.Models.ViewModels;
+using SOPCOVIDChecker.Models.AdminViewModel;
 
 namespace SOPCOVIDChecker.Controllers
 {
@@ -50,11 +52,11 @@ namespace SOPCOVIDChecker.Controllers
         {
             ViewBag.Facilities = new SelectList(_context.Facility.ToList(), "Id", "Name");
             var errors = ModelState.Values.SelectMany(v => v.Errors);
-            if (model.Muncity != 0)
+            if (model.Muncity != null)
             {
                 ViewBag.Muncity = GetMuncities(UserProvince);
             }
-            if (model.Barangay != 0)
+            if (model.Barangay != null)
             {
                 ViewBag.Barangay = GetBarangays((int)model.Muncity, model.Province);
             }
@@ -62,12 +64,41 @@ namespace SOPCOVIDChecker.Controllers
             {
                 if (await _userService.RegisterUserAsync(model, "RHU"))
                 {
-                    return PartialView(model);
+                    var rhuUsers = await _context.Sopusers
+                        .Include(x => x.Facility)
+                        .Include(x => x.BarangayNavigation)
+                        .Include(x => x.MuncityNavigation)
+                        .Include(x => x.ProvinceNavigation)
+                        .Where(x => x.UserLevel.Equals("RHU"))
+                        .Select(x => new UserLess
+                        {
+                            Id = x.Id,
+                            Fname = x.Fname,
+                            Mname = x.Mname,
+                            Lname = x.Lname,
+                            ContactNo = x.ContactNo,
+                            Email = x.Email,
+                            Address = x.GetAddress(),
+                            Facility = x.Facility.Name,
+                            Username = x.Username
+                        }).ToListAsync();
+                    var pageModel = PaginatedList<UserLess>.CreateAsync(rhuUsers, "RhuUsersPartial", 1, 10);
+                    return Json(new JsonModel
+                    {
+                        IsValid = ModelState.IsValid,
+                        Html = Helper.RenderRazorViewToString(new AdminController(_context), "RhuUsresPartial", pageModel),
+                        Toast = $"{model.Firstname} {model.Lastname} was registered."
+                    });
                 }
             }
 
             ViewBag.Errors = errors;
-            return PartialView(model);
+            return Json(new JsonModel
+            {
+                IsValid = ModelState.IsValid,
+                Html = Helper.RenderRazorViewToString(this, nameof(Register), model),
+                Toast = $"User was not registered."
+            });
         }
 
         #endregion
@@ -89,10 +120,41 @@ namespace SOPCOVIDChecker.Controllers
             if(ModelState.IsValid)
             {
                 await _userService.UpdateUserAsync(model);
-                return PartialView(model);
+                var users = await _context.Sopusers
+                .Include(x => x.Facility)
+                .Include(x => x.BarangayNavigation)
+                .Include(x => x.MuncityNavigation)
+                .Include(x => x.ProvinceNavigation)
+                .Where(x => x.UserLevel.Equals("RHU"))
+                .Select(x => new UserLess
+                {
+                    Id = x.Id,
+                    Fname = x.Fname,
+                    Mname = x.Mname,
+                    Lname = x.Lname,
+                    ContactNo = x.ContactNo,
+                    Email = x.Email,
+                    Address = x.GetAddress(),
+                    Facility = x.Facility.Name,
+                    Username = x.Username
+                }).ToListAsync();
+
+                var returnModel = PaginatedList<UserLess>.CreateAsync(users, "RhuUsersPartial", 1, 10);
+
+                return Json(new JsonModel
+                {
+                    IsValid = ModelState.IsValid,
+                    Html = Helper.RenderRazorViewToString(new AdminController(_context), "RhuUsersPartial", returnModel),
+                    Toast = $"User [{model.Username}] edit successful"
+                });
             }
             ViewBag.Errors = errors;
-            return PartialView(model);
+            return Json(new JsonModel
+            {
+                IsValid = ModelState.IsValid,
+                Html = Helper.RenderRazorViewToString(this, nameof(EditUser), model),
+                Toast = $"User [{model.Username}] edit failed"
+            });
         }
         #endregion
         #region LOGIN
@@ -110,7 +172,7 @@ namespace SOPCOVIDChecker.Controllers
                 if (User.FindFirstValue(ClaimTypes.Role).Equals("RHU"))
                     return RedirectToAction("SopIndex", "Sop");
                 else if (User.FindFirstValue(ClaimTypes.Role).Equals("PESU"))
-                    return RedirectToAction("PesuStatus", "Pesu");
+                    return RedirectToAction("Status", "Pesu");
                 else if (User.FindFirstValue(ClaimTypes.Role).Equals("RESU"))
                     return RedirectToAction("ResuIndex", "Resu");
                 else if (User.FindFirstValue(ClaimTypes.Role).Equals("LAB"))
@@ -141,7 +203,7 @@ namespace SOPCOVIDChecker.Controllers
                     if (user.UserLevel.Equals("RHU"))
                         return RedirectToAction("SopIndex", "Sop");
                     else if (user.UserLevel.Equals("PESU"))
-                        return RedirectToAction("PesuStatus", "Pesu");
+                        return RedirectToAction("Status", "Pesu");
                     else if (user.UserLevel.Equals("RESU"))
                         return RedirectToAction("ResuIndex", "Resu");
                     else if (user.UserLevel.Equals("LAB"))
@@ -286,6 +348,7 @@ namespace SOPCOVIDChecker.Controllers
                 new Claim("Facility", user.FacilityId.ToString()),
                 new Claim("FacilityName", user.Facility.Name),
                 new Claim("Province", user.Province.ToString()),
+                new Claim("ProvinceName", user.ProvinceNavigation.Description),
                 new Claim("Muncity", user.Muncity.AddressCheck()),
                 new Claim("Barangay", user.Barangay.AddressCheck()),
             };

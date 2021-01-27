@@ -54,9 +54,9 @@ namespace SOPCOVIDChecker
             })
             .AddCookie(options =>
             {
-                options.LoginPath = "/SOPCCS/Account/Login";
-                options.LogoutPath = "/SOPCCS/Account/Logout";
-                options.AccessDeniedPath = "/SOPCCS/Account/NotFound";
+                options.LoginPath = "/Account/Login";
+                options.LogoutPath = "/Account/Logout";
+                options.AccessDeniedPath = "/Account/NotFound";
                 options.ExpireTimeSpan = TimeSpan.FromHours(5);
             });
 
@@ -95,7 +95,7 @@ namespace SOPCOVIDChecker
             }
             else
             {
-                app.UseExceptionHandler("/SOPCCS/Home/Error");
+                app.UseExceptionHandler("/Home/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
@@ -113,7 +113,7 @@ namespace SOPCOVIDChecker
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "/SOPCCS/{controller=Account}/{action=Login}/{id?}");
+                    pattern: "/{controller=Account}/{action=Login}/{id?}");
             });
         }
     }

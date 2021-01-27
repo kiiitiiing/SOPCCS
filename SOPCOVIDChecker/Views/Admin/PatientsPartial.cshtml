@@ -1,0 +1,90 @@
+﻿@model PaginatedList<ListPatientModel>
+
+@if (Model.Count() > 0)
+{
+    <table class="table table-hover table-striped">
+        <thead class="bg-gray-dark">
+            <tr>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Sex
+                </th>
+                <th>
+                    Age
+                </th>
+                <th style="white-space: nowrap;">
+                    Date of Birth
+                </th>
+                <th>
+                    Address
+                </th>
+                <th>
+                    Action
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var patient in Model)
+            {
+                <tr>
+                    <td>
+                        <a class="text-primary"
+                           onclick="showInPopup('@Url.Action("EditPatient","Admin", new { patientId = patient.Id })', 'def')"
+                           style="cursor: pointer; font-weight:500;">
+                            @patient.Name
+                        </a>
+                    </td>
+                    <td>
+                        @patient.Sex
+                    </td>
+                    <td>
+                        @patient.Age
+                    </td>
+                    <td>
+                        @patient.DateOfBirth
+                    </td>
+                    <td>
+                        @patient.Address
+                    </td>
+                    <td>
+                        <a id="add-sop"
+                           class="btn btn-sm btn-primary text-center"
+                           onclick="showInPopup('@Url.Action("AddSopModal","Sop", new { patientId = patient.Id })', 'def')"
+                           style="width: 100%">
+                            <i class="far fa-file-alt"></i>
+                            &nbsp;
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-warning">
+        <span>
+            <i class="fa fa-exclamation-triangle"></i> No patients found!
+        </span>
+    </div>
+}
+
+
+<div style="padding-top: 20px !important;">
+    @await Html.PartialAsync("~/Views/Shared/_PageList.cshtml", new PageListModel
+    {
+        Action = "Patients",
+        HasNextPage = Model.HasNextPage,
+        HasPreviousPage = Model.HasPreviousPage,
+        PageIndex = Model._pageIndex,
+        TotalPages = Model._totalPages,
+        Container = "list_patient",
+        Parameters = new Dictionary<string, string>
+        {
+            { "page", Model._pageIndex.ToString() },
+            { "q", ViewBag.Search }
+        }
+    })
+</div>

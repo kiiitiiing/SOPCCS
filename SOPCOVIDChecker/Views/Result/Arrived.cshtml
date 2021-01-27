@@ -1,0 +1,26 @@
+﻿@model ArrivedModel
+
+<div class="modal-content" id="arrived_modal">
+    <div class="modal-header">
+        <h4>
+            Sample arrived?
+        </h4>
+    </div>
+    <div class="modal-body">
+        <form asp-action="Arrived">
+            <div class="col-md-12">
+                <div class="form-group text-center">
+                    <input class="form-control" asp-for="Arrived" />
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer" style="display: inline-block !important;">
+        <button class="btn btn-danger fa-pull-left" type="button" data-dismiss="modal">
+            No
+        </button>
+        <button class="btn btn-success fa-pull-right" data-action="small_modal" data-save="modal">
+            Yes
+        </button>
+    </div>
+</div>

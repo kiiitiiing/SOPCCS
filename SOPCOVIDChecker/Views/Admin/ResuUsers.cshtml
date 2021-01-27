@@ -6,45 +6,28 @@
 <div class="col-md-12">
     <div class="card card-success card-outline">
         <div class="card-header">
-            <div class="fa-pull-right form-inline ml-3">
-                <div class="form-actions no-color">
-                    <input type="text" class="form-control form-control-sm" id="searchDetail" placeholder="Search name" name="name" />
-                    <button type="button" id="searchPatientBtn" class="btn btn-sm btn-success">
-                        <i class="fa fa-search"></i>
-                        &nbsp;Search
-                    </button>
-                    <button type="button" id="register"
-                            class="btn btn-sm btn-primary"
-                            data-toggle="ajax-modal"
-                            data-target="#small_modal"
-                            data-action="#small_content"
-                            data-url="@Url.Action("Register","Account", new { level ="RESU" })">
-                        <i class="fa fa-user"></i>
-                        &nbsp;Add User
-                    </button>
+            <form class="fa-pull-right form-inline ml-3" asp-controller="Admin" asp-action="RhuUsersPartial" method="get" onsubmit="return partialViewGet(this, '#admin_resuusers');">
+                <div class="input-group input-group-sm">
+                    <input class="form-control form-control-navbar" id="q" name="q" placeholder="Search">
+                    <div class="input-group-append">
+                        <button class="btn btn-success" type="submit" title="Search User">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                    <div class="input-group-append">
+                        <a class="btn btn-primary" title="Add User" onclick="showInPopup('@Url.Action("Register", "Account", new { level = "RESU" })', 'def')">
+                            <i class="fas fa-plus"></i>
+                        </a>
+                    </div>
                 </div>
-            </div>
+            </form>
             <h4>RESU Users</h4>
         </div>
-        <div class="card-body">
+        <div class="card-body" id="admin_resuusers">
         </div>
-        <div id="admin-resu" style="margin: auto; margin-bottom: 20px;"></div>
     </div>
 </div>
 
 <script>
-    var vessel = $('#admin-resu');
-    var c = [];
-    c.push(qFix($('#searchDetail').val()));
-    LoadList(c, vessel, '@Url.Action("ResuJson","Admin")');
-
-    $(function () {
-        $('#searchPatientBtn').on('click', function (event) {
-            event.preventDefault();
-            event.stopImmediatePropagation();
-            var q = []
-            q.push(qFix($('#searchDetail').val()));
-            LoadList(q, vessel, '@Url.Action("ResuJson", "Admin")');
-        });
-    })
+    LoadPartialView('#admin_resuusers', '@Url.Action("ResuUsersPartial","Admin")');
 </script>

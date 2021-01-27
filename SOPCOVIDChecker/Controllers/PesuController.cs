@@ -23,9 +23,14 @@ namespace SOPCOVIDChecker.Controllers
             _context = context;
         }
         #region DASHBOARD
-        public async Task<ActionResult<List<ResultLess>>> PesuStatusJson(string q)
+        public IActionResult Status()
         {
-            var sop = await _context.ResultForm
+            return View();
+        }
+        [HttpGet]
+        public async Task<IActionResult> StatusPartial(string q, int? page)
+        {
+            var sop = _context.ResultForm
                 .Include(x => x.SopForm).ThenInclude(x => x.DiseaseReportingUnit)
                 .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.CurrentBarangayNavigation)
                 .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.CurrentMuncityNavigation)
@@ -39,30 +44,21 @@ namespace SOPCOVIDChecker.Controllers
                     ResultFormId = x.Id,
                     SOPId = x.SopFormId,
                     PatientId = x.SopForm.PatientId,
-                    PatientName = x.SopForm.Patient.GetFullName(),
+                    PatientName = x.SopForm.Patient.Fname+ " "+ (x.SopForm.Patient.Mname ?? "")+ " " + x.SopForm.Patient.Lname,
                     Lab = x.CreatedByNavigation.Facility.Name,
                     DRU = x.SopForm.DiseaseReportingUnit.Name,
                     PCRResult = x.SopForm.PcrResult,
                     Address = x.SopForm.Patient.GetAddress(),
-                    Status = x.Result()
-                })
-                .ToListAsync();
-
+                    Status = x.ApprovedBy == null? "PROCESSING" : "RELEASED"
+                });
             if (!string.IsNullOrEmpty(q))
             {
-                sop = sop.Where(x => x.PatientName.Contains(q, StringComparison.OrdinalIgnoreCase)).ToList();
+                ViewBag.Search = q;
+                sop = sop.Where(x => x.PatientName.Contains(q));
             }
 
-            return sop;
-        }
-        public IActionResult PesuStatus()
-        {
-            ViewBag.Province = _context.Province.Find(UserProvince).Description;
-            return View();
-        }
-        public IActionResult PesuStatusPartial([FromBody] IEnumerable<ResultLess> model)
-        {
-            return PartialView(model);
+            int size = 10;
+            return PartialView(PaginatedList<ResultLess>.CreateAsync(await sop.ToListAsync(), ControllerContext.Action(), page ?? 1, size));
         }
         #endregion
 
@@ -70,7 +66,8 @@ namespace SOPCOVIDChecker.Controllers
         public int UserId => int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
         public int UserFacility => int.Parse(User.FindFirstValue("Facility"));
         public int UserProvince => int.Parse(User.FindFirstValue("Province"));
-        public int UserMuncity => int.Parse(User.FindFirstValue("Muncity"));
+        public int UserProvinceName => int.Parse(User.FindFirstValue("ProvinceName"));
+        public int UserMuncity => int.Parse(User.FindFirstValue("Muncity")); 
         public int UserBarangay => int.Parse(User.FindFirstValue("Barangay"));
         public string UserName => User.FindFirstValue(ClaimTypes.GivenName) + " " + User.FindFirstValue(ClaimTypes.Surname);
         #endregion

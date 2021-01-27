@@ -1,21 +1,25 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\KitingKo\\Desktop\\DATA BACKUP\\PISTING YAWA\\SOPCCS\\SOPCOVIDChecker\\SOPCOVIDChecker.csproj": {}
+    "D:\\Systems\\SOPCCS\\SOPCOVIDChecker\\SOPCOVIDChecker.csproj": {}
   },
   "projects": {
-    "C:\\Users\\KitingKo\\Desktop\\DATA BACKUP\\PISTING YAWA\\SOPCCS\\SOPCOVIDChecker\\SOPCOVIDChecker.csproj": {
+    "D:\\Systems\\SOPCCS\\SOPCOVIDChecker\\SOPCOVIDChecker.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\KitingKo\\Desktop\\DATA BACKUP\\PISTING YAWA\\SOPCCS\\SOPCOVIDChecker\\SOPCOVIDChecker.csproj",
+        "projectUniqueName": "D:\\Systems\\SOPCCS\\SOPCOVIDChecker\\SOPCOVIDChecker.csproj",
         "projectName": "SOPCOVIDChecker",
-        "projectPath": "C:\\Users\\KitingKo\\Desktop\\DATA BACKUP\\PISTING YAWA\\SOPCCS\\SOPCOVIDChecker\\SOPCOVIDChecker.csproj",
-        "packagesPath": "C:\\Users\\KitingKo\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\KitingKo\\Desktop\\DATA BACKUP\\PISTING YAWA\\SOPCCS\\SOPCOVIDChecker\\obj\\",
+        "projectPath": "D:\\Systems\\SOPCCS\\SOPCOVIDChecker\\SOPCOVIDChecker.csproj",
+        "packagesPath": "C:\\Users\\Keith\\.nuget\\packages\\",
+        "outputPath": "D:\\Systems\\SOPCCS\\SOPCOVIDChecker\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Microsoft\\Xamarin\\NuGet\\"
+        ],
         "configFilePaths": [
-          "C:\\Users\\KitingKo\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\Keith\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
         ],
         "originalTargetFrameworks": [
           "netcoreapp3.1"
@@ -26,6 +30,7 @@
         },
         "frameworks": {
           "netcoreapp3.1": {
+            "targetAlias": "netcoreapp3.1",
             "projectReferences": {}
           }
         },
@@ -37,6 +42,7 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
+          "targetAlias": "netcoreapp3.1",
           "dependencies": {
             "ClosedXML": {
               "target": "Package",
@@ -62,7 +68,11 @@
             },
             "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
               "target": "Package",
-              "version": "[3.1.3, )"
+              "version": "[3.1.4, )"
+            },
+            "NPOI": {
+              "target": "Package",
+              "version": "[2.5.1, )"
             },
             "Newtonsoft.Json": {
               "target": "Package",
@@ -87,7 +97,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.301\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.100\\RuntimeIdentifierGraph.json"
         }
       }
     }

@@ -1,0 +1,127 @@
+﻿
+@{
+    ViewData["Title"] = "Upload Line List";
+}
+
+<div class="row">
+    <div class="col-md-9">
+        <div class="card card-success card-outline">
+            <div class="card-header">
+                <h4>
+                    UPLOAD LINE LIST
+                </h4>
+            </div>
+            <div class="card-body" id="upload_body">
+                <form asp-action="UploadLineList">
+                    <div class="input-group">
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="fileupload" name="files" style="cursor: pointer;">
+                            <label class="custom-file-label" for="fileupload">Choose File</label>
+                        </div>
+                        <div class="input-group-append">
+                            <span class="input-group-text" type="button" name="Upload" value="Upload" id="btnupload">Upload</span>
+                        </div>
+                    </div>
+                    <!-- SELECT FILE -->
+                    <!-- UPLOAD -->
+                </form>
+                <div style="margin-top: 20px!important;" id="excel_out">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card card-success">
+            <div class="card-header">
+                <label>
+                    Download Resources
+                </label>
+            </div>
+            <div class="card-body">
+                <div class="list-group">
+                    <a class="list-group-item list-group-horizontal-sm link-black" asp-controller="Sop" asp-action="LineListForm">
+                        Line List Form
+                    </a>
+                    <a class="list-group-item link-black" asp-controller="Sop" asp-action="Addresses">
+                        Addresses
+                    </a>
+                    <a class="list-group-item link-black" asp-controller="Sop" asp-action="Facilities">
+                        Facilities
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('#fileupload').on('change', function () {
+            //get the file name
+            var fileName = $(this).val();
+            //replace the "Choose a file" label
+            $(this).next('.custom-file-label').html(fileName);
+        })
+        $('#btnupload').on('click', function (event) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            var fileExtension = ['xls', 'xlsx'];
+            var filename = $('#fileupload').val();
+            //if ($('excel_out').find('.overlay'))
+            if (filename.length == 0) {
+                alert("Please select a file.");
+                return false;
+            }
+            else {
+                var extension = filename.replace(/^.*\./, '');
+                if ($.inArray(extension, fileExtension) == -1) {
+                    alert("Please select only excel files.");
+                    return false;
+                }
+            }
+            $('div.input-group').css('pointer-events', 'none');
+            $('div.input-group').css('cursor', 'not-allowed !important');
+            AddLoadingGif();
+            var fdata = new FormData();
+            var fileUpload = $("#fileupload").get(0);
+            var files = fileUpload.files;
+            fdata.append(files[0].name, files[0]);
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("Import","Sop")",
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("XSRF-TOKEN",
+                        $('input:hidden[name="__RequestVerificationToken"]').val());
+                },
+                data: fdata,
+                contentType: false,
+                processData: false,
+                success: function (response, textStatus, jqXHR) {
+                    $('div.input-group').css('pointer-events', '');
+                    $('div.input-group').css('cursor', '');
+                    $('#excel_out').empty();
+                    $('#excel_out').html(response);
+                    /*if (response == 'success') {
+                    }
+                    else {
+                        alert('Upload failed. Check your excel file for errors.');
+                    }
+                    if (response.length == 0)
+                        alert('Some error occured while uploading');
+                    else {
+                        alert(response.status);
+                    }*/
+                },
+                error: function (e) {
+                    $('#divPrint').html(e.responseText);
+                }
+            });
+        })
+    })
+
+    function AddLoadingGif() {
+        var loading = '<div class="overlay d-flex justify-content-center align-items-center"><i class="fas fa-2x fa-sync fa-spin"></i></div>';
+        $('#excel_out').empty();
+        $('#excel_out').prepend(loading);
+    }
+</script>

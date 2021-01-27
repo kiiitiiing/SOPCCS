@@ -46,6 +46,7 @@ namespace SOPCOVIDChecker.Services
 
             user = await _context.Sopusers
                 .Include(x=>x.Facility)
+                .Include(x => x.ProvinceNavigation)
                 .SingleOrDefaultAsync(x => x.Username.Equals(username));
 
             if (user == null)

@@ -1,6 +1,5 @@
 ﻿@model FacilityModel
 
-<div class="modal-content" id="update_facility">
     <div class="modal-header">
         <fieldset>
             <legend>
@@ -9,8 +8,8 @@
             </legend>
         </fieldset>
     </div>
-    <div class="modal-body">
-        <form asp-controller="Admin" asp-action="UpdateFacility" method="post">
+    <form asp-controller="Admin" asp-action="UpdateFacility" method="post" onsubmit="return jQueryAjaxPost(this, 'admin_facilities')">
+        <div class="modal-body">
             <input asp-for="Id" hidden />
             <!-- FACILITY NAME -->
             <div class="form-group">
@@ -102,18 +101,17 @@
                 <span class="text-danger" asp-validation-for="Type"></span>
             </div>
             <hr>
-        </form>
-    </div>
-    <div class="modal-footer">
-        <button class="btn btn-default btn-sm" data-dismiss="modal">
-            <i class="fa fa-times"></i> Cancel
-        </button>
-        <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#remove-facility-alert" value="@Model.Id">
-            <i class="fa fa-times"></i> Remove
-        </button>
-        <button class="btn btn-success btn-sm" data-save="modal">
-            <i class="fa fa-check"></i>
-            &nbsp;Save
-        </button>
-    </div>
-</div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-default btn-sm" data-dismiss="modal">
+                <i class="fa fa-times"></i> Cancel
+            </button>
+            <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#remove-facility-alert" value="@Model.Id">
+                <i class="fa fa-times"></i> Remove
+            </button>
+            <button class="btn btn-success btn-sm" data-save="modal">
+                <i class="fa fa-check"></i>
+                &nbsp;Save
+            </button>
+        </div>
+    </form>

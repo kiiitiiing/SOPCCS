@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using ClosedXML.Excel;
 using DinkToPdf;
 using DinkToPdf.Contracts;
 using Microsoft.AspNetCore.Authorization;
@@ -33,60 +34,128 @@ namespace SOPCOVIDChecker.Controllers
             _userService = userService;
             _converter = converter;
         }
+        #region COMPLETED
+        public IActionResult ArchivedIndex()
+        {
+            return View();
+        }
+        public async Task<IActionResult> ArchivedIndexPartial(string q, int? page)
+        {
+            var form = _context.ResultForm
+                   .Include(x => x.SopForm).ThenInclude(x => x.DiseaseReportingUnit)
+                   .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.CurrentBarangayNavigation)
+                   .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.CurrentMuncityNavigation)
+                   .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.CurrentProvinceNavigation)
+                   .Include(x => x.CreatedByNavigation).ThenInclude(x => x.Facility)
+                   .Where(x => x.CreatedBy == UserId)
+                   .Where(x => x.ApprovedBy != null)
+                   .OrderByDescending(x => x.UpdatedAt)
+                   .Select(x => new ResultLess
+                   {
+                       ResultFormId = x.Id,
+                       SOPId = x.SopFormId,
+                       PatientId = x.SopForm.PatientId,
+                       PatientName = x.SopForm.Patient.Fname+" "+ (x.SopForm.Patient.Mname ?? "") + " " + x.SopForm.Patient.Lname,
+                       DRU = x.SopForm.DiseaseReportingUnit.Name,
+                       PCRResult = x.SopForm.PcrResult,
+                       SampleId = x.SopForm.SampleId,
+                       SampleTaken = x.SopForm.DatetimeCollection,
+                       Approved = x.ApprovedBy != null,
+                       SampleReceipt = x.SopForm.DatetimeSpecimenReceipt
+                   });
+
+            if (!string.IsNullOrEmpty(q))
+            {
+                ViewBag.Search = q;
+                form = form.Where(x => x.PatientName.Contains(q) || x.SampleId.Equals(q));
+            }
+            int size = 10;
+            var action = this.ControllerContext.RouteData.Values["action"].ToString();
+            return PartialView(PaginatedList<ResultLess>.CreateAsync(await form.ToListAsync(), action, page ?? 1, size));
+        }
+        #endregion
 
         #region DASHBOARD
-        public async Task<ActionResult<List<ResultLess>>> LabJson(string q)
+        public IActionResult LabIndex()
         {
-            var form = await _context.ResultForm
+            return View();
+        }
+        [HttpGet]
+        public async Task<IActionResult> LabIndexPartial(string q, int? page)
+        {
+            var form = _context.ResultForm
                 .Include(x => x.SopForm).ThenInclude(x => x.DiseaseReportingUnit)
                 .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.CurrentBarangayNavigation)
                 .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.CurrentMuncityNavigation)
                 .Include(x => x.SopForm).ThenInclude(x => x.Patient).ThenInclude(x => x.CurrentProvinceNavigation)
                 .Include(x => x.CreatedByNavigation).ThenInclude(x => x.Facility)
-                .Where(x => x.CreatedBy != null)
+                .Where(x => x.ApprovedBy == null)
                 .OrderByDescending(x => x.UpdatedAt)
                 .Select(x => new ResultLess
                 {
                     ResultFormId = x.Id,
                     SOPId = x.SopFormId,
                     PatientId = x.SopForm.PatientId,
-                    PatientName = x.SopForm.Patient.GetFullName(),
+                    PatientName = x.SopForm.Patient.Fname + " " + (x.SopForm.Patient.Mname ?? "") + " " + x.SopForm.Patient.Lname,
                     DRU = x.SopForm.DiseaseReportingUnit.Name,
                     PCRResult = x.SopForm.PcrResult,
                     SampleId = x.SopForm.SampleId,
                     SampleTaken = x.SopForm.DatetimeCollection,
-                    Approved = x.ApprovedBy != null
-                })
-                .ToListAsync();
+                    Approved = x.ApprovedBy != null,
+                    SampleReceipt = x.SopForm.DatetimeSpecimenReceipt
+                });
 
             if (!string.IsNullOrEmpty(q))
             {
-                form = form.Where(x => x.PatientName.Contains(q, StringComparison.OrdinalIgnoreCase) || x.SampleId.Equals(q)).ToList();
+                ViewBag.Search = q;
+                form = form.Where(x => x.PatientName.Contains(q) || x.SampleId.Equals(q));
             }
 
-            return form;
+            int size = 10;
+            var action = this.ControllerContext.RouteData.Values["action"].ToString();
+            return PartialView(PaginatedList<ResultLess>.CreateAsync(await form.ToListAsync(), action, page ?? 1, size));
         }
-        public IActionResult LabIndex()
+        #endregion
+
+        #region ARRIVED
+        public IActionResult Arrived(int id)
         {
-            return View();
+            var model = new ArrivedModel
+            {
+                Id = id,
+                Arrived = DateTime.Now.RemoveSeconds()
+            };
+            return PartialView(model);
         }
-        public IActionResult LabIndexPartial([FromBody]IEnumerable<ResultLess> model)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Arrived(ArrivedModel model)
         {
+            var errors = ModelState.Values.SelectMany(x => x.Errors);
+            if(ModelState.IsValid)
+            {
+                var form = await _context.Sopform.FindAsync(model.Id);
+                if (form != null)
+                    form.DatetimeSpecimenReceipt = (DateTime)model.Arrived;
+
+                _context.Update(form);
+                await _context.SaveChangesAsync();
+                return PartialView(model);
+            }
+            ViewBag.Errors = errors;
             return PartialView(model);
         }
         #endregion
+
         #region VIEW RESULT FORM
         public async Task<IActionResult> ViewResultForm(int resultId)
         {
             var sop = await SetResultForm(resultId);
 
-            ViewBag.Perform = await GetStaff("perform");
-            ViewBag.Verify = await GetStaff("verify");
-            ViewBag.Approve = await GetStaff("approve");
-
             return PartialView(sop);
         }
         #endregion
+
         #region RESULT FORM
         public async  Task<IActionResult> ResultForm(int resultId)
         {
@@ -121,6 +190,7 @@ namespace SOPCOVIDChecker.Controllers
                 {
                     _context.Update(await GetResultForm(model));
                     await _context.SaveChangesAsync();
+                    sop = await SetResultForm(model.Id);
                 }
 
                 
@@ -132,6 +202,7 @@ namespace SOPCOVIDChecker.Controllers
             return PartialView(sop);
         }
         #endregion
+
         #region ADD STAFF
         public IActionResult AddStaff()
         {
@@ -158,39 +229,40 @@ namespace SOPCOVIDChecker.Controllers
             return PartialView(model);
         }
         #endregion
-        #region LAB STAFF
-        public async Task<ActionResult<List<UserLess>>> LabUsersJson(string q)
-        {
-            var rhuUsers = await _context.Sopusers
-                .Include(x => x.Facility)
-                .Include(x => x.BarangayNavigation)
-                .Include(x => x.MuncityNavigation)
-                .Include(x => x.ProvinceNavigation)
-                .Where(x=>x.UserLevel == "perform" || x.UserLevel == "verify" || x.UserLevel == "approve")
-                .Where(x => x.FacilityId == UserFacility)
-                .Select(x => new UserLess
-                {
-                    Id = x.Id,
-                    Name = x.GetFullName(),
-                    ContactNo = x.ContactNo,
-                    Email = x.Email,
-                    Designation = x.Designation,
-                    Facility = x.Facility.Name
-                })
-                .ToListAsync();
 
-            return rhuUsers;
-        }
+        #region LAB STAFF
         public IActionResult LabUsers()
         {
             return View();
         }
-
-        public IActionResult LabUsersPartial([FromBody]IEnumerable<UserLess> model)
+        [HttpGet]
+        public async Task<IActionResult> LabUsersPartial(string q, int? page)
         {
-            return PartialView(model);
+            var users = await _context.Sopusers
+                .Include(x => x.Facility)
+                .Where(x => x.UserLevel == "perform" || x.UserLevel == "verify" || x.UserLevel == "approve")
+                .Where(x => x.FacilityId == UserFacility)
+                .Select(x => new UserLess
+                {
+                    Id = x.Id,
+                    Fname = x.Fname,
+                    Mname = x.Mname,
+                    Lname = x.Lname,
+                    ContactNo = x.ContactNo,
+                    Email = x.Email,
+                    Designation = x.Designation,
+                    Facility = x.Facility.Name
+                }).ToListAsync();
+
+            if (!string.IsNullOrEmpty(q))
+            {
+                users = users.Where(x => x.Fullname.Contains(q, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+            int size = 10;
+            return PartialView( PaginatedList<UserLess>.CreateAsync(users, ControllerContext.Action(), page ?? 1, size));
         }
         #endregion
+
         #region PDF
         public async Task<IActionResult> ResultPdf(int resultId)
         {
@@ -299,16 +371,16 @@ namespace SOPCOVIDChecker.Controllers
 
             var patient = "<tr>" +
                               "<td><b>Name of Patient: </b></td>" +
-                              "<td colspan='5' style='color: #dc3545;'> " + model.SopForm.Patient.GetFullName().ToUpper()+" </td>" +//patient Name
+                              "<td colspan='5' style='color: #000000; font-weight: bold;'> " + model.SopForm.Patient.GetFullName().ToUpper()+" </td>" +//patient Name
                           "</tr>" +
                            "<tr>" +
                               "<td colspan='6' class='BBottom pad0'> &nbsp; &nbsp; <i> Last Name, First Name, Middle Name</i> </td>" +
                           "</tr>" +
                            "<tr>" +
-                                "<td class='BBottom' rowspan='2'><b>Age: </b>  &nbsp; &nbsp;<span style='color: #dc3545;'>" + model.SopForm.Patient.Dob.ComputeAge() + "</span></td>" + //age
-                                "<td colspan='2' rowspan='2'class='BBottom BRight'> &nbsp; &nbsp; &nbsp; &nbsp;<b>Sex: </b>&nbsp; &nbsp;<span style='color: #dc3545;'>" + sex + "</span></td>" +//Sex
+                                "<td class='BBottom' rowspan='2'><b>Age: </b>  &nbsp; &nbsp;<span style='color: #000000; font-weight: bold;'>" + model.SopForm.Patient.Dob.ComputeAge() + "</span></td>" + //age
+                                "<td colspan='2' rowspan='2'class='BBottom BRight'> &nbsp; &nbsp; &nbsp; &nbsp;<b>Sex: </b>&nbsp; &nbsp;<span style='color: #000000; font-weight: bold;'>" + sex + "</span></td>" +//Sex
                                 "<td><b> Date of Birth: </b></td>" +
-                                "<td colspan='2' style='color: #dc3545;'>" + model.SopForm.Patient.Dob.GetDate("dd/MM/yyyy") + "</td>" + //Date of Birth
+                                "<td colspan='2' style='color: #000000; font-weight: bold;'>" + model.SopForm.Patient.Dob.GetDate("dd/MM/yyyy") + "</td>" + //Date of Birth
                           "</tr>" +
                           "<tr>" +
                             "<td colspan='3' class='BBottom pad0'>&nbsp; <i>dd/mm/yyyy</i></td>" + //Sample ID
@@ -317,7 +389,7 @@ namespace SOPCOVIDChecker.Controllers
                             "<td><b>Patient Location: </b></td>" +
                             "<td colspan='2' class='BRight'></td>" +//patient Location
                             "<td><b> Sample ID: </b></td>" +
-                            "<td colspan='2' style='color: #dc3545;'>" + model.SopForm.SampleId + "</td>" + //Sample ID
+                            "<td colspan='2' style='color: #000000; font-weight: bold;'>" + model.SopForm.SampleId + "</td>" + //Sample ID
                           "</tr>" +
                           "<tr>" +
                             "<td>RHU/CHO</td>" +
@@ -326,9 +398,9 @@ namespace SOPCOVIDChecker.Controllers
                           "</tr>" +
                            "<tr>" +
                             "<td>Hospital/Infirmary</td>" +
-                            "<td colspan='2' rowspan='2' class='BRight BBottom' style='color: #dc3545;'> " + model.SopForm.DiseaseReportingUnit.Name+" </td>" +// Hospital/Infirmary/referral
+                            "<td colspan='2' rowspan='2' class='BRight BBottom' style='color: #000000; font-weight: bold;'> " + model.SopForm.DiseaseReportingUnit.Name+" </td>" +// Hospital/Infirmary/referral
                             "<td colspan='1'><b>Admission Date</b></td>" +
-                            "<td colspan='2' style='color: #dc3545;'> " + admissionDate + " </td>" + //Admission Date
+                            "<td colspan='2' style='color: #000000; font-weight: bold;'> " + admissionDate + " </td>" + //Admission Date
                           "</tr>" +
                            "<tr>" +
                             "<td class='BBottom'>Referral:</td>" +
@@ -336,20 +408,20 @@ namespace SOPCOVIDChecker.Controllers
                           "</tr>" +
                           "<tr>" +
                               "<td class='BBottom'><b>Requisitioner:</b></td>" +
-                              "<td class='BBottom BRight' colspan='2' style='color: #dc3545;'>" + model.SopForm.RequestedBy + "</td>" + // Requisitioner
+                              "<td class='BBottom BRight' colspan='2' style='color: #000000; font-weight: bold;'>" + model.SopForm.RequestedBy + "</td>" + // Requisitioner
                               "<td><b>Address:</b></td>" +
-                              "<td class='BBottom' colspan='2' rowspan='2' style='color: #dc3545;'>" + model.SopForm.Patient.GetAddress() + "</td>" + //ADDRESS
+                              "<td class='BBottom' colspan='2' rowspan='2' style='color: #000000; font-weight: bold;'>" + model.SopForm.Patient.GetAddress() + "</td>" + //ADDRESS
                           "</tr>" +
                           "<tr>" +
                               "<td class='BBottom'><b>Specimen Type:</b></td>" +
-                              "<td class='BBottom BRight' colspan='2' style='color: #dc3545;'>" + model.SopForm.TypeSpecimen + "</td>" + // Specimen Type
+                              "<td class='BBottom BRight' colspan='2' style='color: #000000; font-weight: bold;'>" + model.SopForm.TypeSpecimen + "</td>" + // Specimen Type
                                "<td class='BBottom' colspan='2'></td>" +
                           "</tr>" +
                            "<tr>" +
                               "<td colspan='2'><b>Date & Time of Specimen Collection:</b></td>" +
-                              "<td rowspan='2' class='BBottom BRight' style='color: #dc3545;'>" + model.SopForm.DatetimeCollection.GetDate("dd/MM/yyyy") +" <br> " + model.SopForm.DatetimeCollection.GetDate("HH:mm") + "</td>" + // Date & Time of Specimen Collection
+                              "<td rowspan='2' class='BBottom BRight' style='color: #000000; font-weight: bold;'>" + model.SopForm.DatetimeCollection.GetDate("dd/MM/yyyy") +" <br> " + model.SopForm.DatetimeCollection.GetDate("HH:mm") + "</td>" + // Date & Time of Specimen Collection
                               "<td colspan='2'> <b>Date & Time of Specimen Receipt:</b></td>" +
-                              "<td rowspan='2'  class='BBottom' style='color: #dc3545;'>" + model.SopForm.DatetimeSpecimenReceipt.GetDate("dd/MM/yyyy") + " <br> " + model.SopForm.DatetimeSpecimenReceipt.GetDate("HH:mm") + "</td>" + //// Date & Time of Specimen Receipt
+                              "<td rowspan='2'  class='BBottom' style='color: #000000; font-weight: bold;'>" + model.SopForm.DatetimeSpecimenReceipt.GetDate("dd/MM/yyyy") + " <br> " + model.SopForm.DatetimeSpecimenReceipt.GetDate("HH:mm") + "</td>" + //// Date & Time of Specimen Receipt
                           "</tr>" +
                            "<tr>" +
                               "<td colspan='2' class='pad0 BBottom'>&nbsp; <i>dd/mm/yyyy hh:mm</i></td>" +
@@ -357,7 +429,7 @@ namespace SOPCOVIDChecker.Controllers
                            "</tr>" +
                            "<tr>" +
                               "<td colspan='2'><b>Date & Time of Release Result:</b></td>" +
-                              "<td rowspan='2' class='BBottom BRight' style='color: #dc3545;'>" + model.SopForm.DateResult.GetDate("dd/MM/yyyy") + " <br> " + model.SopForm.DateResult.GetDate("HH:mm") + "</td>" + // Date & Time of Release Result
+                              "<td rowspan='2' class='BBottom BRight' style='color: #000000; font-weight: bold;'>" + model.SopForm.DateResult.GetDate("dd/MM/yyyy") + " <br> " + model.SopForm.DateResult.GetDate("HH:mm") + "</td>" + // Date & Time of Release Result
                           "</tr>" +
                            "<tr>" +
                               "<td colspan='2' class='pad0 BBottom'>&nbsp; <i>dd/mm/yyyy hh:mm</i></td>" +
@@ -373,7 +445,7 @@ namespace SOPCOVIDChecker.Controllers
                      "<tr><td></td></tr>" +
                      "<tr>" +
                         "<td colspan='2' class='padTop'> TEST RESULT :</td>" +
-                        "<td colspan='4' class='padTop' style='color: #dc3545; font-weight: 600;'> " + model.SopForm.PcrResult + " </td>" + //TEST RESULT
+                        "<td colspan='4' class='padTop' style='color: #000000; font-weight: bold; font-weight: 600;'> " + model.SopForm.PcrResult + " </td>" + //TEST RESULT
                     "</tr>" +
                     "<tr>" +
                         "<td colspan='2' class='padTop'> TEST RESULT AND UNITS OR MEASUREMENTS:</td>" +
@@ -418,7 +490,7 @@ namespace SOPCOVIDChecker.Controllers
                 "<tr><td colspan='14' class='BTop'></td></tr>" +
                 "<tr>" +
                     "<td class='td2 ' colspan='2'><b>COMMENTS:</b></td>" +
-                    "<td class='td2 BBottom' colspan='12' rowspan='5' style='color: #dc3545;'>" + model.Comments + "</td>" + //Comments
+                    "<td class='td2 BBottom' colspan='12' rowspan='5' style='color: #000000; font-weight: bold;'>" + model.Comments + "</td>" + //Comments
 
                 "</tr>" +
                "<tr><td class='td2' height='20px'></td> </tr>" +
@@ -479,6 +551,84 @@ namespace SOPCOVIDChecker.Controllers
         }
         #endregion
         #endregion
+
+        #region EXCEL
+
+        public async Task<IActionResult> ExportAll()
+        {
+            var sop = await _context.Sopform
+                   .Include(x => x.Patient).ThenInclude(x => x.CurrentBarangayNavigation)
+                   .Include(x => x.Patient).ThenInclude(x => x.CurrentMuncityNavigation)
+                   .Include(x => x.Patient).ThenInclude(x => x.CurrentProvinceNavigation)
+                   .Include(x => x.Patient).ThenInclude(x => x.PermanentBarangayNavigation)
+                   .Include(x => x.Patient).ThenInclude(x => x.PermanentMuncityNavigation)
+                   .Include(x => x.Patient).ThenInclude(x => x.PermanentProvinceNavigation)
+                   .Include(x => x.ResultForm)
+                   .Include(x => x.DiseaseReportingUnit)
+                   .ToListAsync();
+            string contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            string fileName = "allpatients.xlsx";
+            try
+            {
+                using (var workbook = new XLWorkbook())
+                {
+                    IXLWorksheet worksheet = workbook.Worksheets.Add("Authors");
+                    worksheet.Cell(1, 1).Value = "SAMPLE ID";
+                    worksheet.Cell(1, 2).Value = "PATIENT NAME";
+                    worksheet.Cell(1, 3).Value = "AGE";
+                    worksheet.Cell(1, 4).Value = "SEX";
+                    worksheet.Cell(1, 5).Value = "DATE OF BIRTH";
+                    worksheet.Cell(1, 6).Value = "CONTACT NUMBER";
+                    worksheet.Cell(1, 7).Value = "CURRENT ADDRESS";
+                    worksheet.Cell(1, 8).Value = "PERMANENT ADDRESS";
+                    worksheet.Cell(1, 9).Value = "DISEASE REPORTING UNIT";
+                    worksheet.Cell(1, 10).Value = "PCR RESULT";
+                    worksheet.Cell(1, 11).Value = "DATE & TIME OF COLLECTION";
+                    worksheet.Cell(1, 12).Value = "REQUESTED BY";
+                    worksheet.Cell(1, 13).Value = "CONTACT NUMBER";
+                    worksheet.Cell(1, 14).Value = "TYPE OF SPECIMEN & COLLECTION MEDIUM";
+                    worksheet.Cell(1, 15).Value = "DATE & TIME OF SPECIMEN RECEIPT";
+                    worksheet.Cell(1, 16).Value = "DATE OF RESULT RELEASE";
+                    for (int index = 1; index <= sop.Count; index++)
+                    {
+                        worksheet.Cell(index + 1, 1).Value = sop[index - 1].SampleId;
+                        worksheet.Cell(index + 1, 2).Value = sop[index - 1].Patient.GetFullName();
+                        worksheet.Cell(index + 1, 3).Value = sop[index - 1].Patient.Dob.ComputeAge();
+                        worksheet.Cell(index + 1, 4).Value = sop[index - 1].Patient.Sex;
+                        worksheet.Cell(index + 1, 5).Value = sop[index - 1].Patient.Dob.ToString("dd-MMM-yyyy");
+                        worksheet.Cell(index + 1, 6).SetDataType(XLDataType.Text);
+                        worksheet.Cell(index + 1, 6).Value = sop[index - 1].Patient.ContactNo;
+                        worksheet.Cell(index + 1, 7).Value = sop[index - 1].Patient.GetAddress();
+                        worksheet.Cell(index + 1, 8).Value = sop[index - 1].Patient.GetPermanentAddress();
+                        worksheet.Cell(index + 1, 9).Value = sop[index - 1].DiseaseReportingUnit.Name;
+                        worksheet.Cell(index + 1, 10).Value = sop[index - 1].PcrResult == "none" ? "PROCESSING" : sop[index - 1].PcrResult;
+                        worksheet.Cell(index + 1, 11).Value = sop[index - 1].DatetimeCollection.GetDate("dd-MMM-yyyy hh:mm tt");
+                        worksheet.Cell(index + 1, 12).Value = sop[index - 1].RequestedBy;
+                        worksheet.Cell(index + 1, 13).SetDataType(XLDataType.Text);
+                        worksheet.Cell(index + 1, 13).Value = sop[index - 1].RequesterContact;
+                        worksheet.Cell(index + 1, 14).Value = sop[index - 1].TypeSpecimen;
+                        worksheet.Cell(index + 1, 15).Value = sop[index - 1].DatetimeSpecimenReceipt == default ? "PROCESSING" : sop[index - 1].DatetimeSpecimenReceipt.GetDate("dd-MMM-yyyy hh:mm tt");
+                        worksheet.Cell(index + 1, 16).Value = sop[index - 1].DateResult == default ? "PROCESSING" : sop[index - 1].DateResult.GetDate("dd-MMM-yyyy hh:mm tt");
+                    }
+                    foreach (var item in worksheet.ColumnsUsed())
+                    {
+                        item.AdjustToContents();
+                    }
+                    using (var stream = new MemoryStream())
+                    {
+                        workbook.SaveAs(stream);
+                        var content = stream.ToArray();
+                        return File(content, contentType, fileName);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return NotFound();
+            }
+        }
+        #endregion
+
         #region HELPERS
 
         public async Task<ResultFormModel> SetResultForm(int resultId)
@@ -506,7 +656,6 @@ namespace SOPCOVIDChecker.Controllers
                 SpecimenType = model.SopForm.TypeSpecimen,
                 Location = model.SopForm.DiseaseReportingUnit.Name,
                 AdmissionDate = model.AdmissionDate,
-                SampleArrived = model.DateTimeSampleArrived == default ? null : (DateTime?)model.DateTimeSampleArrived,
                 DTSpecimeCollection = model.SopForm.DatetimeCollection,
                 DTSpecimenReceipt = model.SopForm.DatetimeSpecimenReceipt == default ? DateTime.Now.RemoveSeconds() : model.SopForm.DatetimeSpecimenReceipt.RemoveSeconds(),
                 DTReleaseResult = model.SopForm.DateResult == default ? DateTime.Now.RemoveSeconds() : model.SopForm.DateResult.RemoveSeconds(),
@@ -536,7 +685,6 @@ namespace SOPCOVIDChecker.Controllers
 
             resultForm.SopForm.SampleId = model.SampleID;
             resultForm.AdmissionDate = model.AdmissionDate;
-            resultForm.SopForm.DatetimeSpecimenReceipt = model.DTSpecimenReceipt;
             resultForm.SopForm.DateResult = model.DTReleaseResult;
             resultForm.SopForm.PcrResult = model.TestResult;
             resultForm.Comments = model.Comments;
@@ -545,7 +693,6 @@ namespace SOPCOVIDChecker.Controllers
             resultForm.ApprovedBy = model.Approved;
             resultForm.UpdatedAt = DateTime.Now;
             resultForm.SopForm.UpdatedAt = DateTime.Now;
-            resultForm.DateTimeSampleArrived = (DateTime)model.SampleArrived;
 
             return resultForm;
         }

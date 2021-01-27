@@ -10,6 +10,8 @@ namespace SOPCOVIDChecker.Models.SopViewModel
     public partial class AddPatientModel
     {
         [Required]
+        public int Id { get; set; }
+        [Required]
         [Column("fname")]
         [StringLength(70)]
         public string Fname { get; set; }
@@ -31,6 +33,9 @@ namespace SOPCOVIDChecker.Models.SopViewModel
         [Column("contact_no")]
         [StringLength(50)]
         public string ContactNo { get; set; }
+        [Required]
+        [DataType(DataType.EmailAddress)]
+        public string Email { get; set; }
         [Column("current_barangay")]
         public int CurrentBarangay { get; set; }
         [Column("current_muncity")]
@@ -49,7 +54,7 @@ namespace SOPCOVIDChecker.Models.SopViewModel
         public string CurrentAddress { get; set; }
         [Required]
         [Column("permanent_baragnay")]
-        public int PermanentBaragnay { get; set; }
+        public int PermanentBarangay { get; set; }
         [Required]
         [Column("permanent_muncity")]
         public int PermanentMuncity { get; set; }
@@ -66,5 +71,15 @@ namespace SOPCOVIDChecker.Models.SopViewModel
         [StringLength(255)]
         public string PermanentAddress { get; set; }
         public bool Disabled { get; set; }
+        [Required]
+        public string PIN { get; set; }
+        [Required]
+        public string PhicMembershipType { get; set; }
+        [Required]
+        public bool Employed { get; set; }
+        [Required]
+        public string PEN { get; set; }
+        [Required]
+        public string EmployerName { get; set; }
     }
 }

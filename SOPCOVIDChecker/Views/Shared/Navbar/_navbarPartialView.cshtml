@@ -1,7 +1,12 @@
-﻿<ul class="navbar-nav flex-grow-1">
+﻿@{ 
+    var url = "";
+}
+
+<ul class="navbar-nav flex-grow-1">
     <!-- NAVBAR -->
     @if (User.FindFirstValue(ClaimTypes.Role) == "RHU")
     {
+        url = "https://www.youtube.com/watch?v=iZMMzaqHESQ&list=PLkVicRlMPdMzDSQ2imtZL2oyzQwLfuaz3&index=1";
         <li class="nav-item ">
             <a class="nav-link" asp-area="" asp-controller="Sop" asp-action="SopIndex">
                 <i class="fa fa-home"></i>
@@ -22,29 +27,35 @@
         </li>
         <li class="nav-item dropdown">
             <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                <i class="fas fa-download"></i>
-                &nbsp;Download
+                <i class="far fa-file-excel"></i>
+                &nbsp;Files
             </a>
-
             <ul class="dropdown-menu border-0 shadow">
                 <li>
-                    <a class="dropdown-item" asp-controller="Sop" asp-action="ExportAll">
-                        <i class="fa fa-user-injured"></i>
-                        &nbsp;All Patient
-                    </a>
-                </li>@*
-                <li>
-                    <a class="dropdown-item" asp-controller="Sop" asp-action="Released">
-                        <i class="fas fa-ambulance"></i>
-                        &nbsp;Released
+                    <a class="dropdown-item" asp-controller="Sop" asp-action="UploadLineList">
+                        <i class="fas fa-file-upload"></i>
+                        &nbsp;Upload
                     </a>
                 </li>
                 <li>
-                    <a class="dropdown-item" asp-controller="Sop" asp-action="Processing">
-                        <i class="fas fa-ambulance"></i>
-                        &nbsp;Processing
+                    <a class="dropdown-item" asp-controller="Sop" asp-action="ExportAll">
+                        <i class="fas fa-download"></i>
+                        &nbsp;Download
                     </a>
-                </li>*@
+                </li>
+                @*
+                    <li>
+                        <a class="dropdown-item" asp-controller="Sop" asp-action="Released">
+                            <i class="fas fa-ambulance"></i>
+                            &nbsp;Released
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" asp-controller="Sop" asp-action="Processing">
+                            <i class="fas fa-ambulance"></i>
+                            &nbsp;Processing
+                        </a>
+                    </li>*@
                 <li>
                     <a class="dropdown-item" asp-area="" asp-controller="Sop" asp-action="DownloadApp">
                         <i class="fas fa-download"></i>
@@ -57,8 +68,9 @@
 
     @if (User.FindFirstValue(ClaimTypes.Role) == "PESU")
     {
+        url = "https://www.youtube.com/watch?v=A_ajc03RUmE&list=PLkVicRlMPdMzDSQ2imtZL2oyzQwLfuaz3&index=4";
         <li class="nav-item ">
-            <a class="nav-link" asp-area="" asp-controller="Pesu" asp-action="PesuStatus">
+            <a class="nav-link" asp-area="" asp-controller="Pesu" asp-action="Status">
                 <i class="fa fa-home"></i>
                 &nbsp;Home
             </a>
@@ -67,6 +79,7 @@
 
     @if (User.FindFirstValue(ClaimTypes.Role) == "RESU")
     {
+        url = "https://www.youtube.com/watch?v=-01KaNWbKDU&list=PLkVicRlMPdMzDSQ2imtZL2oyzQwLfuaz3&index=3";
         <li class="nav-item ">
             <a class="nav-link" asp-area="" asp-controller="Resu" asp-action="ResuIndex">
                 <i class="fa fa-home"></i>
@@ -83,6 +96,7 @@
 
     @if (User.FindFirstValue(ClaimTypes.Role) == "LAB")
     {
+        url = "https://www.youtube.com/watch?v=aPCKfMgfm4Q&list=PLkVicRlMPdMzDSQ2imtZL2oyzQwLfuaz3&index=2";
         <li class="nav-item ">
             <a class="nav-link" asp-area="" asp-controller="Result" asp-action="LabIndex">
                 <i class="fa fa-home"></i>
@@ -90,9 +104,21 @@
             </a>
         </li>
         <li class="nav-item ">
+            <a class="nav-link" asp-area="" asp-controller="Result" asp-action="ArchivedIndex">
+                <i class="far fa-file-alt"></i>
+                &nbsp;Completed
+            </a>
+        </li>
+        <li class="nav-item ">
             <a class="nav-link" asp-area="" asp-controller="Result" asp-action="LabUsers">
                 <i class="fa fa-user-md"></i>
                 &nbsp;Staff
+            </a>
+        </li>
+        <li class="nav-item ">
+            <a class="nav-link" asp-area="" asp-controller="Result" asp-action="ExportAll">
+                <i class="fas fa-file-download"></i>
+                &nbsp;Line List
             </a>
         </li>
         <!-- MANAGE -->
@@ -136,6 +162,12 @@
             </a>
         </li>
         <li class="nav-item ">
+            <a class="nav-link" asp-area="" asp-controller="Admin" asp-action="Patients">
+                <i class="fa fa-user-injured"></i>
+                &nbsp;Patients
+            </a>
+        </li>
+        <li class="nav-item ">
             <a class="nav-link" asp-area="" asp-controller="Admin" asp-action="Facilities">
                 <i class="fa fa-hospital"></i>
                 &nbsp;Facilities
@@ -176,10 +208,38 @@
             </ul>
         </li>
     }
-    <li class="nav-item fa-pull-right">
-        <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Logout">
-            <i class="fa fa-sign-out-alt"></i>
-            &nbsp;Logout
+
+    <li class="nav-item dropdown">
+        <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-user-circle"></i>
+            &nbsp;Account
         </a>
+
+        <ul class="dropdown-menu border-0 shadow">
+            <li>
+                <a class="dropdown-item" href="@url" target="_blank">
+                    <i class="fab fa-youtube"></i>
+                    &nbsp;Video tutorial
+                </a>
+            </li>
+            <li>
+                <a class="dropdown-item" href="https://drive.google.com/file/d/1ydgfaK-kWLRh5pZghJxz6u0IONV3LCNt/view?fbclid=IwAR2mzDOZoIUpAoaUpOirXAqZfZH_YYKXvFlf9G9eBEF_tMkQAvuhBPSYe3E" target="_blank">
+                    <i class="fas fa-file-pdf"></i>
+                    &nbsp;PDF Manual
+                </a>
+            </li>
+            <li>
+                <a class="dropdown-item" href="https://drive.google.com/file/d/1zXam6zU8I-r-qy9VMKy9ghRrtbRKJek0/view?fbclid=IwAR29ljWuIcI0246A-F-FH6BQ8o-68EwRq9kH7HHFKDMwyN4e9EnEDnmoejI" target="_blank">
+                    <i class="fas fa-file-upload"></i>
+                    &nbsp;Incident Report
+                </a>
+            </li>
+            <li>
+                <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Logout">
+                    <i class="fa fa-sign-out-alt"></i>
+                    &nbsp;Logout
+                </a>
+            </li>
+        </ul>
     </li>
 </ul>

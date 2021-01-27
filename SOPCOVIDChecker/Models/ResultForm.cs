@@ -18,16 +18,21 @@ namespace SOPCOVIDChecker.Models
         public int? VerifiedBy { get; set; }
         [Column("approved_by")]
         public int? ApprovedBy { get; set; }
+        [Required]
+        [Column("doctor_pf")]
+        [StringLength(50)]
+        public string DoctorPf { get; set; }
         [Column("sop_form_id")]
         public int SopFormId { get; set; }
         [Column("created_by")]
         public int? CreatedBy { get; set; }
         [Column("admission_date", TypeName = "date")]
         public DateTime? AdmissionDate { get; set; }
-        [Column("date_time_sample_arrived")]
-        public DateTime DateTimeSampleArrived { get; set; }
         [Column("created_at")]
         public DateTime CreatedAt { get; set; }
+        [Required]
+        [StringLength(50)]
+        public string DiagnosisCode { get; set; }
         [Column("updated_at")]
         public DateTime UpdatedAt { get; set; }
 

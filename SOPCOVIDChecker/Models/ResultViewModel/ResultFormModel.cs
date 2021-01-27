@@ -39,7 +39,5 @@ namespace SOPCOVIDChecker.Models.ResultViewModel
         public int? Verified { get; set; }
         [Required]
         public int? Approved { get; set; }
-        [Required]
-        public DateTime? SampleArrived { get; set; }
     }
 }

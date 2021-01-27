@@ -34,8 +34,12 @@ namespace SOPCOVIDChecker.Models
         public string Sex { get; set; }
         [Required]
         [Column("contact_no")]
-        [StringLength(50)]
+        [StringLength(100)]
         public string ContactNo { get; set; }
+        [Required]
+        [Column("email")]
+        [StringLength(50)]
+        public string Email { get; set; }
         [Column("current_barangay")]
         public int CurrentBarangay { get; set; }
         [Column("current_muncity")]
@@ -68,6 +72,20 @@ namespace SOPCOVIDChecker.Models
         [Column("permanent_address")]
         [StringLength(255)]
         public string PermanentAddress { get; set; }
+        [Required]
+        [StringLength(50)]
+        public string PhicMembershipType { get; set; }
+        [Required]
+        [Column("PIN")]
+        [StringLength(50)]
+        public string Pin { get; set; }
+        public bool Employed { get; set; }
+        [Column("PEN")]
+        [StringLength(50)]
+        public string Pen { get; set; }
+        [Required]
+        [StringLength(100)]
+        public string EmployerName { get; set; }
         [Column("created_at")]
         public DateTime CreatedAt { get; set; }
         [Column("updated_at")]

@@ -1,0 +1,36 @@
+﻿
+@{
+    ViewData["Title"] = "LABORATORY";
+}
+
+    <div class="card card-warning card-outline">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-md-6">
+                    <h4>
+                        CONFIRMED SAMPLES<br />
+                    </h4>
+                    <small class="badge bg-gradient-warning">Total: <span class="ctr"></span></small>
+                </div>
+                <div class="col-md-6">
+                    <form class="fa-pull-right form-inline ml-3" asp-controller="Result" asp-action="ArchivedIndexPartial" method="get" onsubmit="return partialViewGet(this, '#result_archivedindex');">
+                        <!-- INPUT -->
+                        <input class="form-control form-control-sm"
+                               name="q"
+                               id="q"
+                               placeholder="Search name"
+                               type="text" />
+                        <button type="submit" class="btn btn-sm btn-success">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="card-body" id="result_archivedindex" style="overflow:auto !important;">
+        </div>
+    </div>
+
+<script>
+    LoadPartialView('#result_archivedindex', '@Url.Action("ArchivedIndexPartial","Result")');
+</script>

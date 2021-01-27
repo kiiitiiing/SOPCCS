@@ -1,8 +1,12 @@
-﻿@model List<ResultLess>
+﻿@model PaginatedList<ResultLess>
+
+@{
+    var dateRange = ViewBag.StartDate + " - " + ViewBag.EndDate;
+}
 
 @if (Model.Count() != 0)
 {
-    <table class="table table-bordered table-striped" style="white-space: nowrap!important; overflow-y: auto !important;">
+    <table class="table table-hover table-bordered table-responsive table-striped" style="white-space: nowrap!important ">
         <thead class="bg-gray">
             <tr>
                 <th class="text-center text-sm">
@@ -49,5 +53,26 @@ else
     </div>
 }
 
+<div style="padding-top: 20px;">
+    @await Html.PartialAsync("~/Views/Shared/_PageList.cshtml", new PageListModel
+    {
+        Action = "SampleStatus",
+        HasNextPage = Model.HasNextPage,
+        HasPreviousPage = Model.HasPreviousPage,
+        PageIndex = Model._pageIndex,
+        TotalPages = Model._totalPages,
+        Parameters = new Dictionary<string, string>
+        {
+            { "page", Model._pageIndex.ToString() },
+            { "q", ViewBag.Search },
+            { "f", ViewBag.Filter },
+            { "dr", dateRange },
+        }
+    })
+</div>
+
 <script>
+    $(function () {
+        $('.total_ctr').html('@Model._itemCount');
+    });
 </script>

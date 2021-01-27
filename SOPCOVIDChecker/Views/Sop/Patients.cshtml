@@ -1,4 +1,5 @@
-﻿@{
+﻿
+@{
     ViewData["Title"] = "Patient List";
 }
 
@@ -16,35 +17,36 @@
                     </div>
                     <!-- CARD DANGER BODY -->
                     <div class="card-body">
+                        <div id="filter_card">
+                            <form asp-controller="Sop" asp-action="PatientsPartial" method="get" onsubmit="return partialViewGet(this, '#sop_patients');">
+                                <div class="form-group">
+                                    <input class="form-control form-control-sm" type="text" id="q" name="q" placeholder="Seach Name..." />
+                                </div>
+                                <!-- BUTTONS -->
+                                <div class="form-group">
+                                    <!-- FILTER -->
+                                    <button class="btn btn-block btn-sm bg-gradient-success" type="submit">
+                                        <i class="fa fa-search"></i>
+                                        &nbsp;Filter
+                                    </button>
+                                    <!-- ADD PATIENT -->
+                                    <button type="button"
+                                            class="btn btn-block btn-sm bg-gradient-warning"
+                                            onclick="showInPopup('@Url.Action("AddPatient", "Sop")', 'def')">
+                                        <i class="fa fa-user-plus">
+                                            &nbsp;Add Patient
+                                        </i>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
                         <!-- SEARCH -->
-                        <div class="form-group">
-                            <input class="form-control form-control-sm" type="text" placeholder="Seach Name..." id="searchDetail" required />
-                        </div>
-                        <!-- BUTTONS -->
-                        <div class="form-group">
-                            <!-- FILTER -->
-                            <button class="btn btn-block btn-sm bg-gradient-success" type="button" id="searchPatientBtn">
-                                <i class="fa fa-search"></i>
-                                &nbsp;Filter
-                            </button>
-                            <!-- ADD PATIENT -->
-                            <button type="button"
-                                    class="btn btn-block btn-sm bg-gradient-warning"
-                                    data-toggle="ajax-modal"
-                                    data-target="#large_modal"
-                                    data-action="#large_content"
-                                    data-url="@Url.Action("AddPatient","Sop")">
-                                <i class="fa fa-user-plus">
-                                    &nbsp;Add Patient
-                                </i>
-                            </button>
-                        </div>
                     </div>
                 </div>
             </div>
             <div class="col-md-9">
                 <!-- PATIENT LIST -->
-                <div class="card card-outline">
+                <div class="card card-outline" id="patient_card">
                     <!-- DAILY USERS HEADER -->
                     <div class="card-header with-border">
                         <h4>
@@ -52,33 +54,14 @@
                         </h4>
                     </div>
                     <!-- DAILY USERS BODY -->
-                    <div class="card-body" id="list_patient">
-                        <div class="overlay d-flex justify-content-center align-items-center">
-                            <i class="fas fa-2x fa-sync fa-spin"></i>
-                        </div>
-                        <br />
-                        <br />
-
+                    <div class="card-body" id="sop_patients">
                     </div>
-                    <div id="sop-patients" style="margin: auto; margin-bottom: 20px;"></div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<script>
-    var vessel = $('#sop-patients');
-    var c = [];
-    c.push(qFix($('#searchDetail').val()));
-    LoadList(c, vessel, '@Url.Action("PatientsJson", "Sop")');
 
-    $(function () {
-        $('#searchPatientBtn').on('click', function (event) {
-            event.preventDefault();
-            event.stopImmediatePropagation();
-            var q = []
-            q.push(qFix($('#searchDetail').val()));
-            LoadList(q, vessel, '@Url.Action("PatientsJson", "Sop")');
-        });
-    })
+<script>
+    LoadPartialView('#sop_patients', '@Url.Action("PatientsPartial", "Sop")');
 </script>

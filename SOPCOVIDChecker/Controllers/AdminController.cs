@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,6 +10,8 @@ using Microsoft.EntityFrameworkCore;
 using SOPCOVIDChecker.Data;
 using SOPCOVIDChecker.Models;
 using SOPCOVIDChecker.Models.AdminViewModel;
+using SOPCOVIDChecker.Models.SopViewModel;
+using SOPCOVIDChecker.Models.ViewModels;
 using SOPCOVIDChecker.Services;
 
 namespace SOPCOVIDChecker.Controllers
@@ -62,6 +65,7 @@ namespace SOPCOVIDChecker.Controllers
             return chart;
         }
         #endregion
+
         #region ADD FACILITY
         // GET: ADD FACILITY    
         public IActionResult AddFacility()
@@ -82,11 +86,31 @@ namespace SOPCOVIDChecker.Controllers
                 var faciliy = await SetFacilityViewModelAsync(model);
                 await _context.AddAsync(faciliy);
                 await _context.SaveChangesAsync();
-                return PartialView();
+                var returnFacilities = await _context.Facility
+                        .Select(x => new FacilitiesModel
+                        {
+                            Id = x.Id,
+                            Facility = x.Name,
+                            Address = x.GetAddress(),
+                            Contact = x.ContactNo,
+                            Email = x.Email,
+                            Chief = x.ChiefHospital,
+                            Level = x.Level,
+                            Type = x.HospitalType
+                        })
+                        .ToListAsync();
+
+                var returnModel = PaginatedList<FacilitiesModel>.CreateAsync(returnFacilities, ControllerContext.Action(), 1, 10);
+                return Json(new JsonModel
+                {
+                    IsValid = ModelState.IsValid,
+                    Html = Helper.RenderRazorViewToString(this, nameof(FacilitiesPartial), returnModel),
+                    Toast = $"Facilit [{model.Name}] added successfully"
+                });
             }
             else
             {
-                if (model.Province == null)
+                if (model.Province == 0)
                     ModelState.AddModelError("Province", "Please select a province.");
                 if (model.Muncity == null)
                     ModelState.AddModelError("Muncity", "Please select a municipality/city.");
@@ -111,9 +135,16 @@ namespace SOPCOVIDChecker.Controllers
             }
             ViewBag.HospitalLevels = new SelectList(ListContainer.HospitalLevel, "Key", "Value", model.Level);
             ViewBag.HospitalTypes = new SelectList(ListContainer.HospitalType, "Key", "Value", model.Type);
-            return PartialView(model);
+
+            return Json(new JsonModel
+            {
+                IsValid = false,
+                Html = Helper.RenderRazorViewToString(this, nameof(UpdateFacility), model),
+                Toast = ""
+            });
         }
         #endregion
+
         #region UPDATE FACILITY
         [HttpGet]
         public async Task<IActionResult> UpdateFacility(int? id)
@@ -149,7 +180,27 @@ namespace SOPCOVIDChecker.Controllers
                     var saveFacility = await SaveFacilityAsync(model);
                     _context.Update(saveFacility);
                     await _context.SaveChangesAsync();
-                    return PartialView("~/Views/Admin/UpdateFacility.cshtml", model);
+                    var returnFacilities = await _context.Facility
+                        .Select(x => new FacilitiesModel
+                        {
+                            Id = x.Id,
+                            Facility = x.Name,
+                            Address = x.GetAddress(),
+                            Contact = x.ContactNo,
+                            Email = x.Email,
+                            Chief = x.ChiefHospital,
+                            Level = x.Level,
+                            Type = x.HospitalType
+                        })
+                        .ToListAsync();
+
+                    var returnModel = PaginatedList<FacilitiesModel>.CreateAsync(returnFacilities, ControllerContext.Action(), 1, 10);
+                    return Json(new JsonModel
+                    {
+                        IsValid = ModelState.IsValid,
+                        Html = Helper.RenderRazorViewToString(this, nameof(FacilitiesPartial), returnModel),
+                        Toast = $"Facilit [{model.Name}] updated successfully"
+                    });
                 }
                 else
                 {
@@ -167,25 +218,38 @@ namespace SOPCOVIDChecker.Controllers
             ViewBag.Levels = new SelectList(ListContainer.HospitalLevel, "Key", "Value");
             ViewBag.Types = new SelectList(ListContainer.HospitalType, "Key", "Value");
 
-            return PartialView(model);
+            return Json(new JsonModel
+            {
+                IsValid = false,
+                Html = Helper.RenderRazorViewToString(this, nameof(UpdateFacility), model),
+                Toast = ""
+            });
         }
         #endregion
+
         #region FACILITES
-        public async Task<ActionResult<List<FacilitiesModel>>> FacilitiesJson(string q)
+        // FACILITIES
+        public IActionResult Facilities()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> FacilitiesPartial(string q, int? p)
         {
             var facilities = await _context.Facility
-                            .Select(x => new FacilitiesModel
-                            {
-                                Id = x.Id,
-                                Facility = x.Name,
-                                Address = x.GetAddress(),
-                                Contact = x.ContactNo,
-                                Email = x.Email,
-                                Chief = x.ChiefHospital,
-                                Level = x.Level,
-                                Type = x.HospitalType
-                            })
-                            .ToListAsync();
+                .Select(x => new FacilitiesModel
+                {
+                    Id = x.Id,
+                    Facility = x.Name,
+                    Address = x.GetAddress(),
+                    Contact = x.ContactNo,
+                    Email = x.Email,
+                    Chief = x.ChiefHospital,
+                    Level = x.Level,
+                    Type = x.HospitalType
+                })
+                .ToListAsync();
 
 
             if (!string.IsNullOrEmpty(q))
@@ -193,21 +257,20 @@ namespace SOPCOVIDChecker.Controllers
                 facilities = facilities.Where(x => x.Facility.Contains(q, StringComparison.OrdinalIgnoreCase)).ToList();
             }
 
-            return facilities;
+            int s = 10;
+
+            return PartialView(PaginatedList<FacilitiesModel>.CreateAsync(facilities, ControllerContext.Action(), p ?? 1, s));
         }
-        // FACILITIES
-        public IActionResult Facilities()
+        #endregion
+
+        #region RHU
+        public IActionResult RhuUsers()
         {
             return View();
         }
 
-        public IActionResult FacilitiesPartial([FromBody]IEnumerable<FacilitiesModel> model)
-        {
-            return PartialView(model);
-        }
-        #endregion
-        #region RHU
-        public async Task<ActionResult<List<UserLess>>> RhuJson(string q)
+        [HttpGet]
+        public async Task<IActionResult> RhuUsersPartial(string q, int? p)
         {
             var rhuUsers = await _context.Sopusers
                 .Include(x => x.Facility)
@@ -218,31 +281,38 @@ namespace SOPCOVIDChecker.Controllers
                 .Select(x => new UserLess
                 {
                     Id = x.Id,
-                    Name = x.GetFullName(),
+                    Fname = x.Fname,
+                    Mname = x.Mname,
+                    Lname = x.Lname,
                     ContactNo = x.ContactNo,
                     Email = x.Email,
                     Address = x.GetAddress(),
                     Facility = x.Facility.Name,
                     Username = x.Username
-                })
-                .ToListAsync();
+                }).ToListAsync();
 
-            return rhuUsers;
+
+            if (!string.IsNullOrEmpty(q))
+            {
+                rhuUsers = rhuUsers.Where(x =>
+                    x.Fullname.Contains(q) || x.Username.Contains(q)).ToList();
+            }
+
+            int s = 10;
+
+            return PartialView(PaginatedList<UserLess>.CreateAsync(rhuUsers, ControllerContext.Action(), p ?? 1, s));
         }
-        public IActionResult RhuUsers()
+        #endregion
+
+        #region PESU
+        public IActionResult PesuUsers()
         {
             return View();
         }
 
-        public IActionResult RhuUsersPartial([FromBody]IEnumerable<UserLess> model)
+        public async Task<IActionResult> PesuUsersPartial(string q, int? p)
         {
-            return PartialView(model);
-        }
-        #endregion
-        #region PESU
-        public async Task<ActionResult<List<UserLess>>> PesuJson(string q)
-        {
-            var rhuUsers = await _context.Sopusers
+            var users = await _context.Sopusers
                 .Include(x => x.Facility)
                 .Include(x => x.BarangayNavigation)
                 .Include(x => x.MuncityNavigation)
@@ -251,7 +321,9 @@ namespace SOPCOVIDChecker.Controllers
                 .Select(x => new UserLess
                 {
                     Id = x.Id,
-                    Name = x.GetFullName(),
+                    Fname = x.Fname,
+                    Mname = x.Mname,
+                    Lname = x.Lname,
                     ContactNo = x.ContactNo,
                     Email = x.Email,
                     Address = x.GetAddress(),
@@ -260,22 +332,26 @@ namespace SOPCOVIDChecker.Controllers
                 })
                 .ToListAsync();
 
-            return rhuUsers;
+            if (!string.IsNullOrEmpty(q))
+            {
+                users = users.Where(x => x.Fullname.Contains(q) || x.Username.Contains(q)).ToList();
+            }
+
+            int s = 10;
+
+            return PartialView(PaginatedList<UserLess>.CreateAsync(users, ControllerContext.Action(), p ?? 1, s));
         }
-        public IActionResult PesuUsers()
+        #endregion
+
+        #region RESU
+        public IActionResult ResuUsers()
         {
             return View();
         }
 
-        public IActionResult PesuUsersPartial([FromBody] IEnumerable<UserLess> model)
+        public async Task<IActionResult> ResuUsersPartial(string q, int? p)
         {
-            return PartialView(model);
-        }
-        #endregion
-        #region RESU
-        public async Task<ActionResult<List<UserLess>>> ResuJson(string q)
-        {
-            var rhuUsers = await _context.Sopusers
+            var users = await _context.Sopusers
                 .Include(x => x.Facility)
                 .Include(x => x.BarangayNavigation)
                 .Include(x => x.MuncityNavigation)
@@ -284,7 +360,9 @@ namespace SOPCOVIDChecker.Controllers
                 .Select(x => new UserLess
                 {
                     Id = x.Id,
-                    Name = x.GetFullName(),
+                    Fname = x.Fname,
+                    Mname = x.Mname,
+                    Lname = x.Lname,
                     ContactNo = x.ContactNo,
                     Email = x.Email,
                     Address = x.GetAddress(),
@@ -293,52 +371,271 @@ namespace SOPCOVIDChecker.Controllers
                 })
                 .ToListAsync();
 
-            return rhuUsers;
-        }
-        public IActionResult ResuUsers()
-        {
-            return View();
-        }
+            if(!string.IsNullOrEmpty(q))
+            {
+                users = users.Where(x => x.Fullname.Contains(q) || x.Username.Contains(q)).ToList();
+            }
 
-        public IActionResult ResuUsersPartial([FromBody] IEnumerable<UserLess> model)
-        {
-            return PartialView(model);
+            int s = 10;
+
+            return PartialView(PaginatedList<UserLess>.CreateAsync(users, ControllerContext.Action(), p ?? 1, s));
         }
         #endregion
-        #region LAB
-        public async Task<ActionResult<List<UserLess>>> LabJson(string q)
-        {
-            var rhuUsers = await _context.Sopusers
-                .Include(x => x.Facility)
-                .Include(x => x.BarangayNavigation)
-                .Include(x => x.MuncityNavigation)
-                .Include(x => x.ProvinceNavigation)
-                .Where(x=>x.UserLevel.Equals("LAB"))
-                .Select(x => new UserLess
-                {
-                    Id = x.Id,
-                    Name = x.GetFullName(),
-                    ContactNo = x.ContactNo,
-                    Email = x.Email,
-                    Address = x.GetAddress(),
-                    Facility = x.Facility.Name,
-                    Username = x.Username
-                })
-                .ToListAsync();
 
-            return rhuUsers;
-        }
+        #region LAB
         public IActionResult LabUsers()
         {
             return View();
         }
 
-        public IActionResult LabUsersPartial([FromBody] IEnumerable<UserLess> model)
+        public async Task<IActionResult> LabUsersPartial(string q, int? p)
         {
-            return PartialView(model);
+            var users = await _context.Sopusers
+                .Include(x => x.Facility)
+                .Include(x => x.BarangayNavigation)
+                .Include(x => x.MuncityNavigation)
+                .Include(x => x.ProvinceNavigation)
+                .Where(x => x.UserLevel.Equals("LAB"))
+                .Select(x => new UserLess
+                {
+                    Id = x.Id,
+                    Fname = x.Fname,
+                    Mname = x.Mname,
+                    Lname = x.Lname,
+                    ContactNo = x.ContactNo,
+                    Email = x.Email,
+                    Address = x.GetAddress(),
+                    Facility = x.Facility.Name,
+                    Username = x.Username
+                })
+                .ToListAsync();
+
+            if(!string.IsNullOrEmpty(q))
+            {
+                users = users.Where(x => x.Fullname.Contains(q) || x.Username.Contains(q)).ToList();
+            }
+
+            int s = 10;
+
+            return PartialView(PaginatedList<UserLess>.CreateAsync(users, ControllerContext.Action(), p ?? 1, s));
         }
         #endregion
+
+        #region PATIENTS
+        [HttpGet]
+        public IActionResult Patients()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> PatientsPartial(string q, int? page)
+        {
+            var patients = _context.Patient
+                   .Include(x => x.CurrentBarangayNavigation)
+                   .Include(x => x.CurrentMuncityNavigation)
+                   .Include(x => x.CurrentProvinceNavigation)
+                   .OrderByDescending(x => x.CreatedAt)
+                   .Select(x => new ListPatientModel
+                   {
+                       Id = x.Id,
+                       Name = x.Fname + " " + (x.Mname ?? "") + " " + x.Lname,
+                       DateOfBirth = x.Dob.GetDate("MMM d, yyyy"),
+                       Age = x.Dob.ComputeAge(),
+                       Sex = x.Sex,
+                       Address = x.GetAddress(),
+                       BarangayId = x.CurrentBarangay,
+                       MuncutyId = x.CurrentMuncity,
+                       ProvinceId = x.CurrentProvince
+                   });
+
+            if (!string.IsNullOrEmpty(q))
+            {
+                ViewBag.Search = q;
+                patients = patients.Where(x => x.Name.Contains(q));
+            }
+            int size = 10;
+
+            return PartialView(PaginatedList<ListPatientModel>.CreateAsync(await patients.ToListAsync(), ControllerContext.Action(), page ?? 1, size));
+        }
+        #endregion
+
+        #region EDIT PATIENT
+
+        public async Task<IActionResult> EditPatient(int patientId)
+        {
+            var patient = await _context.Patient
+                .Include(x => x.CurrentBarangayNavigation)
+                .Include(x => x.CurrentMuncityNavigation)
+                .Include(x => x.CurrentProvinceNavigation)
+                .FirstOrDefaultAsync(x => x.Id == patientId);
+            if (patient.CurrentMuncity != 0)
+            {
+                ViewBag.Muncity = GetMuncities(patient.CurrentProvince);
+            }
+            if (patient.CurrentBarangay != 0)
+            {
+                ViewBag.Barangay = GetBarangays(patient.CurrentMuncity, patient.CurrentProvince);
+            }
+
+            var patientModel = await GetPatientModel(patient);
+            return PartialView(patientModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditPatient(AddPatientModel model)
+        {
+            var errors = ModelState.Values.SelectMany(v => v.Errors);
+            if (ModelState.IsValid)
+            {
+                if (_context.Patient.Where(x => x.Id != model.Id).Any(x =>
+                       x.Fname.ToUpper().Equals(model.Fname.ToUpper()) &&
+                       (x.Mname ?? "").ToUpper().Equals((model.Mname ?? "").ToUpper()) &&
+                       x.Lname.ToUpper().Equals(model.Lname.ToUpper()) &&
+                       x.Sex == model.Sex &&
+                       x.Dob == model.Dob))
+                {
+                    ViewBag.Duplicate = "Patient already exists";
+                    return Json(new JsonModel
+                    {
+                        IsValid = false,
+                        Html = Helper.RenderRazorViewToString(this, nameof(EditPatient), model),
+                        Toast = $"[{model.Fname} {model.Lname}] already exists"
+                    });
+                }
+                else
+                {
+                    var patient = await SetPatient(model);
+                    _context.Update(patient);
+                    await _context.SaveChangesAsync();
+                    return Json(new JsonModel
+                    {
+                        IsValid = true,
+                        Html = Helper.RenderRazorViewToString(this, nameof(PatientsPartial), await GetPatients(1,10,"PatientsPartial")),
+                        Toast = $"[{model.Fname} {model.Lname}] updated"
+                    });
+                }
+            }
+            ViewBag.Errors = errors;
+            if (model.CurrentMuncity != 0)
+            {
+                ViewBag.Muncity = GetMuncities(UserProvince);
+            }
+            if (model.CurrentBarangay != 0)
+            {
+                ViewBag.Barangay = GetBarangays(model.CurrentMuncity, model.CurrentProvince);
+            }
+            return Json(new JsonModel
+            {
+                IsValid = false,
+                Html = Helper.RenderRazorViewToString(this, nameof(EditPatient), model),
+                Toast = $"Edit of [{model.Fname} {model.Lname}] failed"
+            });
+        }
+        #endregion
+
         #region HELPERS
+        public async Task<PaginatedList<ListPatientModel>> GetPatients(int? page, int size, string action)
+        {
+            var patients = await _context.Patient
+                   .Include(x => x.CurrentBarangayNavigation)
+                   .Include(x => x.CurrentMuncityNavigation)
+                   .Include(x => x.CurrentProvinceNavigation)
+                   .OrderByDescending(x => x.CreatedAt)
+                   .Select(x => new ListPatientModel
+                   {
+                       Id = x.Id,
+                       Name = x.Fname + " " + (x.Mname ?? "") + " " + x.Lname,
+                       DateOfBirth = x.Dob.GetDate("MMM d, yyyy"),
+                       Age = x.Dob.ComputeAge(),
+                       Sex = x.Sex,
+                       Address = x.GetAddress(),
+                       BarangayId = x.CurrentBarangay,
+                       MuncutyId = x.CurrentMuncity,
+                       ProvinceId = x.CurrentProvince
+                   }).ToListAsync();
+
+            return PaginatedList<ListPatientModel>.CreateAsync(patients, action, page ?? 1, size);
+        }
+
+        public SelectList GetBarangays(int muncityId, int provinceId)
+        {
+            return new SelectList(_context.Barangay.Where(x => x.Muncity == muncityId && x.Province == x.Province), "Id", "Description");
+        }
+
+        public Task<Patient> SetPatient(AddPatientModel model)
+        {
+            var patient = new Patient
+            {
+                Fname = model.Fname,
+                Mname = model.Mname,
+                Lname = model.Lname,
+                Sex = model.Sex,
+                Dob = (DateTime)model.Dob,
+                ContactNo = model.ContactNo,
+                Email = model.Email,
+                CurrentBarangay = model.CurrentBarangay,
+                CurrentMuncity = model.CurrentMuncity,
+                CurrentProvince = 2,
+                CurrentPurok = model.CurrentPurok,
+                CurrentSitio = model.CurrentSitio,
+                CurrentAddress = model.CurrentAddress,
+                PermanentBarangay = model.Disabled ? model.CurrentBarangay : model.PermanentBarangay,
+                PermanentMuncity = model.Disabled ? model.CurrentMuncity : model.PermanentMuncity,
+                PermanentProvince = 2,
+                PermanentAddress = model.Disabled ? model.CurrentAddress : model.PermanentAddress,
+                PermanentPurok = model.Disabled ? model.CurrentPurok : model.PermanentPurok,
+                PermanentSitio = model.Disabled ? model.CurrentSitio : model.PermanentSitio,
+                PhicMembershipType = model.PhicMembershipType,
+                Pin = model.PIN,
+                Employed = model.Employed,
+                Pen = model.Employed ? model.PEN : "Unemployed",
+                EmployerName = model.Employed ? model.EmployerName : "Unemployed",
+                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now
+            };
+
+            return Task.FromResult(patient);
+        }
+
+        public Task<AddPatientModel> GetPatientModel(Patient patient)
+        {
+            var model = new AddPatientModel
+            {
+                Fname = patient.Fname,
+                Mname = patient.Mname,
+                Lname = patient.Lname,
+                Sex = patient.Sex,
+                Dob = (DateTime)patient.Dob,
+                ContactNo = patient.ContactNo,
+                Email = patient.Email,
+                CurrentBarangay = patient.CurrentBarangay,
+                CurrentMuncity = patient.CurrentMuncity,
+                CurrentProvince = 2,
+                CurrentPurok = patient.CurrentPurok,
+                CurrentSitio = patient.CurrentSitio,
+                CurrentAddress = patient.CurrentAddress,
+                PermanentBarangay = patient.PermanentBarangay,
+                PermanentMuncity = patient.PermanentMuncity,
+                PermanentProvince = 2,
+                PermanentAddress = patient.PermanentAddress,
+                PermanentPurok = patient.PermanentPurok,
+                PermanentSitio = patient.PermanentSitio,
+                PhicMembershipType = patient.PhicMembershipType,
+                PIN = patient.Pin,
+                Employed = patient.Employed,
+                PEN = patient.Pen,
+                EmployerName = patient.EmployerName
+            };
+
+            return Task.FromResult(model);
+        }
+
+        public SelectList GetMuncities(int id)
+        {
+            return new SelectList(_context.Muncity.Where(x => x.Province == id), "Id", "Description");
+        }
         private async Task<Facility> SaveFacilityAsync(FacilityModel model)
         {
             var facility = await _context.Facility.FindAsync(model.Id);
@@ -399,6 +696,12 @@ namespace SOPCOVIDChecker.Controllers
 
             return Task.FromResult(facility);
         }
+        public int UserId => int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+        public int UserFacility => int.Parse(User.FindFirstValue("Facility"));
+        public int UserProvince => int.Parse(User.FindFirstValue("Province"));
+        public int UserMuncity => int.Parse(User.FindFirstValue("Muncity"));
+        public int UserBarangay => int.Parse(User.FindFirstValue("Barangay"));
+        public string UserName => User.FindFirstValue(ClaimTypes.GivenName) + " " + User.FindFirstValue(ClaimTypes.Surname);
         #endregion
     }
 }

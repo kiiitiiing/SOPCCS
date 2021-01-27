@@ -1,4 +1,8 @@
-﻿@model List<SopLess>
+﻿@model PaginatedList<SopLess>
+
+@{
+    var dateRange = ViewBag.StartDate + " - " + ViewBag.EndDate;
+}
 
 @if (Model.Count() != 0)
 {
@@ -52,53 +56,53 @@
         <tbody>
             @foreach (var sop in Model)
             {
-            <tr>
-                <td class="text-center text-sm">
-                    @sop.PatientName
-                </td>
-                <td class="text-center text-sm">
-                    @sop.Age
-                </td>
-                <td class="text-center text-sm">
-                    @sop.Sex
-                </td>
-                <td class="text-center text-sm">
-                    @sop.DateOfBirth.GetDate("dd-MMM-yy")
-                </td>
-                <td class="text-center text-sm">
-                    @sop.ContactNo
-                </td>
-                <td class="text-center text-sm">
-                    @sop.CAddress
-                </td>
-                <td class="text-center text-sm">
-                    @sop.PAddress
-                </td>
-                <td class="text-center text-sm">
-                    @sop.DRU
-                </td>
-                <td class="text-center text-sm">
-                    @sop.DateOnset.GetDate("dd-MMM-yy")
-                </td>
-                <td class="text-center text-sm">
-                    @sop.DateTimeCollection.GetDate("dd-MMM-yy")
-                </td>
-                <td class="text-center text-sm">
-                    @sop.DateTimeCollection.GetDate("h:mm tt")
-                </td>
-                <td class="text-center text-sm">
-                    @sop.Swabber
-                </td>
-                <td class="text-center text-sm">
-                    @sop.RequestedBy
-                </td>
-                <td class="text-center text-sm">
-                    @sop.RequesterContact
-                </td>
-                <td class="text-center text-sm">
-                    @sop.SpecimenCollection
-                </td>
-            </tr>
+                <tr>
+                    <td class="text-center text-sm">
+                        @sop.PatientName
+                    </td>
+                    <td class="text-center text-sm">
+                        @sop.Age
+                    </td>
+                    <td class="text-center text-sm">
+                        @sop.Sex
+                    </td>
+                    <td class="text-center text-sm">
+                        @sop.DateOfBirth.GetDate("dd-MMM-yy")
+                    </td>
+                    <td class="text-center text-sm">
+                        @sop.ContactNo
+                    </td>
+                    <td class="text-center text-sm">
+                        @sop.CAddress
+                    </td>
+                    <td class="text-center text-sm">
+                        @sop.PAddress
+                    </td>
+                    <td class="text-center text-sm">
+                        @sop.DRU
+                    </td>
+                    <td class="text-center text-sm">
+                        @sop.DateOnset.GetDate("dd-MMM-yy")
+                    </td>
+                    <td class="text-center text-sm">
+                        @sop.DateTimeCollection.GetDate("dd-MMM-yy")
+                    </td>
+                    <td class="text-center text-sm">
+                        @sop.DateTimeCollection.GetDate("h:mm tt")
+                    </td>
+                    <td class="text-center text-sm">
+                        @sop.Swabber
+                    </td>
+                    <td class="text-center text-sm">
+                        @sop.RequestedBy
+                    </td>
+                    <td class="text-center text-sm">
+                        @sop.RequesterContact
+                    </td>
+                    <td class="text-center text-sm">
+                        @sop.SpecimenCollection
+                    </td>
+                </tr>
             }
         </tbody>
     </table>
@@ -111,3 +115,25 @@ else
         </span>
     </div>
 }
+
+
+@await Html.PartialAsync("~/Views/Shared/_PageList.cshtml", new PageListModel
+       {
+           Action = "SopIndex",
+           HasNextPage = Model.HasNextPage,
+           HasPreviousPage = Model.HasPreviousPage,
+           PageIndex = Model._pageIndex,
+           TotalPages = Model._totalPages,
+           Parameters = new Dictionary<string, string>
+            {
+               { "page", Model._pageIndex.ToString() },
+               { "q", ViewBag.CurrentSearch },
+               { "dr", dateRange }
+            }
+        })
+
+<script>
+    $(function () {
+        $('.total_ctr').html('@Model._itemCount');  
+    })
+</script>

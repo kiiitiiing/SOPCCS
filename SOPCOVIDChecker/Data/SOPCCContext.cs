@@ -30,7 +30,7 @@ namespace SOPCOVIDChecker.Data
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Data Source=ROCKY\\SQLEXPRESS;Initial Catalog=SOPCOVIDDB;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
+                optionsBuilder.UseSqlServer("Data Source=LAPTOP-0LEHNRO0\\SQLEXPRESS;Initial Catalog=SOPCOVIDDB;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
             }
         }
 
@@ -97,17 +97,27 @@ namespace SOPCOVIDChecker.Data
 
                 entity.Property(e => e.CurrentSitio).IsUnicode(false);
 
+                entity.Property(e => e.Email).IsUnicode(false);
+
+                entity.Property(e => e.EmployerName).IsUnicode(false);
+
                 entity.Property(e => e.Fname).IsUnicode(false);
 
                 entity.Property(e => e.Lname).IsUnicode(false);
 
                 entity.Property(e => e.Mname).IsUnicode(false);
 
+                entity.Property(e => e.Pen).IsUnicode(false);
+
                 entity.Property(e => e.PermanentAddress).IsUnicode(false);
 
                 entity.Property(e => e.PermanentPurok).IsUnicode(false);
 
                 entity.Property(e => e.PermanentSitio).IsUnicode(false);
+
+                entity.Property(e => e.PhicMembershipType).IsUnicode(false);
+
+                entity.Property(e => e.Pin).IsUnicode(false);
 
                 entity.Property(e => e.Sex)
                     .IsUnicode(false)
@@ -157,6 +167,10 @@ namespace SOPCOVIDChecker.Data
 
             modelBuilder.Entity<ResultForm>(entity =>
             {
+                entity.Property(e => e.DiagnosisCode).IsUnicode(false);
+
+                entity.Property(e => e.DoctorPf).IsUnicode(false);
+
                 entity.HasOne(d => d.ApprovedByNavigation)
                     .WithMany(p => p.ResultFormApprovedByNavigation)
                     .HasForeignKey(d => d.ApprovedBy)

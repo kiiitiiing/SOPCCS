@@ -13,91 +13,28 @@
                 </h4>
             </div>
             <div class="col-md-6">
-                <div class="fa-pull-right form-inline ml-3">
-                    <!-- INPUT -->
-                    <input class="form-control form-control-sm"
-                           name="search"
-                           id="searchDetail"
-                           placeholder="Search name"
-                           type="text" />
-                    <button id="searchPatientBtn" type="button" class="btn btn-sm btn-success">
-                        <i class="fa fa-search"></i>
-                    </button>
-                    <button type="button" id="add_facilitys"
-                            class="btn btn-sm btn-primary"
-                            data-toggle="ajax-modal"
-                            data-target="#small_modal"
-                            data-action="#small_content"
-                            data-url="@Url.Action("AddFacility","Admin")">
-                        <i class="far fa-hospital"></i>
-                        &nbsp;Add Facility
-                    </button>
-                </div>
+                <form class="fa-pull-right form-inline ml-3" asp-controller="Admin" asp-action="FacilitiesPartial" method="get" onsubmit="return partialViewGet(this, '#admin_facilities');">
+                    <div class="input-group input-group-sm">
+                        <input class="form-control form-control-navbar" id="q" name="q" placeholder="Search">
+                        <div class="input-group-append">
+                            <button class="btn btn-success" type="submit" title="Search User">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                        <div class="input-group-append">
+                            <a class="btn btn-primary" title="Add User" onclick="showInPopup('@Url.Action("AddFacility", "Admin")', 'def')">
+                                <i class="fas fa-plus"></i>
+                            </a>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
-    <div class="card-body">
-    </div>
-    <div id="admin-facilities" style="margin: auto; margin-bottom: 20px;"></div>
-</div>
-
-
-<div class="modal fade" id="remove-facility-alert">
-    <div class="modal-dialog modal-sm" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <fieldset>
-                    <legend><i class="fa fa-trash"></i> Remove Facility</legend>
-                </fieldset>
-            </div>
-            <div class="modal-body">
-                <div class="alert custom-alert-danger">
-                    <label for="" class="text-danger">Are you sure you want to delete?</label>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">
-                    <i class="fa fa-times"></i>
-                    &nbsp;No
-                </button>
-                <button id="remove-btn" class="btn btn-danger btn-sm" onclick="RemoveFacility()">
-                    <i class="fa fa-check"></i>
-                    &nbsp;Yes
-                </button>
-            </div>
-        </div>
+    <div class="card-body" id="admin_facilities">
     </div>
 </div>
 
 <script type="text/javascript">
-    var vessel = $('#admin-facilities');
-    var c = [];
-    c.push(qFix($('#searchDetail').val()));
-    LoadList(c, vessel, '@Url.Action("FacilitiesJson", "Admin")');
-
-    $(function () {
-        $('#searchPatientBtn').on('click', function (event) {
-            event.preventDefault();
-            event.stopImmediatePropagation();
-            var q = []
-            q.push(qFix($('#searchDetail').val()));
-            LoadList(q, vessel, '@Url.Action("FacilitiesJson", "Admin")');
-        });
-    })
-
-    var facilityId = 0
-    $('.facilityId').on('click', function () {
-        facilityId = $(this).data('id');
-    });
-    function RemoveFacility() {
-        var url = "/Admin/RemoveFacility?id=" + facilityId;
-        console.log(url);
-        $.ajax({
-            url: url,
-            tpye: 'get',
-            async: true
-        });
-        sessionStorage.setItem('onReload', 'removedFacility');
-        location.reload();
-    }
+    LoadPartialView('#admin_facilities', '@Url.Action("FacilitiesPartial","Admin")');
 </script>

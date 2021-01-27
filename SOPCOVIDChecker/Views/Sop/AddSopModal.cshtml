@@ -48,13 +48,13 @@
                     <input type="datetime-local" class="form-control" asp-for="DTCollection" />
                 </div>
                 <div class="col-sm-12">
+                    <label>Specimen Number:</label>
+                    <input type="number" class="form-control" asp-for="NumSpec" />
+                </div>
+                <div class="col-sm-12">
                     <label>Type of Specimen &amp; Collection Medium:</label>
-                    <select type="text" class="form-control" asp-for="SpecimenType">
+                    <select type="text" class="form-control select2" asp-for="SpecimenType" asp-items="ViewBag.Types">
                         <option value="" selected hidden>Select Type</option>
-                        <option value="NPS IN UTM">NPS IN UTM</option>
-                        <option value="OPS IN UTM">OPS IN UTM</option>
-                        <option value="NPS/OPS IN UTM">NPS/OPS IN UTM</option>
-                        <option value="TRACHEAL ASPIRATE">TRACHEAL ASPIRATE</option>
                     </select>
                 </div>
             </div>
@@ -80,7 +80,6 @@
 
 <script>
     $(function () {
-        console.log($('#dateOnset'));
         $('.select2').select2();
     })
 </script>

@@ -1,57 +1,38 @@
 ﻿
+
 @{
     ViewData["Title"] = "RESU";
 }
 
-<div class="card card-warning card-outline">
-    <div class="card-header">
-        <div class="row">
-            <div class="col-md-6">
-                <h4>
-                    SAMPLES SENT FOR CONFIRMATION<br />
-                    <small>Total: <span class="total_ctr"></span></small>
-                </h4>
-            </div>
-            <div class="col-md-6">
-                <div class="fa-pull-right form-inline ml-3">
-                    <!-- INPUT -->
-                    <input class="form-control form-control-sm"
-                           name="search"
-                           id="searchDetail"
-                           placeholder="Search name"
-                           type="text" />
-                    <button id="searchPatientBtn" type="button" class="btn btn-sm btn-success">
-                        <i class="fa fa-search"></i>
-                    </button>
+    <div class="card card-warning card-outline">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-md-6">
+                    <h4>
+                        SAMPLES SENT FOR CONFIRMATION<br />
+                    </h4>
+                    <small class="badge bg-gradient-warning">
+                        Total: <span id="ctr"></span>
+                    </small>
+                </div>
+                <div class="col-md-6">
+                    <form class="fa-pull-right form-inline ml-3" asp-controller="Resu" asp-action="ResuIndexPartial" method="get" onsubmit="return partialViewGet(this, '#resu_resuindex');">
+                        <div class="input-group input-group-sm">
+                            <input class="form-control form-control-navbar" id="q" name="q" placeholder="Search">
+                            <div class="input-group-append">
+                                <button class="btn btn-success" type="submit" title="Search User">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="card-body" id="list_sop_resu" style="overflow:auto !important;">
-        <div class="overlay d-flex justify-content-center align-items-center">
-            <i class="fas fa-2x fa-sync fa-spin"></i>
+        <div class="card-body" id="resu_resuindex" style="overflow:auto !important;">
         </div>
-        <br />
-        <br />
-
     </div>
-    <div id="resu-index" style="margin: auto; margin-bottom: 20px;"></div>
-</div>
-
 
 <script>
-    var vessel = $('#resu-index');
-    var c = [];
-    c.push(qFix($('#searchDetail').val()));
-    LoadList(c, vessel, '@Url.Action("ResuFormJson","Resu")');
-
-    $(function () {
-        $('#searchPatientBtn').on('click', function (event) {
-            event.preventDefault();
-            event.stopImmediatePropagation();
-            var q = []
-            q.push(qFix($('#searchDetail').val()));
-            LoadList(q, vessel, '@Url.Action("ResuFormJson", "Resu")');
-        });
-    })
+    LoadPartialView('#resu_resuindex', '@Url.Action("ResuIndexPartial","Resu")');
 </script>

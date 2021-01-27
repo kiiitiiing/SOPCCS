@@ -26,8 +26,6 @@ namespace SOPCOVIDChecker.Models
         public string PcrResult { get; set; }
         [Column("disease_reporting_unit_id")]
         public int DiseaseReportingUnitId { get; set; }
-        [Column("datetime_collection")]
-        public DateTime DatetimeCollection { get; set; }
         [Required]
         [Column("requested_by")]
         [StringLength(100)]
@@ -40,6 +38,8 @@ namespace SOPCOVIDChecker.Models
         [Column("type_specimen")]
         [StringLength(50)]
         public string TypeSpecimen { get; set; }
+        [Column("datetime_collection")]
+        public DateTime DatetimeCollection { get; set; }
         [Column("date_onset_symptoms", TypeName = "date")]
         public DateTime DateOnsetSymptoms { get; set; }
         [Column("datetime_specimen_receipt")]

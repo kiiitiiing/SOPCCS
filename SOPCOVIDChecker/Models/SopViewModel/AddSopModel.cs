@@ -22,6 +22,8 @@ namespace SOPCOVIDChecker.Models.SopViewModel
         public DateTime? DTCollection { get; set; }
         [Required]
         public string SpecimenType { get; set; }
+        [Required]
+        public int NumSpec { get; set; }
         public bool Disabled { get; set; }
     }
 }
